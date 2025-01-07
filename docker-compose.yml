@@ -1,17 +1,16 @@
 version: "3.4"
 
 services:
-  #  bmusic-api:
-  #   build: bmusic-api
-  #  image: bmusic-api
-  # restart: "no"
-  #volumes:
-  # - ./bmusic-api/:/app
-  #- ./app-cache/:/app-cache
-  #expose:
-  #- 4000
-  #env_file:
-  # - project.env
+  bmusic-api:
+    build: bmusic-api
+    restart: "no"
+    volumes:
+      - ./bmusic-api/:/app
+      - ./app-cache/:/app-cache
+    expose:
+      - 4000
+    env_file:
+      - project.env
 
   bmusic-ui:
     build: bmusic-ui
