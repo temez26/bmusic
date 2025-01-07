@@ -1,0 +1,35 @@
+version: "3.4"
+
+services:
+  #  bmusic-api:
+  #   build: bmusic-api
+  #  image: bmusic-api
+  # restart: "no"
+  #volumes:
+  # - ./bmusic-api/:/app
+  #- ./app-cache/:/app-cache
+  #expose:
+  #- 4000
+  #env_file:
+  # - project.env
+
+  bmusic-ui:
+    build: bmusic-ui
+    restart: "no"
+    volumes:
+      - ./bmusic-ui/:/app
+      - node_modules:/app/node_modules
+    ports:
+      - "4200:4200"
+
+  # database:
+  ##  image: postgres:latest
+  #restart: "no"
+  # volumes:
+  #  - ./database_data:/var/lib/postgresql/data
+  # env_file:
+  # - project.env
+
+volumes:
+  database_data:
+  node_modules:

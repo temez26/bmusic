@@ -1,0 +1,9 @@
+CREATE TABLE songs (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    artist VARCHAR(255),
+    album VARCHAR(255),
+    genre VARCHAR(255),
+    file_path VARCHAR(255) NOT NULL,
+    upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
