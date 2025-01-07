@@ -8,5 +8,5 @@ const handler = (request: Request): Response => {
   return new Response("Not Found", { status: 404 });
 };
 
-console.log("Listening on http://localhost:8000");
-await serve(handler, { addr: ":8000" });
+console.log("Listening on http://localhost:4000");
+await serve(handler, { addr: ":4000" });
