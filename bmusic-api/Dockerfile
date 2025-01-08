@@ -1,15 +1,15 @@
-FROM denoland/deno:2.1.4
+FROM node:22
 
 EXPOSE 4000
 
 WORKDIR /app
 
-COPY deps.ts .
-RUN deno install --entrypoint deps.ts
+ENV PATH /app/node_modules/.bin:$PATH
 
+COPY *.json ./
+
+RUN npm install
 
 COPY . .
 
-RUN deno cache main.ts
-
-CMD ["run", "--allow-net", "main.ts"]
+CMD ["npx", "nodemon", "--watch", ".", "--ext", "js", "--exec", "npm", "start", "--legacy-watch"]
