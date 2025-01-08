@@ -2,11 +2,11 @@
 
 ## **FrontEnd**
 
-- Angular
+- Node, Angular
 
 ## **Backend**
 
-- Deno
+- Node, Express.js
 
 ## **Database**
 

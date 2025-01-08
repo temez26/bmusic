@@ -8,5 +8,5 @@
 
 ## needs to be done
 
-- the bmusic-api
+- the bmusic-api partially setup
 - full database config, probably will be made along the app production
