@@ -21,13 +21,15 @@ services:
     ports:
       - "4200:4200"
 
-  # database:
-  ##  image: postgres:latest
-  #restart: "no"
-  # volumes:
-  #  - ./database_data:/var/lib/postgresql/data
-  # env_file:
-  # - project.env
+  database:
+    container_name: db-bmusic
+    image: postgres:latest
+    restart: "always"
+    volumes:
+      - database_data:/var/lib/postgresql/data
+      - ./database/V1___initial_schema.sql:/docker-entrypoint-initdb.d/create_database.sql
+    env_file:
+      - project.env
 
 volumes:
   database_data:
