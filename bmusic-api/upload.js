@@ -12,7 +12,25 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const fileFilter = (req, file, cb) => {
+  const allowedExtensions = /mp3|flac|wav|aac/;
+  const allowedMimeTypes = /audio\/mpeg|audio\/flac|audio\/wav|audio\/aac/;
+  const extname = path.extname(file.originalname).toLowerCase();
+  const mimetype = file.mimetype;
+
+  const isExtnameValid = allowedExtensions.test(extname);
+  const isMimetypeValid = allowedMimeTypes.test(mimetype);
+
+  if (isExtnameValid && isMimetypeValid) {
+    return cb(null, true);
+  } else {
+    cb(new Error("Only music files are allowed!"));
+  }
+};
+const upload = multer({
+  storage,
+  fileFilter,
+});
 
 const handleFileUpload = async (req, res) => {
   const filePath = req.file.path;
