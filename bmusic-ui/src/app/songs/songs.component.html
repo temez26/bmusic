@@ -1,1 +1,8 @@
-<p>songs works!</p>
+<h1>Songs</h1>
+<div *ngFor="let song of songs">
+  <h3 (click)="playSong(song.file_path)" style="cursor: pointer">
+    {{ song.title }}
+  </h3>
+  <p>Artist: {{ song.artist }}</p>
+  <p>Album: {{ song.album }}</p>
+</div>

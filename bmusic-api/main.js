@@ -3,6 +3,7 @@ const path = require("path");
 const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
+const cors = require("cors");
 const { getAllSongs, insertSong } = require("./db");
 const { upload, handleFileUpload } = require("./upload");
 
@@ -11,6 +12,8 @@ const port = 4000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -29,7 +32,7 @@ app.post("/test", async (req, res) => {
 });
 
 // Endpoint to fetch all data from the songs table
-app.get("/results", async (req, res) => {
+app.get("/songs", async (req, res) => {
   try {
     const songs = await getAllSongs();
     res.status(200).json(songs);
