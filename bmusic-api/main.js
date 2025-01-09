@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
@@ -51,6 +53,22 @@ wss.on("connection", (ws) => {
 
   ws.on("message", (message) => {
     console.log(`Received message => ${message}`);
+
+    const filePath = path.join(__dirname, message.toString());
+
+    const readStream = fs.createReadStream(filePath);
+    readStream.on("data", (chunk) => {
+      ws.send(chunk);
+    });
+
+    readStream.on("end", () => {
+      ws.send("EOF"); // Indicate the end of the file
+    });
+
+    readStream.on("error", (err) => {
+      console.error("Error reading file:", err);
+      ws.send("Error reading file");
+    });
   });
 
   ws.on("close", () => {
