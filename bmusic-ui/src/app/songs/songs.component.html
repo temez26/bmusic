@@ -1,8 +1,11 @@
 <h1>Songs</h1>
 <div *ngFor="let song of songs">
-  <h3 class="song" (click)="playSong(song.file_path)" style="cursor: pointer">
-    {{ song.title }} <app-delete />
-  </h3>
+  <div class="song">
+    <h3 (click)="playSong(song.file_path)" style="cursor: pointer">
+      {{ song.title }}
+    </h3>
+    <app-delete [songId]="song.id"></app-delete>
+  </div>
   <p>Artist: {{ song.artist || "empty" }}</p>
   <p>Album: {{ song.album || "empty" }}</p>
 </div>

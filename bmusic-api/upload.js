@@ -1,7 +1,8 @@
 const multer = require("multer");
 const mm = require("music-metadata");
 const path = require("path");
-const { insertSong } = require("./db");
+const fs = require("fs");
+const { insertSong, deleteSong, getSongById, getAllSongs } = require("./db");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -27,6 +28,7 @@ const fileFilter = (req, file, cb) => {
     cb(new Error("Only music files are allowed!"));
   }
 };
+
 const upload = multer({
   storage,
   fileFilter,
@@ -37,21 +39,46 @@ const handleFileUpload = async (req, res) => {
   try {
     const metadata = await mm.parseFile(filePath);
     const { title, artist, album, genre } = metadata.common;
-    const song = await insertSong(
+    await insertSong(
       title || req.file.originalname,
       artist,
       album,
       genre,
       filePath
     );
-    res.status(201).json(song);
+    const songs = await getAllSongs();
+    res.status(201).json(songs);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error uploading file and extracting metadata");
+    res.status(500).json("Error uploading file and extracting metadata");
+  }
+};
+
+const handleFileDelete = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const song = await getSongById(id);
+    if (!song) {
+      return res.status(404).json({ message: "Song not found" });
+    }
+
+    const filePath = song.file_path;
+    if (!filePath) {
+      return res.status(400).json({ message: "File path is missing" });
+    }
+
+    fs.unlinkSync(filePath);
+    await deleteSong(id);
+    const songs = await getAllSongs();
+    res.status(200).json(songs);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error deleting file" });
   }
 };
 
 module.exports = {
   upload,
   handleFileUpload,
+  handleFileDelete,
 };

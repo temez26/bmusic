@@ -5,7 +5,7 @@ const http = require("http");
 const WebSocket = require("ws");
 const cors = require("cors");
 const { getAllSongs, insertSong } = require("./db");
-const { upload, handleFileUpload } = require("./upload");
+const { upload, handleFileUpload, handleFileDelete } = require("./upload");
 
 const app = express();
 const port = 4000;
@@ -44,6 +44,8 @@ app.get("/songs", async (req, res) => {
 
 // Endpoint to upload music files and extract metadata
 app.post("/upload", upload.single("file"), handleFileUpload);
+
+app.delete("/delete", handleFileDelete);
 
 // Create an HTTP server
 const server = http.createServer(app);

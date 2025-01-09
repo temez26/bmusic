@@ -21,7 +21,23 @@ const getAllSongs = async () => {
   return result.rows;
 };
 
+const getSongById = async (id) => {
+  const result = await pool.query("SELECT * FROM songs WHERE id = $1", [id]);
+  return result.rows[0];
+};
+
+const deleteSong = async (id) => {
+  try {
+    const result = await pool.query("DELETE FROM songs WHERE id = $1", [id]);
+    return result.rowCount;
+  } catch (err) {
+    console.error("Error deleting song:", err);
+    throw err;
+  }
+};
 module.exports = {
   insertSong,
   getAllSongs,
+  getSongById,
+  deleteSong,
 };
