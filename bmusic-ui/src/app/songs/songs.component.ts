@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlayerService } from '../player/player.service';
+import { PlayerService } from '../service/player.service';
 import { DeleteComponent } from '../delete/delete.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-songs',
@@ -11,33 +11,30 @@ import { DeleteComponent } from '../delete/delete.component';
   templateUrl: './songs.component.html',
   styleUrl: './songs.component.scss',
 })
-export class SongsComponent implements OnInit {
+export class SongsComponent implements OnInit, OnDestroy {
   songs: any[] = [];
+  private songsSubscription!: Subscription;
 
-  constructor(private http: HttpClient, private playerService: PlayerService) {}
+  constructor(private playerService: PlayerService) {}
 
   ngOnInit() {
-    this.getData();
+    this.songsSubscription = this.playerService.songs$.subscribe((songs) => {
+      this.songs = songs;
+    });
+    this.playerService.fetchSongs().subscribe();
   }
 
-  getData() {
-    this.http
-      .get<any[]>(`http://${window.location.hostname}:4000/songs`)
-      .subscribe({
-        next: (response) => {
-          this.songs = response;
-          console.log(response);
-        },
-        error: (error) => {
-          console.error('Error fetching data:', error);
-        },
-        complete: () => {
-          console.log('Request completed');
-        },
-      });
+  ngOnDestroy() {
+    if (this.songsSubscription) {
+      this.songsSubscription.unsubscribe();
+    }
   }
 
   playSong(filePath: string) {
     this.playerService.setFilePath(filePath);
+  }
+
+  onSongDeleted() {
+    this.playerService.fetchSongs().subscribe();
   }
 }

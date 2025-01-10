@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { PlayerService } from '../service/player.service';
 
 @Component({
   selector: 'app-upload',
@@ -10,40 +10,35 @@ import { CommonModule } from '@angular/common';
   styleUrl: './upload.component.scss',
 })
 export class UploadComponent implements OnInit {
-  selectedFile: File | null = null;
+  selectedFiles: File[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private playerService: PlayerService) {}
 
   ngOnInit() {
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
     fileInput.addEventListener('change', (event: Event) => {
       const target = event.target as HTMLInputElement;
       if (target.files && target.files.length > 0) {
-        this.selectedFile = target.files[0];
+        this.selectedFiles = Array.from(target.files);
       }
     });
   }
 
-  uploadFile() {
-    if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('file', this.selectedFile);
-
-      this.http
-        .post(`http://${window.location.hostname}:4000/upload`, formData)
-        .subscribe({
-          next: (response) => {
-            console.log('File uploaded successfully', response);
-          },
-          error: (error) => {
-            console.error('Error uploading file:', error);
-          },
-          complete: () => {
-            console.log('Upload request completed');
-          },
-        });
+  uploadFiles() {
+    if (this.selectedFiles.length > 0) {
+      this.playerService.uploadFiles(this.selectedFiles).subscribe({
+        next: (response) => {
+          console.log('Files uploaded successfully', response);
+        },
+        error: (error) => {
+          console.error('Error uploading files:', error);
+        },
+        complete: () => {
+          console.log('Upload request completed');
+        },
+      });
     } else {
-      console.error('No file selected');
+      console.error('No files selected');
     }
   }
 }

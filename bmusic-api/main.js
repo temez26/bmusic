@@ -35,6 +35,7 @@ app.post("/test", async (req, res) => {
 app.get("/songs", async (req, res) => {
   try {
     const songs = await getAllSongs();
+    console.log("got songs");
     res.status(200).json(songs);
   } catch (err) {
     console.error(err);
@@ -43,7 +44,7 @@ app.get("/songs", async (req, res) => {
 });
 
 // Endpoint to upload music files and extract metadata
-app.post("/upload", upload.single("file"), handleFileUpload);
+app.post("/upload", upload, handleFileUpload);
 
 app.delete("/delete", handleFileDelete);
 

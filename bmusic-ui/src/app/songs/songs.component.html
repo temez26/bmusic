@@ -4,7 +4,7 @@
     <h3 (click)="playSong(song.file_path)" style="cursor: pointer">
       {{ song.title }}
     </h3>
-    <app-delete [songId]="song.id"></app-delete>
+    <app-delete [songId]="song.id" (songDeleted)="onSongDeleted()"></app-delete>
   </div>
   <p>Artist: {{ song.artist || "empty" }}</p>
   <p>Album: {{ song.album || "empty" }}</p>
