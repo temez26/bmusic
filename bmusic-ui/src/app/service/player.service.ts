@@ -3,6 +3,21 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 
+interface Song {
+  id: number;
+  title: string;
+  artist: string;
+  album: string;
+  genre: string;
+  file_path: string;
+  album_cover_url: string;
+  upload_date: string;
+}
+
+interface UploadResponse {
+  songs: Song[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -10,7 +25,7 @@ export class PlayerService {
   private filePathSubject = new BehaviorSubject<string | null>(null);
   filePath$ = this.filePathSubject.asObservable();
 
-  private songsSubject = new BehaviorSubject<any[]>([]);
+  private songsSubject = new BehaviorSubject<Song[]>([]);
   songs$ = this.songsSubject.asObservable();
 
   constructor(private http: HttpClient) {}
@@ -19,25 +34,34 @@ export class PlayerService {
     this.filePathSubject.next(filePath);
   }
 
-  fetchSongs(): Observable<any[]> {
+  fetchSongs(): Observable<Song[]> {
     return this.http
-      .get<any[]>(`http://${window.location.hostname}:4000/songs`)
+      .get<Song[]>(`http://${window.location.hostname}:4000/songs`)
       .pipe(tap((songs) => this.songsSubject.next(songs)));
   }
 
-  deleteSong(songId: number): Observable<any> {
+  deleteSong(songId: number): Observable<Song[]> {
     const url = `http://${window.location.hostname}:4000/delete`;
     return this.http
-      .delete<any[]>(url, { body: { id: songId } })
+      .delete<Song[]>(url, { body: { id: songId } })
       .pipe(tap((songs) => this.songsSubject.next(songs)));
   }
 
-  uploadFiles(files: File[]): Observable<any[]> {
+  uploadFiles(files: File[]): Observable<UploadResponse> {
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
 
     return this.http
-      .post<any[]>(`http://${window.location.hostname}:4000/upload`, formData)
-      .pipe(tap((songs) => this.songsSubject.next(songs)));
+      .post<UploadResponse>(
+        `http://${window.location.hostname}:4000/upload`,
+        formData
+      )
+      .pipe(
+        tap((response) => {
+          if (response && response.songs) {
+            this.songsSubject.next(response.songs);
+          }
+        })
+      );
   }
 }

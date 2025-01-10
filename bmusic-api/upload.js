@@ -48,7 +48,7 @@ const upload = multer({
   storage,
   fileFilter,
 }).fields([
-  { name: "files", maxCount: 10 },
+  { name: "files", maxCount: 100 },
   { name: "cover", maxCount: 1 },
 ]);
 
@@ -84,6 +84,7 @@ const handleFileUpload = async (req, res) => {
     }
 
     const songs = await getAllSongs();
+    console.log("got songs");
     res.status(201).json({ songs, errors, successfulUploads });
   } catch (err) {
     console.error(err);
