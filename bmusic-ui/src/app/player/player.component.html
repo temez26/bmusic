@@ -1,4 +1,10 @@
-<h2>{{ currentTitle }}</h2>
-<audio id="audio" controls></audio>
-<button (click)="previousSong()">Previous Song</button>
-<button (click)="nextSong()">Next Song</button>
+<div class="player">
+  <h2 class="player-title">{{ currentTitle }}</h2>
+  <div class="player-controls">
+    <button class="player-button" (click)="previousSong()">
+      Previous Song
+    </button>
+    <audio id="audio" controls class="player-audio"></audio>
+    <button class="player-button" (click)="nextSong()">Next Song</button>
+  </div>
+</div>
