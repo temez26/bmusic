@@ -36,7 +36,7 @@ export class PlayerService {
       .get<Song[]>(`http://${window.location.hostname}:4000/songs`)
       .pipe(
         tap((songs) => {
-          console.log('Fetched songs:', songs[0].title); // Added console log
+          console.log('Fetched songs:', songs);
           this.songsSubject.next(songs);
         })
       );
