@@ -1,18 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Song } from './song-def.class';
 import { tap } from 'rxjs/operators';
-
-interface Song {
-  id: number;
-  title: string;
-  artist: string;
-  album: string;
-  genre: string;
-  file_path: string;
-  album_cover_url: string;
-  upload_date: string;
-}
 
 interface UploadResponse {
   songs: Song[];
@@ -28,16 +18,28 @@ export class PlayerService {
   private songsSubject = new BehaviorSubject<Song[]>([]);
   songs$ = this.songsSubject.asObservable();
 
+  private titleSubject = new BehaviorSubject<string | null>(null);
+  title$ = this.titleSubject.asObservable();
+
   constructor(private http: HttpClient) {}
 
   setFilePath(filePath: string) {
     this.filePathSubject.next(filePath);
   }
+  setTitle(title: string) {
+    console.log(title);
+    this.titleSubject.next(title);
+  }
 
   fetchSongs(): Observable<Song[]> {
     return this.http
       .get<Song[]>(`http://${window.location.hostname}:4000/songs`)
-      .pipe(tap((songs) => this.songsSubject.next(songs)));
+      .pipe(
+        tap((songs) => {
+          console.log('Fetched songs:', songs[0].title); // Added console log
+          this.songsSubject.next(songs);
+        })
+      );
   }
 
   deleteSong(songId: number): Observable<Song[]> {

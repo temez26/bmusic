@@ -30,8 +30,9 @@ export class SongsComponent implements OnInit, OnDestroy {
     }
   }
 
-  playSong(filePath: string) {
+  playSong(filePath: string, title: string) {
     this.playerService.setFilePath(filePath);
+    this.playerService.setTitle(title);
   }
 
   onSongDeleted() {

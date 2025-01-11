@@ -9,8 +9,7 @@ import { PlayerService } from '../service/player.service';
   styleUrl: './player.component.scss',
 })
 export class PlayerComponent implements OnInit {
-  title = 'bmusic-ui';
-
+  currentTitle: string | null = null;
   constructor(private playerService: PlayerService) {}
 
   ngOnInit() {
@@ -18,6 +17,9 @@ export class PlayerComponent implements OnInit {
       if (filePath) {
         this.startWebSocket(filePath);
       }
+    });
+    this.playerService.title$.subscribe((title) => {
+      this.currentTitle = title;
     });
   }
 
