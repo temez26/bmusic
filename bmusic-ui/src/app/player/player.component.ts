@@ -18,8 +18,8 @@ export class PlayerComponent implements OnInit {
         this.startWebSocket(filePath);
       }
     });
-    this.playerService.title$.subscribe((title) => {
-      this.currentTitle = title;
+    this.playerService.songs$.subscribe((songs) => {
+      this.currentTitle = songs[0].title;
     });
   }
 
