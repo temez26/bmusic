@@ -10,6 +10,7 @@ import { PlayerService } from '../service/player.service';
 })
 export class PlayerComponent implements OnInit {
   currentTitle: string | null = null;
+
   constructor(private playerService: PlayerService) {}
 
   ngOnInit() {
@@ -60,5 +61,12 @@ export class PlayerComponent implements OnInit {
     ws.onerror = (error) => {
       console.error('WebSocket error:', error);
     };
+  }
+  nextSong() {
+    this.playerService.changeSong(1);
+  }
+
+  previousSong() {
+    this.playerService.changeSong(-1);
   }
 }

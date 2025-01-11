@@ -12,6 +12,7 @@ interface UploadResponse {
   providedIn: 'root',
 })
 export class PlayerService {
+  private currentSongIndex = 0;
   private filePathSubject = new BehaviorSubject<string | null>(null);
   filePath$ = this.filePathSubject.asObservable();
 
@@ -65,5 +66,20 @@ export class PlayerService {
           }
         })
       );
+  }
+  changeSong(offset: number) {
+    const songs = this.songsSubject.getValue();
+    const currentFilePath = this.filePathSubject.getValue();
+    const currentSongIndex = songs.findIndex(
+      (song) => song.file_path === currentFilePath
+    );
+
+    if (currentSongIndex !== -1) {
+      this.currentSongIndex =
+        (currentSongIndex + offset + songs.length) % songs.length;
+      const newSong = songs[this.currentSongIndex];
+      this.setFilePath(newSong.file_path);
+      this.setTitle(newSong.title);
+    }
   }
 }
