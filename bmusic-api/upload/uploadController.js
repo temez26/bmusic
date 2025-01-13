@@ -1,6 +1,15 @@
 const mm = require("music-metadata");
-const { insertSong, deleteSong, getSongById, getAllSongs } = require("./db");
-const fs = require("fs");
+const { insertSong, getAllSongs } = require("../database/db");
+
+const handleAllSongs = async (req, res) => {
+  try {
+    const songs = await getAllSongs();
+    res.status(200).json(songs);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching data from database");
+  }
+};
 
 const handleFileUpload = async (req, res) => {
   const files = req.files.files || [];
@@ -49,32 +58,7 @@ const handleFileUpload = async (req, res) => {
   }
 };
 
-const handleFileDelete = async (req, res) => {
-  const { id } = req.body;
-  try {
-    const song = await getSongById(id);
-    if (!song) {
-      return res.status(404).json({ message: "Song not found" });
-    }
-
-    const filePath = song.file_path;
-
-    if (!filePath) {
-      return res.status(400).json({ message: "File path is missing" });
-    }
-
-    fs.unlinkSync(filePath);
-
-    await deleteSong(id);
-    const songs = await getAllSongs();
-    res.status(200).json(songs);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error deleting file" });
-  }
-};
-
 module.exports = {
   handleFileUpload,
-  handleFileDelete,
+  handleAllSongs,
 };
