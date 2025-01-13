@@ -15,13 +15,19 @@ export class UploadComponent implements OnInit {
   constructor(private playerService: PlayerService) {}
 
   ngOnInit() {
+    this.initializeFileInput();
+  }
+
+  initializeFileInput() {
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-    fileInput.addEventListener('change', (event: Event) => {
-      const target = event.target as HTMLInputElement;
-      if (target.files && target.files.length > 0) {
-        this.selectedFiles = Array.from(target.files);
-      }
-    });
+    fileInput.addEventListener('change', this.handleFileInputChange.bind(this));
+  }
+
+  handleFileInputChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      this.selectedFiles = Array.from(target.files);
+    }
   }
 
   uploadFiles() {
@@ -29,6 +35,7 @@ export class UploadComponent implements OnInit {
       this.playerService.uploadFiles(this.selectedFiles).subscribe({
         next: (response) => {
           console.log('Files uploaded successfully', response);
+          this.selectedFiles = [];
         },
         error: (error) => {
           console.error('Error uploading files:', error);

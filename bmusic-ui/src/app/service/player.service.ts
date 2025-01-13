@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { Song } from './song-def.class';
+import { ApiService } from './api.service';
+import { Song, UploadResponse } from './models/song-def.class';
 import { tap } from 'rxjs/operators';
-
-interface UploadResponse {
-  songs: Song[];
-}
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +18,7 @@ export class PlayerService {
   private titleSubject = new BehaviorSubject<string | null>(null);
   title$ = this.titleSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private apiService: ApiService) {}
 
   setFilePath(filePath: string) {
     this.filePathSubject.next(filePath);
@@ -33,39 +29,25 @@ export class PlayerService {
   }
 
   fetchSongs(): Observable<Song[]> {
-    return this.http
-      .get<Song[]>(`http://${window.location.hostname}:4000/songs`)
-      .pipe(
-        tap((songs) => {
-          console.log('Fetched songs:', songs);
-          this.songsSubject.next(songs);
-        })
-      );
+    return this.apiService
+      .fetchSongs()
+      .pipe(tap((songs) => this.songsSubject.next(songs)));
   }
 
   deleteSong(songId: number): Observable<Song[]> {
-    const url = `http://${window.location.hostname}:4000/delete`;
-    return this.http
-      .delete<Song[]>(url, { body: { id: songId } })
+    return this.apiService
+      .deleteSong(songId)
       .pipe(tap((songs) => this.songsSubject.next(songs)));
   }
 
   uploadFiles(files: File[]): Observable<UploadResponse> {
-    const formData = new FormData();
-    files.forEach((file) => formData.append('files', file));
-
-    return this.http
-      .post<UploadResponse>(
-        `http://${window.location.hostname}:4000/upload`,
-        formData
-      )
-      .pipe(
-        tap((response) => {
-          if (response && response.songs) {
-            this.songsSubject.next(response.songs);
-          }
-        })
-      );
+    return this.apiService.uploadFiles(files).pipe(
+      tap((response) => {
+        if (response && response.songs) {
+          this.songsSubject.next(response.songs);
+        }
+      })
+    );
   }
   changeSong(offset: number) {
     const songs = this.songsSubject.getValue();

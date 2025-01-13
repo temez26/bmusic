@@ -8,3 +8,6 @@ export interface Song {
   album_cover_url: string;
   upload_date: string;
 }
+export interface UploadResponse {
+  songs: Song[];
+}
