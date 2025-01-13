@@ -2,12 +2,14 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
+// Ensure the directory exists, create if it doesn't
 const ensureDirectoryExistence = (dir) => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
 };
 
+// Configure storage settings for multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let uploadDir;
@@ -24,6 +26,7 @@ const storage = multer.diskStorage({
   },
 });
 
+// File filter to allow only specific file types
 const fileFilter = (req, file, cb) => {
   const allowedExtensions = /mp3|flac|wav|aac|jpg|jpeg|png/;
   const allowedMimeTypes =
@@ -41,6 +44,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+// Configure multer upload settings
 const upload = multer({
   storage,
   fileFilter,

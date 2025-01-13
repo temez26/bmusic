@@ -14,7 +14,7 @@ export class CoverWsService {
 
     const coverPromise = new Promise<string>((resolve, reject) => {
       if (!coverPath || coverPath === '/app/null') {
-        const defaultCoverImageSrc = '/music.png';
+        const defaultCoverImageSrc = '/cd-cover.png';
         this.coverImageSrcMap[songId] = defaultCoverImageSrc;
         resolve(defaultCoverImageSrc);
         return;

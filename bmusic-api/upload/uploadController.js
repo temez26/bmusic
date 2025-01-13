@@ -1,6 +1,7 @@
 const mm = require("music-metadata");
 const { insertSong, getAllSongs } = require("../database/db");
 
+// Function to handle fetching all songs from the database
 const handleAllSongs = async (req, res) => {
   try {
     const songs = await getAllSongs();
@@ -11,6 +12,7 @@ const handleAllSongs = async (req, res) => {
   }
 };
 
+// Function to handle file uploads and metadata extraction
 const handleFileUpload = async (req, res) => {
   const files = req.files.files || [];
   const errors = [];
@@ -18,6 +20,7 @@ const handleFileUpload = async (req, res) => {
   let albumCoverUrl = null;
 
   try {
+    // Process image files to get album cover URL
     for (const file of files) {
       if (file.mimetype.startsWith("image/")) {
         albumCoverUrl = file.path;
@@ -25,6 +28,7 @@ const handleFileUpload = async (req, res) => {
       }
     }
 
+    // Process audio files to extract metadata and insert into database
     for (const file of files) {
       if (file.mimetype.startsWith("audio/")) {
         try {
@@ -49,6 +53,7 @@ const handleFileUpload = async (req, res) => {
       }
     }
 
+    // Fetch all songs after upload and send response
     const songs = await getAllSongs();
     console.log("got songs");
     res.status(201).json({ songs, errors, successfulUploads });

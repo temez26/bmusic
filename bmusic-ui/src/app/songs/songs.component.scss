@@ -1,3 +1,7 @@
+.song-list-container {
+  max-height: 500px;
+  overflow-y: auto;
+}
 .song-item {
   display: flex;
   align-items: center;
