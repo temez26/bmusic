@@ -106,15 +106,13 @@ const handleFileDelete = async (req, res) => {
     }
 
     const filePath = song.file_path;
-    const albumCoverUrl = song.album_cover_url;
+
     if (!filePath) {
       return res.status(400).json({ message: "File path is missing" });
     }
 
     fs.unlinkSync(filePath);
-    if (albumCoverUrl) {
-      fs.unlinkSync(albumCoverUrl);
-    }
+
     await deleteSong(id);
     const songs = await getAllSongs();
     res.status(200).json(songs);

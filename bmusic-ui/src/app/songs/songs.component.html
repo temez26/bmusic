@@ -1,14 +1,17 @@
-<div
-  *ngFor="let song of songs"
-  class="song-item"
-  [style.background-image]="'url(' + song.album_cover_url + ')'"
->
+<div *ngFor="let song of songs" class="song-item">
   <div class="song-details">
     <h3 (click)="playSong(song.file_path, song.title)" style="cursor: pointer">
       {{ song.title }}
     </h3>
-    <app-delete [songId]="song.id" (songDeleted)="onSongDeleted()"></app-delete>
+
     <p>Artist: {{ song.artist || "empty" }}</p>
     <p>Album: {{ song.album || "empty" }}</p>
+    <app-delete [songId]="song.id" (songDeleted)="onSongDeleted()"></app-delete>
   </div>
+  <img
+    *ngIf="coverImageSrcMap[song.id]"
+    [src]="coverImageSrcMap[song.id]"
+    alt="Cover Image"
+    class="cover-image"
+  />
 </div>
