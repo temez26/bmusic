@@ -5,7 +5,8 @@ const http = require("http");
 const WebSocket = require("ws");
 const cors = require("cors");
 const { getAllSongs, insertSong } = require("./db");
-const { upload, handleFileUpload, handleFileDelete } = require("./upload");
+const upload = require("./uploadConfig");
+const { handleFileUpload, handleFileDelete } = require("./uploadController");
 
 const app = express();
 const port = 4000;
@@ -56,7 +57,6 @@ app.delete("/delete", handleFileDelete);
 // Create an HTTP server
 const server = http.createServer(app);
 
-// Create a WebSocket server
 const wss = new WebSocket.Server({ server });
 
 wss.on("connection", (ws) => {
@@ -73,7 +73,7 @@ wss.on("connection", (ws) => {
     });
 
     readStream.on("end", () => {
-      ws.send("EOF"); // Indicate the end of the file
+      ws.send("EOF");
     });
 
     readStream.on("error", (err) => {

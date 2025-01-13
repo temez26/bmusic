@@ -38,8 +38,8 @@ export class SongsComponent implements OnInit, OnDestroy {
   }
 
   getCovers(songId: number, coverPath: string) {
+    // If already downloading or downloaded, use the existing promise
     if (this.downloadedCovers.has(coverPath)) {
-      // If already downloading or downloaded, use the existing promise
       this.downloadedCovers
         .get(coverPath)!
         .then((imageSrc) => {
@@ -53,6 +53,13 @@ export class SongsComponent implements OnInit, OnDestroy {
 
     // Create a new promise for downloading the cover
     const coverPromise = new Promise<string>((resolve, reject) => {
+      if (!coverPath || coverPath === '/app/null') {
+        const defaultCoverImageSrc = '/music.png';
+        this.coverImageSrcMap[songId] = defaultCoverImageSrc;
+        resolve(defaultCoverImageSrc);
+        return;
+      }
+
       const ws = new WebSocket(`ws://${window.location.hostname}:4000`);
       ws.binaryType = 'arraybuffer';
       const chunks: ArrayBuffer[] = [];
