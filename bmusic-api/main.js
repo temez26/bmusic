@@ -16,7 +16,12 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  const arr = ["Welcome", "to", "bmusic"];
+  function convert(arr) {
+    let result = arr.map((str) => str.toUpperCase());
+    return result;
+  }
+  res.send(convert(arr));
 });
 
 // Test route to insert data into the songs table

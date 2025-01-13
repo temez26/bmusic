@@ -8,10 +8,17 @@ const pool = new Pool({
   port: 5432,
 });
 
-const insertSong = async (title, artist, album, genre, file_path) => {
+const insertSong = async (
+  title,
+  artist,
+  album,
+  genre,
+  file_path,
+  album_cover_url
+) => {
   const result = await pool.query(
-    "INSERT INTO songs (title, artist, album, genre, file_path) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-    [title, artist, album, genre, file_path]
+    "INSERT INTO songs (title, artist, album, genre, file_path, album_cover_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+    [title, artist, album, genre, file_path, album_cover_url]
   );
   return result.rows[0];
 };

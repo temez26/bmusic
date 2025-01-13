@@ -4,3 +4,17 @@
   align-items: center;
   justify-content: space-between;
 }
+.song-item {
+  background-size: cover;
+  background-position: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  color: #fff;
+}
+
+.song-details {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}

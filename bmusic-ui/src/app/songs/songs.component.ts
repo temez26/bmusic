@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 })
 export class SongsComponent implements OnInit, OnDestroy {
   songs: any[] = [];
+
   private songsSubscription!: Subscription;
 
   constructor(private playerService: PlayerService) {}
