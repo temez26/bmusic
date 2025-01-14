@@ -86,8 +86,7 @@
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.search-input:focus,
-.search-input:hover {
+.search-container:hover .search-input {
   background-color: #444;
   color: #ffffff;
 }
@@ -113,16 +112,21 @@
   transition: background-position 0.3s ease;
 }
 
-.search-button:hover .material-icons {
+.search-container:hover .material-icons {
   background-position: 100% 50%;
 }
-
 button[mat-icon-button] {
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 button[mat-icon-button] .material-icons {
-  background: linear-gradient(45deg, #ff5722, #2196f3, #ff5722, #2196f3);
+  background: linear-gradient(
+    45deg,
+    rgba(255, 87, 34, 0.8),
+    rgba(255, 235, 59, 0.8),
+    rgba(255, 87, 34, 0.8),
+    rgba(255, 235, 59, 0.8)
+  );
   background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -132,4 +136,5 @@ button[mat-icon-button] .material-icons {
 
 button[mat-icon-button]:hover .material-icons {
   background-position: 100% 50%;
+  transition: background-position 0.3s ease 0.2s;
 }
