@@ -1,0 +1,87 @@
+.myapp {
+  border-bottom: 1px solid white;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.navbar-title {
+  font-size: 2rem;
+  color: #f0f0f0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  background-color: #333;
+  border-radius: 20px;
+  padding: 5px 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.search-container:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #444;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  padding: 5px;
+  border-radius: 20px;
+  flex-grow: 1;
+  background-color: #333;
+  color: #e0e0e0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.search-input:focus,
+.search-input:hover {
+  background-color: #444;
+  color: #ffffff;
+}
+
+.search-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  transition: color 0.3s ease;
+}
+
+.search-button .material-icons {
+  font-size: 24px;
+  color: #e0e0e0;
+  transition: color 0.3s ease;
+}
+
+.search-button:hover .material-icons {
+  color: #ffffff;
+}
+
+button[mat-icon-button] {
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button[mat-icon-button]:hover {
+  transform: scale(1.05);
+}
+
+button[mat-icon-button] .material-icons {
+  color: #e0e0e0;
+  transition: color 0.3s ease;
+}

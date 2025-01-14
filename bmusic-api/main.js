@@ -5,12 +5,12 @@ const express = require("express");
 const WebSocket = require("ws");
 const cors = require("cors");
 
-const upload = require("./upload/uploadConfig");
-const { handleFileDelete } = require("./upload/deleteController");
+const upload = require("./services/uploadConfig");
+const { handleFileDelete } = require("./services/deleteController");
 const {
   handleFileUpload,
   handleAllSongs,
-} = require("./upload/uploadController");
+} = require("./services/uploadController");
 
 const app = express();
 const port = 4000;
