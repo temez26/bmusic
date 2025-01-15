@@ -31,10 +31,7 @@ export class NavbarComponent {
       this.dialogRef.close();
       this.dialogRef = null;
     } else {
-      this.dialogRef = this.dialog.open(UploadComponent, {
-        width: '600px',
-        height: 'auto',
-      });
+      this.dialogRef = this.dialog.open(UploadComponent);
     }
   }
 }
