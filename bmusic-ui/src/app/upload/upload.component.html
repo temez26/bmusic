@@ -6,7 +6,13 @@
       the correct album cover by uploading one album at a time.
     </p>
   </div>
-  <label for="fileInput">Choose files</label>
-  <input type="file" id="fileInput" multiple accept="audio/*,image/*" />
+  <div class="file-input-container">
+    <label for="fileInput">Choose files</label>
+    <input type="file" id="fileInput" multiple accept="audio/*,image/*" />
+    <p *ngIf="fileCount > 0" class="file-count">
+      {{ fileCount }} file(s) selected
+    </p>
+  </div>
   <button (click)="uploadFiles()">Upload</button>
+  <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
 </div>

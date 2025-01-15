@@ -7,10 +7,12 @@ import { PlayerService } from '../service/player.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './upload.component.html',
-  styleUrl: './upload.component.scss',
+  styleUrls: ['./upload.component.scss'],
 })
 export class UploadComponent implements OnInit {
   selectedFiles: File[] = [];
+  fileCount: number = 0;
+  successMessage: string = '';
 
   constructor(private playerService: PlayerService) {}
 
@@ -27,6 +29,9 @@ export class UploadComponent implements OnInit {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
       this.selectedFiles = Array.from(target.files);
+      this.fileCount = target.files.length;
+    } else {
+      this.fileCount = 0;
     }
   }
 
@@ -36,9 +41,12 @@ export class UploadComponent implements OnInit {
         next: (response) => {
           console.log('Files uploaded successfully', response);
           this.selectedFiles = [];
+          this.fileCount = 0;
+          this.successMessage = 'Files uploaded successfully!';
         },
         error: (error) => {
           console.error('Error uploading files:', error);
+          this.successMessage = 'Error uploading files. Please try again.';
         },
         complete: () => {
           console.log('Upload request completed');
@@ -46,6 +54,7 @@ export class UploadComponent implements OnInit {
       });
     } else {
       console.error('No files selected');
+      this.successMessage = 'No files selected. Please choose files to upload.';
     }
   }
 }

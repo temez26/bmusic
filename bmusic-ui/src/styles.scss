@@ -51,8 +51,10 @@ app-root {
 
 // upload component
 .cdk-global-overlay-wrapper {
-  display: flex;
-  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 // Add some cool styling for the base of the app
