@@ -1,45 +1,63 @@
-.album-section {
-  margin-bottom: 20px;
-}
-
-.album-header {
-  margin-bottom: 10px;
-}
-
-.album-content {
+.song-list-container {
   display: flex;
-  overflow-x: auto;
-  white-space: nowrap;
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.719);
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
+.top-songs-row {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: 100%;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.719);
+  border-radius: 4px;
+}
+.title {
+  align-self: start;
+}
 .song-item {
-  display: inline-block;
-  margin-right: 20px;
-  margin-top: 7px;
-  margin-bottom: 7px;
+  flex: 0 0 auto;
+  margin: 10px;
   max-width: 150px;
 }
 
-.cover-image-large {
-  width: 40px;
-  height: 40px;
+.song-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
+.cover-image-large {
+  width: 100px;
+  height: 100px;
+  display: block;
+  margin: 0 auto;
+}
 .song-details {
   margin-top: 10px;
   width: 150px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: center;
 }
+
+.artist-column,
+.time-column,
+.actions-column {
+  display: none;
+}
+
 h2 {
   margin: 0;
 }
+
 h3 {
   font-size: 1rem;
 }
+
 p {
   font-size: 0.8rem;
 }

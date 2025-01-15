@@ -6,6 +6,7 @@ export interface Song {
   genre: string;
   file_path: string;
   album_cover_url: string;
+  play_count: number;
   upload_date: string;
 }
 export interface UploadResponse {

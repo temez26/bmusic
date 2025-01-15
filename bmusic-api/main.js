@@ -32,7 +32,6 @@ app.post("/upload", upload, handleFileUpload);
 
 app.post("/increment", async (req, res) => {
   const { id } = req.body;
-  console.log(id);
 
   if (!id) {
     return res.status(400).send("Song ID is required");

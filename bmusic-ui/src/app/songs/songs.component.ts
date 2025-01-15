@@ -27,7 +27,7 @@ export class SongsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.songsSubscription = this.playerService.songs$.subscribe((songs) => {
-      this.songs = songs;
+      this.songs = songs.sort((a, b) => a.id - b.id); // Sort songs by ID
       // Fetch covers for each song using CoverService
       this.songs.forEach((song) =>
         this.coverWsService

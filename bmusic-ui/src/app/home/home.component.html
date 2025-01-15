@@ -1,5 +1,31 @@
 <h1>Home</h1>
 <div class="home-container">
-  <h2 class="songs"><a routerLink="songs">Songs</a></h2>
-  <h2 class="albums"><a routerLink="albums">Albums</a></h2>
+  <div class="card-container">
+    <div class="card" routerLink="songs">
+      <div class="card-image" style="background-image: url('/music.png')"></div>
+      <div class="card-text">Songs</div>
+    </div>
+    <div class="card" routerLink="albums">
+      <div
+        class="card-image"
+        style="background-image: url('/album-cover-design.png')"
+      ></div>
+      <div class="card-text">Albums</div>
+    </div>
+    <div class="card" routerLink="playlists">
+      <div
+        class="card-image"
+        style="background-image: url('/cd-cover.png')"
+      ></div>
+      <div class="card-text">Playlists</div>
+    </div>
+    <div class="card" routerLink="artists">
+      <div
+        class="card-image"
+        style="background-image: url('/cd-cover.png')"
+      ></div>
+      <div class="card-text">Artists</div>
+    </div>
+  </div>
+  <app-songs></app-songs>
 </div>
