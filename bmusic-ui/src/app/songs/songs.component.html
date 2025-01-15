@@ -1,25 +1,42 @@
 <div class="song-list-container">
-  <div *ngFor="let song of songs" class="song-item">
-    <div class="song-details">
-      <h3
-        (click)="playSong(song.file_path, song.title)"
-        style="cursor: pointer"
-      >
-        {{ song.title }}
-      </h3>
+  <div class="song-header">
+    <div class="header-item">Song</div>
+    <div class="header-item">Artist</div>
+    <div class="header-item">Album</div>
+    <div class="header-item">Actions</div>
+  </div>
 
+  <div *ngFor="let song of songs" class="song-item">
+    <div class="song-column">
+      <img
+        *ngIf="coverImageSrcMap[song.id]"
+        [src]="coverImageSrcMap[song.id]"
+        alt="Cover Image"
+        class="cover-image"
+      />
+      <div class="song-details">
+        <h3
+          (click)="playSong(song.file_path, song.title)"
+          style="cursor: pointer"
+        >
+          {{ song.title }}
+        </h3>
+      </div>
+    </div>
+
+    <div class="artist-column">
       <p>Artist: {{ song.artist || "empty" }}</p>
+    </div>
+
+    <div class="album-column">
       <p>Album: {{ song.album || "empty" }}</p>
+    </div>
+
+    <div class="actions-column">
       <app-delete
         [songId]="song.id"
         (songDeleted)="onSongDeleted()"
       ></app-delete>
     </div>
-    <img
-      *ngIf="coverImageSrcMap[song.id]"
-      [src]="coverImageSrcMap[song.id]"
-      alt="Cover Image"
-      class="cover-image"
-    />
   </div>
 </div>
