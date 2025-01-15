@@ -50,9 +50,18 @@ const deleteSong = async (id) => {
 };
 
 // Export the functions for use in other modules
+const incrementPlayCount = async (id) => {
+  const result = await pool.query(
+    "UPDATE songs SET play_count = play_count + 1 WHERE id = $1 RETURNING play_count",
+    [id]
+  );
+  return result.rows[0].play_count;
+};
+
 module.exports = {
   insertSong,
   getAllSongs,
   getSongById,
   deleteSong,
+  incrementPlayCount,
 };

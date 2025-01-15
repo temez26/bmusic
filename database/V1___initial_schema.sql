@@ -7,5 +7,6 @@ CREATE TABLE songs (
     file_path VARCHAR(255) NOT NULL,
     album_cover_url VARCHAR(255), 
     length VARCHAR(10),
-    upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    play_count INT DEFAULT 0
 );

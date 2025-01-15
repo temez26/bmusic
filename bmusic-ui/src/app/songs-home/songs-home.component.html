@@ -1,0 +1,44 @@
+<div class="song-list-container">
+  <div *ngFor="let album of albums" class="album-section">
+    <div class="album-header">
+      <h2>{{ album.name }}</h2>
+    </div>
+    <div class="album-content">
+      <div *ngFor="let song of album.randomSongs" class="song-item">
+        <div class="song-column">
+          <img
+            *ngIf="coverImageSrcMap[song.id]"
+            [src]="coverImageSrcMap[song.id]"
+            (click)="playSong(song.file_path, song.title)"
+            alt="Cover Image"
+            class="cover-image-large"
+            style="cursor: pointer"
+          />
+          <div class="song-details">
+            <h3
+              (click)="playSong(song.file_path, song.title)"
+              style="cursor: pointer"
+            >
+              {{ song.title }}
+            </h3>
+          </div>
+        </div>
+
+        <div class="artist-column">
+          <p>{{ song.artist || "empty" }}</p>
+        </div>
+
+        <div class="time-column">
+          <p>{{ song.length || "empty" }}</p>
+        </div>
+
+        <div class="actions-column">
+          <app-delete
+            [songId]="song.id"
+            (songDeleted)="onSongDeleted()"
+          ></app-delete>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

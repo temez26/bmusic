@@ -1,0 +1,45 @@
+.album-section {
+  margin-bottom: 20px;
+}
+
+.album-header {
+  margin-bottom: 10px;
+}
+
+.album-content {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.719);
+}
+
+.song-item {
+  display: inline-block;
+  margin-right: 20px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  max-width: 150px;
+}
+
+.cover-image-large {
+  width: 40px;
+  height: 40px;
+}
+
+.song-details {
+  margin-top: 10px;
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+h2 {
+  margin: 0;
+}
+h3 {
+  font-size: 1rem;
+}
+p {
+  font-size: 0.8rem;
+}

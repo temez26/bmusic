@@ -10,6 +10,14 @@ import { Song, UploadResponse } from './models/song-def.class';
 export class ApiService {
   constructor(private http: HttpClient) {}
 
+  incrementPlayCount(songId: number): Observable<{ playCount: number }> {
+    const url = `http://${window.location.hostname}:4000/increment`;
+    return this.http.post<{ playCount: number }>(url, { id: songId }).pipe(
+      tap((response) => {
+        console.log('Incremented play count:', response.playCount);
+      })
+    );
+  }
   fetchSongs(): Observable<Song[]> {
     return this.http
       .get<Song[]>(`http://${window.location.hostname}:4000/songs`)

@@ -4,7 +4,7 @@ const http = require("http");
 const express = require("express");
 const WebSocket = require("ws");
 const cors = require("cors");
-
+const { incrementPlayCount } = require("./database/db");
 const upload = require("./services/uploadConfig");
 const { handleFileDelete } = require("./services/deleteController");
 const {
@@ -29,6 +29,23 @@ app.get("/songs", handleAllSongs);
 
 // Route to handle file uploads
 app.post("/upload", upload, handleFileUpload);
+
+app.post("/increment", async (req, res) => {
+  const { id } = req.body;
+  console.log(id);
+
+  if (!id) {
+    return res.status(400).send("Song ID is required");
+  }
+
+  try {
+    const playCount = await incrementPlayCount(id);
+    res.status(200).json({ playCount });
+  } catch (err) {
+    console.error("Error incrementing play count:", err);
+    res.status(500).send("Error incrementing play count");
+  }
+});
 
 // Route to handle file deletion
 app.delete("/delete", handleFileDelete);
