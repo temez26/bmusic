@@ -5,15 +5,20 @@
 
 .song-header {
   display: flex;
-  gap: 15%;
+  justify-content: space-evenly;
   background-color: rgba(0, 0, 0, 0.8);
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem 0.5rem 0 0;
+  padding: 0.5rem 0.3rem;
+  border-radius: 0.2rem;
   margin-bottom: 0.5rem;
 }
 
 .header-item {
   flex: 1;
+  font-weight: bold;
+  color: #fff;
+}
+.header-last {
+  padding-right: 2%;
   font-weight: bold;
   color: #fff;
 }
@@ -47,20 +52,12 @@
   align-items: center;
 }
 
-.song-column {
-  flex: 2;
-}
-
+.song-column,
 .artist-column,
+.time-column,
 .album-column {
-  flex: 1.5;
-}
-
-.actions-column {
   flex: 1;
-  justify-content: center;
 }
-
 .song-details {
   border-radius: 0.5rem;
   margin-left: 0.3rem;

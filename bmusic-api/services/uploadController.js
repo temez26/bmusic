@@ -35,6 +35,10 @@ const handleFileUpload = async (req, res) => {
           const filePath = file.path;
           const metadata = await mm.parseFile(filePath);
           const { title, artist, album, genre } = metadata.common;
+          const duration = metadata.format.duration;
+          const minutes = Math.floor(duration / 60);
+          const seconds = Math.floor(duration % 60);
+          const length = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 
           await insertSong(
             title || file.originalname,
@@ -42,7 +46,8 @@ const handleFileUpload = async (req, res) => {
             album,
             genre,
             filePath,
-            albumCoverUrl
+            albumCoverUrl,
+            length
           );
           successfulUploads.push(file.originalname);
         } catch (err) {

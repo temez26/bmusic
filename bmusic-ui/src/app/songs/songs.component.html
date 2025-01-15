@@ -1,8 +1,10 @@
+<h1>Songs</h1>
 <div class="song-header">
   <div class="header-item">Song</div>
   <div class="header-item">Artist</div>
   <div class="header-item">Album</div>
-  <div class="header-item">Actions</div>
+  <div class="header-item">Time</div>
+  <div class="header-last">Actions</div>
 </div>
 <div class="song-list-container">
   <div *ngFor="let song of songs" class="song-item">
@@ -26,11 +28,16 @@
     </div>
 
     <div class="artist-column">
-      <p>Artist: {{ song.artist || "empty" }}</p>
+      <p>{{ song.artist || "empty" }}</p>
     </div>
 
     <div class="album-column">
-      <p>Album: {{ song.album || "empty" }}</p>
+      <p>{{ song.album || "empty" }}</p>
+    </div>
+    <div class="time-column">
+      <p>
+        {{ song.length || "empty" }}
+      </p>
     </div>
 
     <div class="actions-column">
