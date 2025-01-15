@@ -14,18 +14,37 @@
   flex-direction: column;
   align-items: center;
   color: white;
+  position: relative;
 }
 
 .album-cover {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-radius: 10px;
   margin-bottom: 10px;
 }
 
 .player-title {
-  font-size: 1.5em;
-  margin-bottom: 10px;
+  font-size: 1em;
+  margin-bottom: 5px;
+}
+
+.volume-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.volume-dial {
+  margin-left: 10px;
+}
+
+.volume-percentage {
+  margin-left: 5px;
+  color: white;
+  font-size: 0.8em;
 }
 
 .player-controls {
@@ -38,8 +57,8 @@
   background: none;
   border: none;
   color: white;
-  font-size: 1.5em;
-  margin: 0 10px;
+  font-size: 1em;
+  margin: 0 5px;
   cursor: pointer;
 }
 
@@ -59,15 +78,21 @@
   margin: 0 10px;
 }
 
-.volume-dial {
-  margin-left: 10px;
-}
-
 .timer {
   color: white;
+  font-size: 0.8em;
 }
 
-.volume-percentage {
-  margin-left: 5px;
+.shuffle-button,
+.repeat-button {
+  background: none;
+  border: none;
   color: white;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.shuffle-button:hover,
+.repeat-button:hover {
+  color: #1e8fff;
 }

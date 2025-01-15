@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { PlayerService } from '../service/player.service';
 import { PlayerWsService } from '../service/playerws.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-player',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './player.component.html',
   styleUrl: './player.component.scss',
 })
@@ -21,7 +22,7 @@ export class PlayerComponent implements OnInit {
   isShuffle: boolean = false;
   isRepeat: boolean = false;
   isPlaying: boolean = false;
-  volumePercentage: number = 100;
+  volumePercentage: number = 50;
 
   constructor(
     private playerService: PlayerService,
