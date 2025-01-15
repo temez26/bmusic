@@ -14,9 +14,28 @@
   background-color: rgba(0, 0, 0, 0.719);
   border-radius: 4px;
 }
+
+.top-songs-row::-webkit-scrollbar {
+  height: 12px;
+}
+
+.top-songs-row::-webkit-scrollbar-track {
+  background: #333;
+}
+
+.top-songs-row::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 10px;
+}
+
+.top-songs-row::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
 .title {
   align-self: start;
 }
+
 .song-item {
   flex: 0 0 auto;
   margin: 10px;
@@ -35,6 +54,7 @@
   display: block;
   margin: 0 auto;
 }
+
 .song-details {
   margin-top: 10px;
   width: 150px;
