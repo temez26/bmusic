@@ -10,8 +10,10 @@
       <img
         *ngIf="coverImageSrcMap[song.id]"
         [src]="coverImageSrcMap[song.id]"
+        (click)="playSong(song.file_path, song.title)"
         alt="Cover Image"
         class="cover-image"
+        style="cursor: pointer"
       />
       <div class="song-details">
         <h3
