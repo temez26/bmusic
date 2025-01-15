@@ -2,9 +2,37 @@
   <h2 class="player-title">{{ currentTitle }}</h2>
   <div class="player-controls">
     <button class="player-button" (click)="previousSong()">
-      Previous Song
+      &#9664;
+      <!-- Left arrow -->
     </button>
-    <audio id="audio" controls class="player-audio"></audio>
-    <button class="player-button" (click)="nextSong()">Next Song</button>
+    <button class="player-button" (click)="toggleShuffle()">Shuffle</button>
+    <button class="player-button" (click)="togglePlayPause()">
+      {{ isPlaying ? "Pause" : "Play" }}
+    </button>
+    <button class="player-button" (click)="toggleRepeat()">Repeat</button>
+    <audio
+      #audio
+      id="audio"
+      class="player-audio"
+      (loadedmetadata)="updateDuration($event)"
+      (timeupdate)="updateCurrentTime($event)"
+    ></audio>
+    <button class="player-button" (click)="nextSong()">
+      &#9654;
+      <!-- Right arrow -->
+    </button>
+  </div>
+  <div class="player-extra-controls">
+    <span class="timer">{{ currentTime }}</span>
+    <input
+      type="range"
+      class="progress-slider"
+      (input)="seek($event)"
+      [max]="audioDuration"
+      [value]="audioCurrentTime"
+    />
+    <span class="timer">{{ duration }}</span>
+    <input type="range" class="volume-dial" (input)="changeVolume($event)" />
+    <span class="volume-percentage">{{ volumePercentage }}%</span>
   </div>
 </div>
