@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,10 +19,11 @@ import { UploadComponent } from '../upload/upload.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss',
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
   private dialogRef: MatDialogRef<UploadComponent> | null = null;
+
   constructor(private dialog: MatDialog) {}
 
   toggleUploadDialog(): void {
@@ -31,7 +31,10 @@ export class NavbarComponent {
       this.dialogRef.close();
       this.dialogRef = null;
     } else {
-      this.dialogRef = this.dialog.open(UploadComponent);
+      this.dialogRef = this.dialog.open(UploadComponent, {
+        width: '600px',
+        height: 'auto',
+      });
     }
   }
 }

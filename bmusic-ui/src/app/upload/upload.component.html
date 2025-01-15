@@ -1,3 +1,12 @@
-<h1>Upload songs</h1>
-<input type="file" id="fileInput" multiple />
-<button (click)="uploadFiles()">upload</button>
+<div class="upload">
+  <div>
+    <h1>Upload songs</h1>
+    <p class="text-background">
+      Please upload only audio files and album covers. Ensure that each song has
+      the correct album cover by uploading one album at a time.
+    </p>
+  </div>
+  <label for="fileInput">Choose files</label>
+  <input type="file" id="fileInput" multiple accept="audio/*,image/*" />
+  <button (click)="uploadFiles()">Upload</button>
+</div>

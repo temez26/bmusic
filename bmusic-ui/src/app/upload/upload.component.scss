@@ -1,3 +1,95 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.952);
+  color: #c9d1d9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.733);
+  backdrop-filter: blur(5px);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+:host::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: black;
+  z-index: -1;
+}
+.upload {
+  .text-background {
+    background-color: rgba(81, 107, 255, 0.2);
+    padding: 1.5rem;
+    border-radius: 12px;
+    color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+}
+h1 {
+  font-size: 2rem;
+  font-weight: 450;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid white;
+  padding-bottom: 4px;
+  background: linear-gradient(45deg, #ff5722, #2196f3, #ff5722, #2196f3);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientAnimation 5s ease infinite;
+  transition: transform 0.3s ease, background-position 0.3s ease;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+input[type="file"] {
+  display: none;
+}
+
+label {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #0040c993;
+  color: #ffffff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+}
+
+label:hover {
+  background-color: #0040c960;
+}
+
+button {
+  background-color: #0040c993;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 button:hover {
-  background-color: #2ea043;
+  background-color: #0040c960;
 }

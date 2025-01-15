@@ -49,6 +49,12 @@ app-root {
   flex-grow: 1;
 }
 
+// upload component
+.cdk-global-overlay-wrapper {
+  display: flex;
+  align-items: center;
+}
+
 // Add some cool styling for the base of the app
 header {
   background-color: #161b22;
