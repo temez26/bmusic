@@ -2,12 +2,12 @@
   background: linear-gradient(
     135deg,
     rgba(0, 0, 0, 0.3),
-    rgba(94, 1, 1, 0.5),
-    rgba(155, 0, 0, 0.575),
-    rgba(77, 0, 0, 0.616)
+    rgba(56, 0, 0, 0.5),
+    rgba(65, 0, 0, 0.575),
+    rgba(54, 0, 0, 0.616)
   );
-  box-shadow: 0 0 15px rgba(30, 143, 255, 0.404),
-    0 0 25px rgba(9, 65, 122, 0.404), 0 0 35px rgba(0, 71, 141, 0.404);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.527), 0 0 25px rgba(7, 7, 7, 0.514),
+    0 0 35px rgba(0, 0, 0, 0.404);
   padding: 0 10px;
   border-radius: 10px;
   display: flex;
@@ -63,7 +63,7 @@
 
 .volume-percentage {
   margin-left: 5px;
-  color: white;
+  color: rgb(255, 255, 255);
   font-size: 0.8em;
 }
 
@@ -71,36 +71,32 @@
   display: flex;
   align-items: center;
   margin-bottom: 2px;
+  border-radius: 5px;
+  padding: 10px;
 }
 
 .player-button {
   background: none;
   border: none;
-  color: white;
-  font-size: 1em;
-  margin: 0 5px;
+  border-radius: 50%;
+  margin: 0 10px;
   cursor: pointer;
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   padding: 5px;
-  transition: transform 0.2s, color 0.2s, box-shadow 0.2s;
 }
+
 .player-button img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
+
 .next,
 .previous {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   padding: 5px;
-}
-
-.player-button:hover {
-  color: #1e8fff;
-  transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(30, 143, 255, 0.7);
 }
 
 .player-extra-controls {
@@ -111,26 +107,27 @@
 }
 
 .timer {
-  color: white;
-  font-size: 0.8em;
+  color: #c2c2c2;
+  font-size: 1em;
+  font-family: "Arial", sans-serif;
 }
 
 .shuffle-button,
 .repeat-button {
   background: none;
   border: none;
-  color: white;
-  font-size: 1em;
+  color: #333;
+  font-size: 1.2em;
   cursor: pointer;
-  width: 28px;
-  height: 28px;
+  width: 25px;
+  height: 25px;
   padding: 5px;
-  transition: transform 0.2s, color 0.2s, box-shadow 0.2s;
 }
 
-.shuffle-button:hover,
-.repeat-button:hover {
-  color: #1e8fff;
-  transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(30, 143, 255, 0.7);
+.icon {
+  filter: invert(1) sepia(1) saturate(5) hue-rotate(180deg);
+  opacity: 0.8;
+}
+.player-button:hover .icon {
+  filter: invert(1) brightness(1.5) saturate(100%);
 }
