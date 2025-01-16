@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { PlayerService } from '../service/player.service';
 import { PlayerWsService } from '../service/playerws.service';
+import { ProgressService } from '../service/progress.service';
+import { PlayerModel } from '../service/models/player.model';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,21 +14,17 @@ import { CommonModule } from '@angular/common';
 })
 export class PlayerComponent implements OnInit {
   @ViewChild('audio', { static: true }) audioRef!: ElementRef<HTMLAudioElement>;
+  @ViewChild('progressSlider', { static: true })
+  progressSliderRef!: ElementRef<HTMLInputElement>;
+  @ViewChild('volumeDial', { static: true })
+  volumeDialRef!: ElementRef<HTMLInputElement>;
 
-  currentTitle: string | null = null;
-  currentAlbumCover: string | null = null;
-  currentTime: string = '0:00';
-  duration: string = '0:00';
-  audioCurrentTime: number = 0;
-  audioDuration: number = 0;
-  isShuffle: boolean = false;
-  isRepeat: boolean = false;
-  isPlaying: boolean = false;
-  volumePercentage: number = 50;
+  player: PlayerModel = new PlayerModel();
 
   constructor(
     private playerService: PlayerService,
-    private playerWsService: PlayerWsService
+    private playerWsService: PlayerWsService,
+    private progressService: ProgressService
   ) {}
 
   ngOnInit() {
@@ -37,8 +35,23 @@ export class PlayerComponent implements OnInit {
       }
     });
     this.playerService.title$.subscribe((title) => {
-      this.currentTitle = title;
+      this.player.currentTitle = title;
     });
+
+    this.progressSliderRef.nativeElement.addEventListener(
+      'input',
+      this.seek.bind(this)
+    );
+    this.audioRef.nativeElement.addEventListener(
+      'timeupdate',
+      this.updateCurrentTime.bind(this)
+    );
+
+    //set initial volume
+    this.audioRef.nativeElement.volume = this.player.volumePercentage / 100;
+    this.volumeDialRef.nativeElement.value = String(
+      this.player.volumePercentage
+    );
   }
 
   nextSong() {
@@ -50,54 +63,64 @@ export class PlayerComponent implements OnInit {
   }
 
   toggleShuffle() {
-    this.isShuffle = !this.isShuffle;
-    console.log('Shuffle toggled:', this.isShuffle);
+    this.player.isShuffle = !this.player.isShuffle;
+    console.log('Shuffle toggled:', this.player.isShuffle);
   }
 
   toggleRepeat() {
-    this.isRepeat = !this.isRepeat;
-    console.log('Repeat toggled:', this.isRepeat);
+    this.player.isRepeat = !this.player.isRepeat;
+    console.log('Repeat toggled:', this.player.isRepeat);
   }
 
   togglePlayPause() {
     const audio = this.audioRef.nativeElement;
     if (audio.paused) {
       audio.play();
-      this.isPlaying = true;
+      this.player.isPlaying = true;
     } else {
       audio.pause();
-      this.isPlaying = false;
+      this.player.isPlaying = false;
     }
   }
 
   changeVolume(event: any) {
     const volume = event.target.value / 100;
     this.audioRef.nativeElement.volume = volume;
-    this.volumePercentage = event.target.value;
+    this.player.volumePercentage = event.target.value;
     console.log('Volume changed:', volume);
   }
 
   updateDuration(event: any) {
     const audio = event.target;
-    this.audioDuration = audio.duration;
-    this.duration = this.formatTime(audio.duration);
+    const { duration, formattedDuration } =
+      this.progressService.updateDuration(audio);
+    this.player.audioDuration = duration;
+    this.player.duration = formattedDuration;
   }
 
   updateCurrentTime(event: any) {
     const audio = event.target;
-    this.audioCurrentTime = audio.currentTime;
-    this.currentTime = this.formatTime(audio.currentTime);
+    const { currentTime, formattedCurrentTime } =
+      this.progressService.updateCurrentTime(audio);
+    this.player.audioCurrentTime = currentTime;
+    this.player.currentTime = formattedCurrentTime;
+    this.updateProgress();
   }
 
   seek(event: any) {
     const seekTime = event.target.value;
-    this.audioRef.nativeElement.currentTime = seekTime;
-    this.audioCurrentTime = seekTime;
+    const { currentTime } = this.progressService.seek(
+      this.audioRef.nativeElement,
+      seekTime
+    );
+    this.player.audioCurrentTime = currentTime;
+    this.updateProgress();
   }
 
-  formatTime(seconds: number): string {
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+  updateProgress() {
+    this.progressService.updateProgress(
+      this.progressSliderRef.nativeElement,
+      this.audioRef.nativeElement
+    );
   }
 }

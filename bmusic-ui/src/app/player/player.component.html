@@ -1,29 +1,25 @@
 <div class="player">
-  <h2 class="player-title">{{ currentTitle }}</h2>
+  <h2 class="player-title">{{ player.currentTitle }}</h2>
   <div class="volume-controls">
     <input type="range" class="volume-dial" (input)="changeVolume($event)" />
-    <span class="volume-percentage">{{ volumePercentage }}%</span>
+    <span class="volume-percentage">{{ player.volumePercentage }}%</span>
   </div>
   <div class="player-controls">
     <button class="player-button shuffle-button" (click)="toggleShuffle()">
-      <img src="assets/icons/shuffle.svg" alt="Shuffle" />
+      <img src="/shuffle.png" alt="Shuffle" />
     </button>
-    <button class="player-button" (click)="previousSong()">
-      &#9664;
-      <!-- Left arrow -->
+    <button class="player-button previous" (click)="previousSong()">
+      <img src="/previous.png" alt="Previous" />
     </button>
     <button class="player-button" (click)="togglePlayPause()">
-      <span *ngIf="!isPlaying">&#9658;</span>
-      <!-- Play icon -->
-      <span *ngIf="isPlaying">&#10074;&#10074;</span>
-      <!-- Pause icon -->
+      <img *ngIf="!player.isPlaying" src="/play.png" alt="Play" />
+      <img *ngIf="player.isPlaying" src="/pause.png" alt="Pause" />
     </button>
-    <button class="player-button" (click)="nextSong()">
-      &#9654;
-      <!-- Right arrow -->
+    <button class="player-button next" (click)="nextSong()">
+      <img src="/next.png" alt="Next" />
     </button>
     <button class="player-button repeat-button" (click)="toggleRepeat()">
-      <img src="assets/icons/repeat.svg" alt="Repeat" />
+      <img src="/repeat.png" alt="Repeat" />
     </button>
     <audio
       #audio
@@ -34,14 +30,15 @@
     ></audio>
   </div>
   <div class="player-extra-controls">
-    <span class="timer">{{ currentTime }}</span>
+    <span class="timer">{{ player.currentTime }}</span>
     <input
       type="range"
       class="progress-slider"
+      #progressSlider
       (input)="seek($event)"
-      [max]="audioDuration"
-      [value]="audioCurrentTime"
+      [max]="player.audioDuration"
+      [value]="player.audioCurrentTime"
     />
-    <span class="timer">{{ duration }}</span>
+    <span class="timer">{{ player.duration }}</span>
   </div>
 </div>
