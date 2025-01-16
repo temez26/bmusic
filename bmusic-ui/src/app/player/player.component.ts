@@ -79,7 +79,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
       'timeupdate',
       this.updateCurrentTime.bind(this)
     );
-
+    // check if music is playuing
+    this.playerService.isPlaying$.subscribe((isPlaying) => {
+      this.player.isPlaying = isPlaying;
+    });
     // Set initial volume
     this.audioRef.nativeElement.volume = this.player.volumePercentage / 100;
     this.volumeSliderRef.nativeElement.value = String(
@@ -107,10 +110,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   nextSong() {
     this.playerService.changeSong(1);
+    this.playerService.setIsPlaying(true);
   }
 
   previousSong() {
     this.playerService.changeSong(-1);
+    this.playerService.setIsPlaying(true);
   }
 
   toggleShuffle() {
@@ -127,10 +132,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
     const audio = this.audioRef.nativeElement;
     if (audio.paused) {
       audio.play();
-      this.player.isPlaying = true;
+      this.playerService.setIsPlaying(true);
     } else {
       audio.pause();
-      this.player.isPlaying = false;
+      this.playerService.setIsPlaying(false);
     }
   }
 

@@ -20,6 +20,8 @@ export class PlayerService {
 
   private currentSongSubject = new BehaviorSubject<Song | null>(null);
   currentSong$ = this.currentSongSubject.asObservable();
+  private isPlayingSubject = new BehaviorSubject<boolean>(false);
+  isPlaying$ = this.isPlayingSubject.asObservable();
 
   constructor(private apiService: ApiService) {}
 
@@ -30,6 +32,9 @@ export class PlayerService {
   setTitle(title: string) {
     console.log(title);
     this.titleSubject.next(title);
+  }
+  setIsPlaying(isPlaying: boolean) {
+    this.isPlayingSubject.next(isPlaying);
   }
 
   setCurrentSong(song: Song) {

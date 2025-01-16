@@ -57,6 +57,7 @@ export class SongsComponent implements OnInit, OnDestroy {
         console.log('Play count incremented:', response.playCount);
         this.playerService.setFilePath(filePath);
         this.playerService.setTitle(title);
+        this.playerService.setIsPlaying(true);
       },
       error: (error) => {
         console.error('Error incrementing play count:', error);
