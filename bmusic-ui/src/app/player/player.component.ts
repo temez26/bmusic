@@ -1,9 +1,18 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
 import { PlayerService } from '../service/player.service';
 import { PlayerWsService } from '../service/playerws.service';
 import { ProgressService } from '../service/progress.service';
+import { CoverWsService } from '../service/coverws.service';
 import { PlayerModel } from '../service/models/player.model';
 import { CommonModule } from '@angular/common';
+import { Song } from '../service/models/song-def.class';
 
 @Component({
   selector: 'app-player',
@@ -16,7 +25,7 @@ import { CommonModule } from '@angular/common';
     './volume-slider.component.scss',
   ],
 })
-export class PlayerComponent implements OnInit {
+export class PlayerComponent implements OnInit, OnDestroy {
   @ViewChild('audio', { static: true }) audioRef!: ElementRef<HTMLAudioElement>;
   @ViewChild('progressSlider', { static: true })
   progressSliderRef!: ElementRef<HTMLInputElement>;
@@ -24,20 +33,40 @@ export class PlayerComponent implements OnInit {
   volumeSliderRef!: ElementRef<HTMLInputElement>;
 
   player: PlayerModel = new PlayerModel();
+  albumCoverSrc: string = '';
+  private currentSongSubscription!: Subscription;
 
   constructor(
     private playerService: PlayerService,
     private playerWsService: PlayerWsService,
-    private progressService: ProgressService
+    private progressService: ProgressService,
+    private coverWsService: CoverWsService
   ) {}
 
   ngOnInit() {
+    this.currentSongSubscription = this.playerService.currentSong$.subscribe(
+      (song: Song | null) => {
+        if (song) {
+          this.player.currentTitle = song.title;
+          this.coverWsService
+            .getCovers(song.id, song.album_cover_url)
+            .then((imageSrc) => {
+              this.albumCoverSrc = imageSrc;
+            })
+            .catch((error) => {
+              console.error('Error fetching cover:', error);
+            });
+        }
+      }
+    );
+
     this.playerService.filePath$.subscribe((filePath) => {
       if (filePath) {
         this.playerWsService.startWebSocket(filePath);
         this.audioRef.nativeElement.src = filePath;
       }
     });
+
     this.playerService.title$.subscribe((title) => {
       this.player.currentTitle = title;
     });
@@ -59,6 +88,12 @@ export class PlayerComponent implements OnInit {
 
     // Initialize volume slider styles
     this.initializeSlider(this.volumeSliderRef.nativeElement);
+  }
+
+  ngOnDestroy() {
+    if (this.currentSongSubscription) {
+      this.currentSongSubscription.unsubscribe();
+    }
   }
 
   initializeSlider(slider: HTMLInputElement) {

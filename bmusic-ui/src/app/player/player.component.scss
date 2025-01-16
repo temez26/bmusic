@@ -1,10 +1,10 @@
 .player {
   background: linear-gradient(
     135deg,
-    rgba(0, 0, 0, 0.3),
-    rgba(56, 0, 0, 0.5),
+    rgba(8, 0, 0, 0.3),
+    rgba(180, 0, 0, 0.5),
     rgba(65, 0, 0, 0.575),
-    rgba(54, 0, 0, 0.616)
+    rgba(24, 0, 0, 0.616)
   );
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.527), 0 0 25px rgba(7, 7, 7, 0.514),
     0 0 35px rgba(0, 0, 0, 0.404);
@@ -18,6 +18,28 @@
   color: white;
   position: relative;
 }
+
+.player-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.album-cover {
+  width: 35px;
+  height: 35px;
+  border-radius: 2px;
+  padding: 5px;
+}
+
+.player-title {
+  font-size: 1em;
+  font-weight: 250;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 .volume-controls {
   display: flex;
   align-items: center;
@@ -39,19 +61,6 @@
 
 .volume-percentage {
   white-space: nowrap;
-}
-
-.album-cover {
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-}
-
-.player-title {
-  font-size: 1em;
-  margin-top: 5px;
-  margin-bottom: 5px;
 }
 
 .volume-controls {
@@ -108,7 +117,7 @@
 }
 
 .timer {
-  color: #c2c2c2;
+  color: #cac9c9;
   font-size: 0.8em;
   font-family: "Arial", sans-serif;
 }

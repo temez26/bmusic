@@ -8,7 +8,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class PlayerService {
-  private currentSongIndex = 0;
+  currentSongIndex = 0;
   private filePathSubject = new BehaviorSubject<string | null>(null);
   filePath$ = this.filePathSubject.asObservable();
 
@@ -18,14 +18,22 @@ export class PlayerService {
   private titleSubject = new BehaviorSubject<string | null>(null);
   title$ = this.titleSubject.asObservable();
 
+  private currentSongSubject = new BehaviorSubject<Song | null>(null);
+  currentSong$ = this.currentSongSubject.asObservable();
+
   constructor(private apiService: ApiService) {}
 
   setFilePath(filePath: string) {
     this.filePathSubject.next(filePath);
   }
+
   setTitle(title: string) {
     console.log(title);
     this.titleSubject.next(title);
+  }
+
+  setCurrentSong(song: Song) {
+    this.currentSongSubject.next(song);
   }
 
   fetchSongs(): Observable<Song[]> {
@@ -49,6 +57,7 @@ export class PlayerService {
       })
     );
   }
+
   changeSong(offset: number) {
     const songs = this.songsSubject.getValue();
     const currentFilePath = this.filePathSubject.getValue();
@@ -62,6 +71,7 @@ export class PlayerService {
       const newSong = songs[this.currentSongIndex];
       this.setFilePath(newSong.file_path);
       this.setTitle(newSong.title);
+      this.setCurrentSong(newSong);
     }
   }
 }
