@@ -1,13 +1,18 @@
 <div class="player">
   <h2 class="player-title">{{ player.currentTitle }}</h2>
   <div class="volume-controls">
-    <input
-      type="range"
-      class="styled-slider slider-progress"
-      #volumeSlider
-      (input)="changeVolume($event)"
-    />
-    <span class="volume-percentage">{{ player.volumePercentage }}%</span>
+    <div class="volume-slider-container">
+      <input
+        type="range"
+        class="styled-slider slider-progress"
+        #volumeSlider
+        [value]="player.volumePercentage"
+        (input)="changeVolume($event)"
+      />
+    </div>
+    <div class="volume-percentage-container">
+      <span class="volume-percentage">{{ player.volumePercentage }}%</span>
+    </div>
   </div>
   <div class="player-controls">
     <button class="player-button shuffle-button" (click)="toggleShuffle()">
