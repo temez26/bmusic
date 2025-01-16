@@ -11,9 +11,10 @@
   padding: 0 10px;
   border-radius: 10px;
   display: flex;
-  height: 100px;
+  height: 120px;
   flex-direction: column;
   align-items: center;
+  justify-content: end;
   color: white;
   position: relative;
 }
@@ -108,7 +109,7 @@
 
 .timer {
   color: #c2c2c2;
-  font-size: 1em;
+  font-size: 0.8em;
   font-family: "Arial", sans-serif;
 }
 
