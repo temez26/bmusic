@@ -37,11 +37,6 @@
   align-items: center;
 }
 
-.volume-dial {
-  margin-left: 10px;
-  height: 3px;
-}
-
 .volume-percentage {
   margin-left: 5px;
   color: white;
@@ -89,46 +84,6 @@
   align-items: center;
   width: 100%;
   justify-content: space-between;
-}
-
-.progress-slider {
-  flex-grow: 1;
-  margin: 0 10px;
-  background: #4e4e4eaf;
-  border-radius: 5px;
-  height: 5px;
-  appearance: none; /* Remove default styling */
-  position: relative; /* Add relative positioning */
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: var(--progress, 0); /* Use custom property */
-    background: rgb(218, 218, 218); /* Same color as the thumb */
-    border-radius: 5px;
-    z-index: 1;
-  }
-}
-
-.progress-slider::-webkit-slider-thumb {
-  -webkit-appearance: none; /* Remove default styling */
-  appearance: none; /* Remove default styling */
-  width: 5px; /* Adjust the thumb size */
-  height: 5px; /* Adjust the thumb size */
-  background: none; /* Thumb color */
-  border: none; /* Remove any border */
-  z-index: 2; /* Ensure thumb is above the played area */
-}
-
-.progress-slider::-moz-range-thumb {
-  width: 10px; /* Adjust the thumb size */
-  height: 10px; /* Adjust the thumb size */
-  background: rgb(218, 218, 218); /* Thumb color */
-  border: none; /* Remove any border */
-  z-index: 2; /* Ensure thumb is above the played area */
 }
 
 .timer {

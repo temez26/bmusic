@@ -1,7 +1,12 @@
 <div class="player">
   <h2 class="player-title">{{ player.currentTitle }}</h2>
   <div class="volume-controls">
-    <input type="range" class="volume-dial" (input)="changeVolume($event)" />
+    <input
+      type="range"
+      class="styled-slider slider-progress"
+      #volumeSlider
+      (input)="changeVolume($event)"
+    />
     <span class="volume-percentage">{{ player.volumePercentage }}%</span>
   </div>
   <div class="player-controls">

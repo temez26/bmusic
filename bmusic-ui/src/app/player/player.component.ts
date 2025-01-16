@@ -10,14 +10,18 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './player.component.html',
-  styleUrl: './player.component.scss',
+  styleUrls: [
+    './player.component.scss',
+    './progress.component.scss',
+    './volume-slider.component.scss',
+  ],
 })
 export class PlayerComponent implements OnInit {
   @ViewChild('audio', { static: true }) audioRef!: ElementRef<HTMLAudioElement>;
   @ViewChild('progressSlider', { static: true })
   progressSliderRef!: ElementRef<HTMLInputElement>;
-  @ViewChild('volumeDial', { static: true })
-  volumeDialRef!: ElementRef<HTMLInputElement>;
+  @ViewChild('volumeSlider', { static: true })
+  volumeSliderRef!: ElementRef<HTMLInputElement>;
 
   player: PlayerModel = new PlayerModel();
 
@@ -47,10 +51,22 @@ export class PlayerComponent implements OnInit {
       this.updateCurrentTime.bind(this)
     );
 
-    //set initial volume
+    // Set initial volume
     this.audioRef.nativeElement.volume = this.player.volumePercentage / 100;
-    this.volumeDialRef.nativeElement.value = String(
+    this.volumeSliderRef.nativeElement.value = String(
       this.player.volumePercentage
+    );
+
+    // Initialize volume slider styles
+    this.initializeSlider(this.volumeSliderRef.nativeElement);
+  }
+
+  initializeSlider(slider: HTMLInputElement) {
+    slider.style.setProperty('--value', slider.value);
+    slider.style.setProperty('--min', slider.min === '' ? '0' : slider.min);
+    slider.style.setProperty('--max', slider.max === '' ? '100' : slider.max);
+    slider.addEventListener('input', () =>
+      slider.style.setProperty('--value', slider.value)
     );
   }
 
@@ -87,7 +103,7 @@ export class PlayerComponent implements OnInit {
     const volume = event.target.value / 100;
     this.audioRef.nativeElement.volume = volume;
     this.player.volumePercentage = event.target.value;
-    console.log('Volume changed:', volume);
+    this.initializeSlider(event.target);
   }
 
   updateDuration(event: any) {
