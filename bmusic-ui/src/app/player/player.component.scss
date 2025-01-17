@@ -13,7 +13,6 @@
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   padding: 0 10px;
   border-radius: 20px;
-
   display: flex;
   height: 100px;
   flex-direction: column;
@@ -145,6 +144,11 @@
 }
 @media (max-width: 768px) {
   .player {
+    height: 90px;
     border-radius: 0;
+    padding: 0 7px;
+  }
+  .volume-controls {
+    top: 3px;
   }
 }
