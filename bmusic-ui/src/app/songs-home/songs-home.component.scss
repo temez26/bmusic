@@ -39,9 +39,16 @@
 .song-item {
   flex: 0 0 auto;
   margin: 10px;
+  padding: 4px;
   max-width: 150px;
+  transition: background-color 0.3s ease;
 }
 
+.song-item:hover {
+  background-color: rgba(165, 165, 165, 0.116);
+
+  border-radius: 5px;
+}
 .song-number {
   font-size: 1.5rem;
   font-weight: bold;
@@ -68,16 +75,4 @@
 .time-column,
 .actions-column {
   display: none;
-}
-
-h2 {
-  margin: 0;
-}
-
-h3 {
-  font-size: 1rem;
-}
-
-p {
-  font-size: 0.8rem;
 }

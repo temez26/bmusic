@@ -20,37 +20,18 @@ body {
   padding-left: 10%;
 }
 
-// Responsive design for body padding
-@media (max-width: 1200px) {
-  body {
-    padding-right: 6%;
-    padding-left: 6%;
-  }
-}
-
-@media (max-width: 992px) {
-  body {
-    padding-right: 4%;
-    padding-left: 4%;
-  }
-}
-
-@media (max-width: 768px) {
-  body {
-    padding: 0 2px;
-  }
-}
-
 // parent for all the components
 app-root {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  max-width: 100vh;
 }
 
 // main content area
 main {
   flex-grow: 1;
+  padding: 0 10px;
 }
 // child components
 
