@@ -68,6 +68,9 @@ h2 {
 }
 
 @media (max-width: 768px) {
+  .card-container {
+    margin: 0;
+  }
   .card {
     width: 150px;
     height: 150px;

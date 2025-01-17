@@ -139,4 +139,32 @@ button[mat-icon-button]:hover {
   .parent-container {
     height: 80vh;
   }
+
+  .song-header {
+    display: none;
+  }
+
+  .song-column {
+    flex-direction: row;
+    align-items: center;
+  }
+  .album-column {
+    display: none;
+  }
+  .artist-column {
+    display: flex;
+    justify-content: center;
+  }
+  .time-column {
+    display: none;
+  }
+
+  .song-details {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .song-details p {
+    margin: 0;
+  }
 }
