@@ -1,4 +1,3 @@
-// filepath: /c:/Users/temek/Documents/GitHub/bmusic/bmusic-ui/src/app/songs-home/songs-home.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayerService } from '../service/player.service';
@@ -30,7 +29,7 @@ export class SongsComponent implements OnInit, OnDestroy {
       this.songs = songs
         .sort((a, b) => b.play_count - a.play_count) // Sort songs by play_count in descending order
         .slice(0, 10); // Take the top 25 songs
-      // Fetch covers for each song using CoverService
+
       this.songs.forEach((song) =>
         this.coverWsService
           .getCovers(song.id, song.album_cover_url)
@@ -60,11 +59,7 @@ export class SongsComponent implements OnInit, OnDestroy {
     this.apiService.incrementPlayCount(songId).subscribe({
       next: (response) => {
         console.log('Play count incremented:', response.playCount);
-        this.playerService.setFilePath(filePath);
-        this.playerService.setTitle(title);
-        this.playerService.setIsPlaying(true);
-        this.playerService.setCover(album_cover_url);
-        this.playerService.setId(songId);
+        this.playerService.setData(songId, filePath, title, album_cover_url);
       },
       error: (error) => {
         console.error('Error incrementing play count:', error);

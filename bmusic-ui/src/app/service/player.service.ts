@@ -52,7 +52,18 @@ export class PlayerService {
   setCurrentSong(song: Song) {
     this.currentSongSubject.next(song);
   }
-
+  setData(
+    songId: number,
+    filePath: string,
+    title: string,
+    album_cover_url: string
+  ) {
+    this.setId(songId);
+    this.setTitle(title);
+    this.setFilePath(filePath);
+    this.setCover(album_cover_url);
+    this.setIsPlaying(true);
+  }
   fetchSongs(): Observable<Song[]> {
     return this.apiService
       .fetchSongs()
