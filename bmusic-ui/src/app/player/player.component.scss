@@ -97,7 +97,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .player-button img {
@@ -106,15 +106,18 @@
   object-fit: contain;
 }
 .player-button.active {
-  border: 1px solid white;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-radius: 50%;
   transition: all 0.3s ease;
-  background-color: rgba(255, 255, 255, 0.603);
+  background-color: rgba(255, 255, 255, 0.8);
 }
+
 .player-button.active img {
-  filter: brightness(1.1);
+  filter: brightness(1.2);
+  transition: filter 0.3s ease;
 }
+
 .play {
   width: 43px;
   height: 43px;
@@ -154,11 +157,14 @@
 
 .icon {
   filter: invert(1) sepia(1) saturate(5) hue-rotate(180deg);
-  opacity: 0.8;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
 }
-.player-button:hover .icon {
-  filter: invert(1) brightness(1.5) saturate(100%);
+
+.icon:hover {
+  opacity: 0.9;
 }
+
 @media (max-width: 768px) {
   .full-player {
     height: 90px;
