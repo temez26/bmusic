@@ -118,7 +118,6 @@
   justify-content: center;
   width: 100%;
 }
-
 .timer {
   color: #cac9c9;
   font-size: 0.8em;
@@ -155,7 +154,12 @@
     padding: 0px;
     width: 30%;
   }
-
+  .player-extra-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 25px;
+  }
   .album-cover {
     width: 30px;
     height: 30px;
