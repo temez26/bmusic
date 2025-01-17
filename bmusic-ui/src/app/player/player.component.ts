@@ -1,17 +1,17 @@
 import {
   Component,
+  ElementRef,
   OnInit,
   OnDestroy,
   ViewChild,
-  ElementRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
 import { PlayerService } from '../service/player.service';
 import { PlayerWsService } from '../service/playerws.service';
 import { ProgressService } from '../service/progress.service';
 import { CoverWsService } from '../service/coverws.service';
 import { PlayerModel } from '../service/models/player.model';
-import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 import { Song } from '../service/models/song-def.class';
 
 @Component({
@@ -68,6 +68,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
         this.audioRef.nativeElement.src = filePath;
       }
     });
+
     this.playerService.coverPath$.subscribe((coverPath) => {
       this.albumCoverSrc = coverPath ?? '';
       this.playerService.songId$.subscribe((songId) => {
@@ -97,7 +98,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     );
     this.audioRef.nativeElement.addEventListener(
       'ended',
-      this.nextSong.bind(this)
+      this.handleSongEnd.bind(this)
     );
     // check if music is playing
     this.playerService.isPlaying$.subscribe((isPlaying) => {
@@ -129,7 +130,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
 
   nextSong() {
-    this.playerService.changeSong(1);
+    if (this.player.isShuffle) {
+      this.playerService.playRandomSong();
+    } else {
+      this.playerService.changeSong(1);
+    }
     this.playerService.setIsPlaying(true);
   }
 
@@ -141,11 +146,13 @@ export class PlayerComponent implements OnInit, OnDestroy {
   toggleShuffle() {
     this.player.isShuffle = !this.player.isShuffle;
     console.log('Shuffle toggled:', this.player.isShuffle);
+    this.playerService.setShuffle(this.player.isShuffle);
   }
 
   toggleRepeat() {
     this.player.isRepeat = !this.player.isRepeat;
     console.log('Repeat toggled:', this.player.isRepeat);
+    this.playerService.setRepeat(this.player.isRepeat);
   }
 
   togglePlayPause() {
@@ -198,5 +205,14 @@ export class PlayerComponent implements OnInit, OnDestroy {
       this.progressSliderRef.nativeElement,
       this.audioRef.nativeElement
     );
+  }
+
+  handleSongEnd() {
+    if (this.player.isRepeat) {
+      this.audioRef.nativeElement.currentTime = 0;
+      this.audioRef.nativeElement.play();
+    } else {
+      this.nextSong();
+    }
   }
 }

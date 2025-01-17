@@ -28,6 +28,12 @@ export class PlayerService {
   private isPlayingSubject = new BehaviorSubject<boolean>(false);
   isPlaying$ = this.isPlayingSubject.asObservable();
 
+  private isShuffleSubject = new BehaviorSubject<boolean>(false);
+  isShuffle$ = this.isShuffleSubject.asObservable();
+
+  private isRepeatSubject = new BehaviorSubject<boolean>(false);
+  isRepeat$ = this.isRepeatSubject.asObservable();
+
   constructor(private apiService: ApiService) {}
 
   setFilePath(filePath: string) {
@@ -38,20 +44,25 @@ export class PlayerService {
     console.log(title);
     this.titleSubject.next(title);
   }
+
   setIsPlaying(isPlaying: boolean) {
     this.isPlayingSubject.next(isPlaying);
   }
+
   setCover(album_cover_url: string) {
     this.coverPath.next(album_cover_url);
     console.log(this.coverPath.getValue());
   }
+
   setId(songId: number) {
     this.songId.next(songId);
     console.log(this.songId.getValue());
   }
+
   setCurrentSong(song: Song) {
     this.currentSongSubject.next(song);
   }
+
   setData(
     songId: number,
     filePath: string,
@@ -64,6 +75,7 @@ export class PlayerService {
     this.setCover(album_cover_url);
     this.setIsPlaying(true);
   }
+
   fetchSongs(): Observable<Song[]> {
     return this.apiService
       .fetchSongs()
@@ -101,5 +113,26 @@ export class PlayerService {
       this.setTitle(newSong.title);
       this.setCurrentSong(newSong);
     }
+  }
+
+  setShuffle(isShuffle: boolean) {
+    this.isShuffleSubject.next(isShuffle);
+    console.log('Shuffle state set to:', isShuffle);
+  }
+
+  setRepeat(isRepeat: boolean) {
+    this.isRepeatSubject.next(isRepeat);
+    console.log('Repeat state set to:', isRepeat);
+  }
+  playRandomSong() {
+    const songs = this.songsSubject.getValue();
+    const randomIndex = Math.floor(Math.random() * songs.length);
+    const randomSong = songs[randomIndex];
+    this.setData(
+      randomSong.id,
+      randomSong.file_path,
+      randomSong.title,
+      randomSong.album_cover_url
+    );
   }
 }
