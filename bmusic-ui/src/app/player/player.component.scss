@@ -94,9 +94,10 @@
   border-radius: 50%;
   margin: 0 10px;
   cursor: pointer;
-  width: 45px;
-  height: 45px;
-  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border 0.3s ease;
 }
 
 .player-button img {
@@ -104,7 +105,21 @@
   height: 100%;
   object-fit: contain;
 }
-
+.player-button.active {
+  border: 1px solid white;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.603);
+}
+.player-button.active img {
+  filter: brightness(1.1);
+}
+.play {
+  width: 43px;
+  height: 43px;
+  padding: 5px;
+}
 .next,
 .previous {
   width: 32px;
