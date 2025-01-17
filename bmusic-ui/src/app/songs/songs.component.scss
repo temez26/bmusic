@@ -1,9 +1,13 @@
+.parent-container {
+  display: flex;
+  flex-direction: column;
+  height: 83vh;
+}
 .song-list-container {
-  max-height: 800px;
   overflow-y: auto;
 }
 .song-list-container::-webkit-scrollbar {
-  width: 12px; /* Adjust the width of the scrollbar */
+  width: 12px;
 }
 
 .song-list-container::-webkit-scrollbar-track {
@@ -24,7 +28,7 @@
   background-color: rgba(0, 0, 0, 0.8);
   padding: 0.5rem 0.3rem;
   border-radius: 0.2rem;
-  margin-bottom: 0.5rem;
+  border-bottom: 1px solid grey;
 }
 
 .header-item {

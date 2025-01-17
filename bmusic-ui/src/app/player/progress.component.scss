@@ -1,6 +1,6 @@
 .progress-slider {
-  flex-grow: 1;
-  margin: 0 10px;
+  width: 35%;
+  margin: 15px 10px;
   background: #4e4e4eaf;
   border-radius: 5px;
   height: 4px;
@@ -36,4 +36,15 @@
   background: rgb(218, 218, 218);
   border: none;
   z-index: 2;
+}
+
+@media (max-width: 992px) {
+  .progress-slider {
+    width: 50%;
+  }
+}
+@media (max-width: 768px) {
+  .progress-slider {
+    width: 100%;
+  }
 }

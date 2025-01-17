@@ -1,19 +1,7 @@
 .home-container {
   display: flex;
   flex-direction: column;
-  height: 74vh;
-  padding: 0 10px;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.3),
-    rgba(94, 1, 1, 0.5),
-    rgba(155, 0, 0, 0.575),
-    rgba(77, 0, 0, 0.616)
-  );
-  box-shadow: 0 0 15px rgba(30, 143, 255, 0.404),
-    0 0 25px rgba(9, 65, 122, 0.404), 0 0 35px rgba(0, 71, 141, 0.404);
-  backdrop-filter: blur(15px);
-  border-radius: 10px;
+  height: 100%;
 }
 
 h1 {
