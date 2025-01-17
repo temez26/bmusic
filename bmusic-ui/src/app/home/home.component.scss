@@ -58,8 +58,11 @@ h2 {
   position: relative;
   text-align: center;
   color: white;
+  transition: transform 0.3s ease;
 }
-
+.card:hover {
+  transform: scale(1.05);
+}
 .card-image {
   width: 100%;
   height: 100%;
@@ -76,6 +79,11 @@ h2 {
   background: rgba(0, 0, 0, 0.5);
   padding: 10px;
   font-size: 1.2em;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.card-text:hover {
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 @media (max-width: 768px) {
