@@ -9,6 +9,7 @@ import { tap } from 'rxjs/operators';
 })
 export class PlayerService {
   currentSongIndex = 0;
+
   private filePathSubject = new BehaviorSubject<string | null>(null);
   filePath$ = this.filePathSubject.asObservable();
 
@@ -17,6 +18,10 @@ export class PlayerService {
 
   private titleSubject = new BehaviorSubject<string | null>(null);
   title$ = this.titleSubject.asObservable();
+  private coverPath = new BehaviorSubject<string | null>(null);
+  coverPath$ = this.coverPath.asObservable();
+  private songId = new BehaviorSubject<number | null>(null);
+  songId$ = this.songId.asObservable();
 
   private currentSongSubject = new BehaviorSubject<Song | null>(null);
   currentSong$ = this.currentSongSubject.asObservable();
@@ -36,7 +41,14 @@ export class PlayerService {
   setIsPlaying(isPlaying: boolean) {
     this.isPlayingSubject.next(isPlaying);
   }
-
+  setCover(album_cover_url: string) {
+    this.coverPath.next(album_cover_url);
+    console.log(this.coverPath.getValue());
+  }
+  setId(songId: number) {
+    this.songId.next(songId);
+    console.log(this.songId.getValue());
+  }
   setCurrentSong(song: Song) {
     this.currentSongSubject.next(song);
   }

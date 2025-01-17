@@ -13,14 +13,23 @@
         <img
           *ngIf="coverImageSrcMap[song.id]"
           [src]="coverImageSrcMap[song.id]"
-          (click)="playSong(song.id, song.file_path, song.title)"
+          (click)="
+            playSong(song.id, song.file_path, song.title, song.album_cover_url)
+          "
           alt="Cover Image"
           class="cover-image"
           style="cursor: pointer"
         />
         <div class="song-details">
           <p
-            (click)="playSong(song.id, song.file_path, song.title)"
+            (click)="
+              playSong(
+                song.id,
+                song.file_path,
+                song.title,
+                song.album_cover_url
+              )
+            "
             style="cursor: pointer"
           >
             {{ song.title }}

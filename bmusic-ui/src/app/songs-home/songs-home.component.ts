@@ -51,20 +51,26 @@ export class SongsComponent implements OnInit, OnDestroy {
     }
   }
 
-  playSong(songId: number, filePath: string, title: string) {
+  playSong(
+    songId: number,
+    filePath: string,
+    title: string,
+    album_cover_url: string
+  ) {
     this.apiService.incrementPlayCount(songId).subscribe({
       next: (response) => {
         console.log('Play count incremented:', response.playCount);
         this.playerService.setFilePath(filePath);
         this.playerService.setTitle(title);
         this.playerService.setIsPlaying(true);
+        this.playerService.setCover(album_cover_url);
+        this.playerService.setId(songId);
       },
       error: (error) => {
         console.error('Error incrementing play count:', error);
       },
     });
   }
-
   onSongDeleted() {
     this.playerService.fetchSongs().subscribe();
   }

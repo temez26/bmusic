@@ -34,6 +34,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   player: PlayerModel = new PlayerModel();
   albumCoverSrc: string = '';
+  songId: number = 0;
+
   private currentSongSubscription!: Subscription;
 
   constructor(
@@ -65,6 +67,20 @@ export class PlayerComponent implements OnInit, OnDestroy {
         this.playerWsService.startWebSocket(filePath);
         this.audioRef.nativeElement.src = filePath;
       }
+    });
+    this.playerService.coverPath$.subscribe((coverPath) => {
+      this.albumCoverSrc = coverPath ?? '';
+      this.playerService.songId$.subscribe((songId) => {
+        this.songId = songId ?? 0;
+        this.coverWsService
+          .getCovers(this.songId, this.albumCoverSrc)
+          .then((imageSrc) => {
+            this.albumCoverSrc = imageSrc;
+          });
+
+        console.log(this.songId);
+        console.log(this.albumCoverSrc);
+      });
     });
 
     this.playerService.title$.subscribe((title) => {
