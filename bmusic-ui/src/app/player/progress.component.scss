@@ -3,7 +3,7 @@
   margin: 15px 10px;
   background: #4e4e4eaf;
   border-radius: 5px;
-  height: 4px;
+  height: 5px;
   appearance: none;
   position: relative;
 
@@ -17,6 +17,17 @@
     background: rgb(218, 218, 218);
     border-radius: 5px;
     z-index: 1;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 0;
+    height: 13px;
+    width: 100%;
+    background: transparent;
+    cursor: pointer;
   }
 }
 
