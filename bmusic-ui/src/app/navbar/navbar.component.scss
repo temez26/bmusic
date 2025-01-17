@@ -1,6 +1,4 @@
 .myapp {
-  padding-top: 1%;
-  padding-bottom: 1%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -123,4 +121,9 @@ button[mat-icon-button] .material-icons {
 button[mat-icon-button]:hover .material-icons {
   background-position: 100% 20%;
   transition: background-position 0.3s ease 0.2s;
+}
+@media (max-width: 768px) {
+  .myapp {
+    border-radius: 0;
+  }
 }

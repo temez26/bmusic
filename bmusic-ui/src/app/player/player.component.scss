@@ -143,3 +143,8 @@
 .player-button:hover .icon {
   filter: invert(1) brightness(1.5) saturate(100%);
 }
+@media (max-width: 768px) {
+  .player {
+    border-radius: 0;
+  }
+}
