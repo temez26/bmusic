@@ -95,7 +95,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
       'timeupdate',
       this.updateCurrentTime.bind(this)
     );
-    // check if music is playuing
+    this.audioRef.nativeElement.addEventListener(
+      'ended',
+      this.nextSong.bind(this)
+    );
+    // check if music is playing
     this.playerService.isPlaying$.subscribe((isPlaying) => {
       this.player.isPlaying = isPlaying;
     });
