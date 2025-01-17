@@ -2,14 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayerService } from '../service/player.service';
 import { CoverWsService } from '../service/coverws.service';
-import { DeleteComponent } from '../delete/delete.component';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../service/api.service';
+import { MenuComponent } from '../menu/menu.component';
 
 @Component({
   selector: 'app-songs',
   standalone: true,
-  imports: [CommonModule, DeleteComponent],
+  imports: [CommonModule, MenuComponent],
   templateUrl: './songs.component.html',
   styleUrls: ['./songs.component.scss'],
 })
@@ -27,8 +27,7 @@ export class SongsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.songsSubscription = this.playerService.songs$.subscribe((songs) => {
-      this.songs = songs.sort((a, b) => a.id - b.id); // Sort songs by ID
-      // Fetch covers for each song using CoverService
+      this.songs = songs.sort((a, b) => a.id - b.id);
       this.songs.forEach((song) =>
         this.coverWsService
           .getCovers(song.id, song.album_cover_url)

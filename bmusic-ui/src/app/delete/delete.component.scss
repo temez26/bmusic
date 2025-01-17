@@ -2,8 +2,7 @@ button {
   background-color: #e74c3c;
   color: #fff;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -12,4 +11,8 @@ button {
 button:hover {
   background-color: #c0392b;
   transform: scale(1.05);
+}
+img {
+  width: 20px;
+  height: 20px;
 }

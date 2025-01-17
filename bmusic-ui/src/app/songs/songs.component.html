@@ -8,7 +8,7 @@
     <div class="header-last"><h4>Actions</h4></div>
   </div>
   <div class="song-list-container">
-    <div *ngFor="let song of songs" class="song-item">
+    <div *ngFor="let song of songs; let i = index" class="song-item">
       <div class="song-column">
         <img
           *ngIf="coverImageSrcMap[song.id]"
@@ -42,10 +42,10 @@
       </div>
 
       <div class="actions-column">
-        <app-delete
-          [songId]="song.id"
-          (songDeleted)="onSongDeleted()"
-        ></app-delete>
+        <button (click)="('menu')">
+          <img src="/three-dots.png" alt="menu-img" class="icon-img" />
+        </button>
+        <div *ngIf="'menu'" class="menu-container"></div>
       </div>
     </div>
   </div>
