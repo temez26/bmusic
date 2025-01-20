@@ -98,7 +98,14 @@ button[mat-icon-button] {
   width: 20px;
   height: 20px;
 }
-
+.button-svg {
+  width: 24px;
+  height: 24px;
+}
+.button-svg:hover path {
+  stroke: rgba(255, 0, 0, 0.705);
+  transition: stroke 0.3s ease;
+}
 button[mat-icon-button]:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
