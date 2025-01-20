@@ -13,11 +13,12 @@ import { CoverWsService } from '../service/coverws.service';
 import { PlayerModel } from '../service/models/player.model';
 import { Subscription } from 'rxjs';
 import { Song } from '../service/models/song-def.class';
+import { VolumeIconComponent } from './volume-icon/volume-icon.component';
 
 @Component({
   selector: 'app-player',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, VolumeIconComponent],
   templateUrl: './player.component.html',
   styleUrls: [
     './player.component.scss',
