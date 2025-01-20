@@ -1,7 +1,7 @@
 .parent-container {
   display: flex;
   flex-direction: column;
-  height: 85vh;
+  height: 100%;
 }
 .song-list-container {
   overflow-y: auto;
@@ -136,10 +136,6 @@ button[mat-icon-button]:hover {
   }
 }
 @media (max-width: 768px) {
-  .parent-container {
-    height: 80vh;
-  }
-
   .song-header {
     display: none;
   }
