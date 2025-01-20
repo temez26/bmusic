@@ -1,7 +1,7 @@
 /*generated with Input range slider CSS style generator (version 20211225)
 https://toughengineer.github.io/demo/slider-styler*/
 input[type="range"].styled-slider {
-  height: 0.2em;
+  height: 0.3em;
   border-radius: 4px;
   width: 90%;
   -webkit-appearance: none;
@@ -21,8 +21,8 @@ input[type="range"].styled-slider:focus {
 /*webkit*/
 input[type="range"].styled-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 0.7em;
-  height: 0.7em;
+  width: 0.8em;
+  height: 0.8em;
   border-radius: 0.5em;
   background: #f8f8f8;
   border: none;
@@ -31,7 +31,7 @@ input[type="range"].styled-slider::-webkit-slider-thumb {
 }
 
 input[type="range"].styled-slider::-webkit-slider-runnable-track {
-  height: 0.2em;
+  height: 0.3em;
   border: none;
   border-radius: 0.3em;
   background: #606060b8;
