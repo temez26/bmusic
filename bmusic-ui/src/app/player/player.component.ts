@@ -51,6 +51,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
       (song: Song | null) => {
         if (song) {
           this.player.currentTitle = song.title;
+          this.player.currentArtist = song.artist;
           this.coverWsService
             .getCovers(song.id, song.album_cover_url)
             .then((imageSrc) => {
@@ -79,14 +80,14 @@ export class PlayerComponent implements OnInit, OnDestroy {
           .then((imageSrc) => {
             this.albumCoverSrc = imageSrc;
           });
-
-        console.log(this.songId);
-        console.log(this.albumCoverSrc);
       });
     });
 
     this.playerService.title$.subscribe((title) => {
       this.player.currentTitle = title;
+    });
+    this.playerService.artistPath$.subscribe((artist) => {
+      this.player.currentArtist = artist;
     });
 
     this.progressSliderRef.nativeElement.addEventListener(

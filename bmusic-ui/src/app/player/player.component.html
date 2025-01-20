@@ -1,10 +1,17 @@
 <div class="full-player">
   <div class="player-header" *ngIf="player.currentTitle && albumCoverSrc">
     <img class="album-cover" [src]="albumCoverSrc" alt="Album Cover" />
-    <h2 class="player-title">
-      <span class="player-title-text">{{ player.currentTitle }}</span>
-    </h2>
+    <div class="title-artist">
+      <p class="player-title">
+        <span class="player-title-text">{{ player.currentTitle }}</span>
+      </p>
+
+      <p class="player-artist">
+        <span class="">{{ player.currentArtist }}</span>
+      </p>
+    </div>
   </div>
+
   <div class="player">
     <div class="volume-controls">
       <div class="volume-slider-container">

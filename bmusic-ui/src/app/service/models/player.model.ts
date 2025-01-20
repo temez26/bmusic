@@ -1,5 +1,6 @@
 export class PlayerModel {
   currentTitle: string | null = null;
+  currentArtist: string | null = null;
   currentAlbumCover: string | null = null;
   currentTime: string = '0:00';
   duration: string = '0:00';

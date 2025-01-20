@@ -30,9 +30,10 @@
   position: absolute;
   display: flex;
   padding: 5px;
+}
+.title-artist {
   width: 30%;
 }
-
 .album-cover {
   display: flex;
   justify-content: start;
@@ -42,9 +43,14 @@
   padding: 5px;
 }
 
+.player-artist {
+  display: flex;
+  align-self: end;
+  font-weight: 150;
+  font-size: 0.6rem;
+}
+
 .player-title {
-  font-size: 0.8em;
-  font-weight: 250;
   white-space: nowrap;
   overflow: hidden;
   position: relative;
@@ -58,11 +64,11 @@
   transition: transform 0.3s ease-out;
 }
 
-.player-header:hover .player-title-text {
+.title-artist:hover .player-title-text {
   animation: scroll-text 10s linear infinite;
 }
 
-.player-header:not(:hover) .player-title-text {
+.title-artist:not(:hover) .player-title-text {
   animation: none;
   transform: translateX(0);
 }
@@ -75,6 +81,7 @@
     transform: translateX(-100%);
   }
 }
+
 .volume-controls {
   display: flex;
   align-items: center;
@@ -231,7 +238,10 @@
     top: 3px;
   }
   .volume-icon {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
+  }
+  .player-artist {
+    font-size: 0.5rem;
   }
 }

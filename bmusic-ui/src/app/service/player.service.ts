@@ -18,6 +18,8 @@ export class PlayerService {
 
   private titleSubject = new BehaviorSubject<string | null>(null);
   title$ = this.titleSubject.asObservable();
+  private artistPath = new BehaviorSubject<string | null>(null);
+  artistPath$ = this.artistPath.asObservable();
   private coverPath = new BehaviorSubject<string | null>(null);
   coverPath$ = this.coverPath.asObservable();
   private songId = new BehaviorSubject<number | null>(null);
@@ -54,6 +56,10 @@ export class PlayerService {
     console.log(this.coverPath.getValue());
   }
 
+  setArtist(artist: string) {
+    this.artistPath.next(artist);
+  }
+
   setId(songId: number) {
     this.songId.next(songId);
     console.log(this.songId.getValue());
@@ -67,12 +73,14 @@ export class PlayerService {
     songId: number,
     filePath: string,
     title: string,
-    album_cover_url: string
+    album_cover_url: string,
+    artist: string
   ) {
     this.setId(songId);
     this.setTitle(title);
     this.setFilePath(filePath);
     this.setCover(album_cover_url);
+    this.setArtist(artist);
     this.setIsPlaying(true);
   }
 
@@ -132,7 +140,8 @@ export class PlayerService {
       randomSong.id,
       randomSong.file_path,
       randomSong.title,
-      randomSong.album_cover_url
+      randomSong.album_cover_url,
+      randomSong.artist
     );
   }
 }

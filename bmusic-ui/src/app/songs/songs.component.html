@@ -14,7 +14,13 @@
           *ngIf="coverImageSrcMap[song.id]"
           [src]="coverImageSrcMap[song.id]"
           (click)="
-            playSong(song.id, song.file_path, song.title, song.album_cover_url)
+            playSong(
+              song.id,
+              song.file_path,
+              song.title,
+              song.album_cover_url,
+              song.artist
+            )
           "
           alt="Cover Image"
           class="cover-image"
@@ -27,7 +33,8 @@
                 song.id,
                 song.file_path,
                 song.title,
-                song.album_cover_url
+                song.album_cover_url,
+                song.artist
               )
             "
             style="cursor: pointer"
