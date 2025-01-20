@@ -1,7 +1,9 @@
 <div class="full-player">
   <div class="player-header" *ngIf="player.currentTitle && albumCoverSrc">
     <img class="album-cover" [src]="albumCoverSrc" alt="Album Cover" />
-    <h2 class="player-title">{{ player.currentTitle }}</h2>
+    <h2 class="player-title">
+      <span class="player-title-text">{{ player.currentTitle }}</span>
+    </h2>
   </div>
   <div class="player">
     <div class="volume-controls">
