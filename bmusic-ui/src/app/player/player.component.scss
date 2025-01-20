@@ -88,22 +88,17 @@
 }
 
 .volume-percentage-container {
-  width: 40px;
   display: flex;
   align-items: center;
-  justify-content: center;
-}
-
-.volume-percentage {
-  white-space: nowrap;
 }
 
 .volume-controls {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 3px;
   display: flex;
+  align-self: end;
   align-items: center;
+  justify-content: start;
 }
 
 .volume-percentage {
@@ -111,7 +106,10 @@
   color: rgb(255, 255, 255);
   font-size: 0.8em;
 }
-
+.volume-icon {
+  height: 26px;
+  width: 26px;
+}
 .player-controls {
   display: flex;
   align-items: center;
@@ -230,5 +228,9 @@
   }
   .volume-controls {
     top: 3px;
+  }
+  .volume-icon {
+    width: 24px;
+    height: 24px;
   }
 }
