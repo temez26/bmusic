@@ -58,11 +58,11 @@
   transition: transform 0.3s ease-out;
 }
 
-.player-title:hover .player-title-text {
+.player-header:hover .player-title-text {
   animation: scroll-text 10s linear infinite;
 }
 
-.player-title:not(:hover) .player-title-text {
+.player-header:not(:hover) .player-title-text {
   animation: none;
   transform: translateX(0);
 }
