@@ -14,7 +14,7 @@ import { PlayerModel } from '../service/models/player.model';
 import { Subscription } from 'rxjs';
 import { Song } from '../service/models/song-def.class';
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
-import { AudioService } from '../service/audio.service';
+import { AudioService } from '../service/player/audio.service';
 import { AlbumComponent } from './album/album.component';
 
 @Component({

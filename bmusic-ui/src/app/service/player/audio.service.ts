@@ -1,6 +1,6 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { ProgressService } from './progress.service';
-import { PlayerModel } from './models/player.model';
+import { PlayerModel } from '../models/player.model';
 
 @Injectable({
   providedIn: 'root',

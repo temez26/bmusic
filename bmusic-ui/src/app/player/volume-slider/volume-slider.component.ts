@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 
 import { PlayerModel } from '../../service/models/player.model';
-import { AudioService } from '../../service/audio.service';
+import { AudioService } from '../../service/player/audio.service';
 
 @Component({
   selector: 'app-volume-slider',
