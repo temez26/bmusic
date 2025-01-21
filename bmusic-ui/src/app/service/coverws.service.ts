@@ -25,14 +25,12 @@ export class CoverWsService {
       const chunks: ArrayBuffer[] = [];
 
       ws.onopen = () => {
-        console.log('WebSocket for covers opened');
         ws.send(coverPath);
       };
 
       ws.onmessage = (event) => {
         if (typeof event.data === 'string') {
           if (event.data === 'EOF') {
-            console.log('End of file received');
             const blob = new Blob(chunks, { type: 'image/jpeg' });
             const imageSrc = URL.createObjectURL(blob);
             this.coverImageSrcMap[songId] = imageSrc;
@@ -51,9 +49,7 @@ export class CoverWsService {
         reject(error);
       };
 
-      ws.onclose = () => {
-        console.log('WebSocket connection closed');
-      };
+      ws.onclose = () => {};
     });
 
     this.downloadedCovers.set(coverPath, coverPromise);

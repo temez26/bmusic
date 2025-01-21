@@ -59,8 +59,7 @@ export class SongsComponent implements OnInit, OnDestroy {
     artist: string
   ) {
     this.apiService.incrementPlayCount(songId).subscribe({
-      next: (response) => {
-        console.log('Play count incremented:', response.playCount);
+      next: () => {
         this.playerService.setData(
           songId,
           filePath,

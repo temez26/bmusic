@@ -41,7 +41,6 @@ export class PlayerStateService {
   }
 
   setTitle(title: string) {
-    console.log(title);
     this.titleSubject.next(title);
   }
 
@@ -51,7 +50,6 @@ export class PlayerStateService {
 
   setCover(album_cover_url: string) {
     this.coverPath.next(album_cover_url);
-    console.log(this.coverPath.getValue());
   }
 
   setArtist(artist: string) {
@@ -60,7 +58,6 @@ export class PlayerStateService {
 
   setId(songId: number) {
     this.songId.next(songId);
-    console.log(this.songId.getValue());
   }
 
   setCurrentSong(song: Song) {

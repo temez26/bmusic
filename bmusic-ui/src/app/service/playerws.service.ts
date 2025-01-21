@@ -18,7 +18,6 @@ export class PlayerWsService {
     ws.onmessage = (event) => {
       if (typeof event.data === 'string') {
         if (event.data === 'EOF') {
-          console.log('End of file');
           const blob = new Blob(chunks, { type: 'audio/flac' });
           const url = URL.createObjectURL(blob);
           const audio = document.getElementById('audio') as HTMLAudioElement;
