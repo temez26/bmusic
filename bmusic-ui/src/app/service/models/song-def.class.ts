@@ -8,6 +8,7 @@ export interface Song {
   album_cover_url: string;
   play_count: number;
   upload_date: string;
+  length: string;
 }
 export interface UploadResponse {
   songs: Song[];

@@ -5,6 +5,7 @@ import { CoverWsService } from '../../service/coverws.service';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../../service/api.service';
 import { MenuComponent } from './menu/menu.component';
+import { Song } from '../../service/models/song-def.class';
 
 @Component({
   selector: 'app-songs',
@@ -14,7 +15,7 @@ import { MenuComponent } from './menu/menu.component';
   styleUrls: ['./songs.component.scss'],
 })
 export class SongsComponent implements OnInit, OnDestroy {
-  songs: any[] = [];
+  songs: Song[] = [];
   coverImageSrcMap: { [key: number]: string } = {};
 
   private songsSubscription!: Subscription;
