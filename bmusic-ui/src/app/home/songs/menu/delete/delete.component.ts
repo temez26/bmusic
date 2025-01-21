@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlayerService } from '../service/player.service';
+import { PlayerService } from '../../../../service/player.service';
 
 @Component({
   selector: 'app-delete',

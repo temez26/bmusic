@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DeleteComponent } from '../delete/delete.component';
+import { DeleteComponent } from './delete/delete.component';
 
 @Component({
   selector: 'app-menu',

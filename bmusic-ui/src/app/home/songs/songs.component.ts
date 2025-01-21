@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlayerService } from '../service/player.service';
-import { CoverWsService } from '../service/coverws.service';
+import { PlayerService } from '../../service/player.service';
+import { CoverWsService } from '../../service/coverws.service';
 import { Subscription } from 'rxjs';
-import { ApiService } from '../service/api.service';
-import { MenuComponent } from '../menu/menu.component';
+import { ApiService } from '../../service/api.service';
+import { MenuComponent } from './menu/menu.component';
 
 @Component({
   selector: 'app-songs',
