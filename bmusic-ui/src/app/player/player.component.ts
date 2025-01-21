@@ -14,6 +14,7 @@ import { PlayerModel } from '../service/models/player.model';
 import { Subscription } from 'rxjs';
 import { Song } from '../service/models/song-def.class';
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
+import { AudioService } from '../service/audio.service';
 
 @Component({
   selector: 'app-player',
@@ -42,8 +43,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
   constructor(
     private playerService: PlayerService,
     private playerWsService: PlayerWsService,
-    private progressService: ProgressService,
-    private coverWsService: CoverWsService
+    private coverWsService: CoverWsService,
+    private audioService: AudioService
   ) {}
 
   ngOnInit() {
@@ -113,22 +114,13 @@ export class PlayerComponent implements OnInit, OnDestroy {
     );
 
     // Initialize volume slider styles
-    this.initializeSlider(this.volumeSliderRef.nativeElement);
+    this.audioService.initializeSlider(this.volumeSliderRef.nativeElement);
   }
 
   ngOnDestroy() {
     if (this.currentSongSubscription) {
       this.currentSongSubscription.unsubscribe();
     }
-  }
-
-  initializeSlider(slider: HTMLInputElement) {
-    slider.style.setProperty('--value', slider.value);
-    slider.style.setProperty('--min', slider.min === '' ? '0' : slider.min);
-    slider.style.setProperty('--max', slider.max === '' ? '100' : slider.max);
-    slider.addEventListener('input', () =>
-      slider.style.setProperty('--value', slider.value)
-    );
   }
 
   nextSong() {
@@ -169,52 +161,35 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
 
   changeVolume(event: any) {
-    const volume = event.target.value / 100;
-    this.audioRef.nativeElement.volume = volume;
-    this.player.volumePercentage = event.target.value;
-    this.initializeSlider(event.target);
+    this.audioService.changeVolume(event, this.audioRef, this.player);
   }
 
   updateDuration(event: any) {
-    const audio = event.target;
-    const { duration, formattedDuration } =
-      this.progressService.updateDuration(audio);
-    this.player.audioDuration = duration;
-    this.player.duration = formattedDuration;
+    this.audioService.updateDuration(event, this.player);
   }
 
   updateCurrentTime(event: any) {
-    const audio = event.target;
-    const { currentTime, formattedCurrentTime } =
-      this.progressService.updateCurrentTime(audio);
-    this.player.audioCurrentTime = currentTime;
-    this.player.currentTime = formattedCurrentTime;
-    this.updateProgress();
+    this.audioService.updateCurrentTime(
+      event,
+      this.player,
+      this.progressSliderRef
+    );
   }
 
   seek(event: any) {
-    const seekTime = event.target.value;
-    const { currentTime } = this.progressService.seek(
-      this.audioRef.nativeElement,
-      seekTime
-    );
-    this.player.audioCurrentTime = currentTime;
-    this.updateProgress();
-  }
-
-  updateProgress() {
-    this.progressService.updateProgress(
-      this.progressSliderRef.nativeElement,
-      this.audioRef.nativeElement
+    this.audioService.seek(
+      event,
+      this.audioRef,
+      this.player,
+      this.progressSliderRef
     );
   }
 
   handleSongEnd() {
-    if (this.player.isRepeat) {
-      this.audioRef.nativeElement.currentTime = 0;
-      this.audioRef.nativeElement.play();
-    } else {
-      this.nextSong();
-    }
+    this.audioService.handleSongEnd(
+      this.audioRef,
+      this.player,
+      this.nextSong.bind(this)
+    );
   }
 }
