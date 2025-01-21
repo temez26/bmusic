@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { SongsComponent } from '../songs-home/songs-home.component';
+import { TopSongsComponent } from './top-songs/top-songs.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, SongsComponent],
+  imports: [RouterLink, TopSongsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

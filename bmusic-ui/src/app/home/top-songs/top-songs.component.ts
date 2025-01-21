@@ -1,18 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlayerService } from '../service/player.service';
-import { CoverWsService } from '../service/coverws.service';
+import { PlayerService } from '../../service/player.service';
+import { CoverWsService } from '../../service/coverws.service';
 import { Subscription } from 'rxjs';
-import { ApiService } from '../service/api.service';
+import { ApiService } from '../../service/api.service';
 
 @Component({
-  selector: 'app-songs',
+  selector: 'app-top-songs',
   standalone: true,
-  templateUrl: './songs-home.component.html',
   imports: [CommonModule],
-  styleUrls: ['./songs-home.component.scss'],
+  templateUrl: './top-songs.component.html',
+  styleUrl: './top-songs.component.scss',
 })
-export class SongsComponent implements OnInit, OnDestroy {
+export class TopSongsComponent implements OnInit, OnDestroy {
   songs: any[] = [];
   coverImageSrcMap: { [key: number]: string } = {};
 
