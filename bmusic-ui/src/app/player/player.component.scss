@@ -84,23 +84,6 @@
 }
 
 .volume-controls {
-  display: flex;
-  align-items: center;
-}
-
-.volume-slider-container {
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  justify-content: end;
-}
-
-.volume-percentage-container {
-  display: flex;
-  align-items: center;
-}
-
-.volume-controls {
   position: absolute;
   top: 3px;
   padding: 2px;
@@ -110,15 +93,6 @@
   justify-content: start;
 }
 
-.volume-percentage {
-  margin-left: 5px;
-  color: rgb(255, 255, 255);
-  font-size: 0.8em;
-}
-.volume-icon {
-  height: 26px;
-  width: 26px;
-}
 .player-controls {
   display: flex;
   align-items: center;
@@ -237,10 +211,6 @@
   }
   .volume-controls {
     top: 3px;
-  }
-  .volume-icon {
-    width: 22px;
-    height: 22px;
   }
   .player-artist {
     font-size: 0.5rem;
