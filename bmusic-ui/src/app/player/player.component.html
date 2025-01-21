@@ -14,15 +14,10 @@
 
   <div class="player">
     <div class="volume-controls">
-      <div class="volume-slider-container">
-        <input
-          type="range"
-          class="styled-slider slider-progress"
-          #volumeSlider
-          [value]="player.volumePercentage"
-          (input)="changeVolume($event)"
-        />
-      </div>
+      <app-volume-icon
+        (volumeChange)="onVolumeChange($event)"
+      ></app-volume-icon>
+
       <div class="volume-percentage-container">
         <ng-container *ngIf="player.volumePercentage == 0">
           <!-- Mute Icon -->

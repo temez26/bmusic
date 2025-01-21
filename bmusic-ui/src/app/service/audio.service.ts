@@ -19,11 +19,14 @@ export class AudioService {
 
   changeVolume(
     event: any,
-    audioRef: ElementRef<HTMLAudioElement>,
+    volumeSliderRef: ElementRef<HTMLInputElement>,
     player: PlayerModel
   ) {
     const volume = event.target.value / 100;
-    audioRef.nativeElement.volume = volume;
+    const audio = volumeSliderRef.nativeElement.closest('audio');
+    if (audio) {
+      audio.volume = volume;
+    }
     player.volumePercentage = event.target.value;
     this.initializeSlider(event.target);
   }

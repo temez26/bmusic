@@ -160,14 +160,14 @@ export class PlayerComponent implements OnInit, OnDestroy {
     }
   }
 
-  changeVolume(event: any) {
-    this.audioService.changeVolume(event, this.audioRef, this.player);
-  }
-
   updateDuration(event: any) {
     this.audioService.updateDuration(event, this.player);
   }
 
+  onVolumeChange(volumePercentage: number) {
+    this.player.volumePercentage = volumePercentage;
+    this.audioRef.nativeElement.volume = volumePercentage / 100;
+  }
   updateCurrentTime(event: any) {
     this.audioService.updateCurrentTime(
       event,
