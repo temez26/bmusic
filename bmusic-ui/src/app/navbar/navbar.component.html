@@ -1,4 +1,4 @@
-<mat-toolbar class="myapp">
+<div class="myapp">
   <button
     mat-icon-button
     class="example-icon"
@@ -7,12 +7,7 @@
   >
     <mat-icon>home</mat-icon>
   </button>
-  <div class="search-container">
-    <button class="search-button">
-      <i class="material-icons">search</i>
-    </button>
-    <input type="text" class="search-input" placeholder="Search" />
-  </div>
+  <app-search></app-search>
 
   <span class="example-spacer"></span>
 
@@ -35,4 +30,4 @@
   >
     <mat-icon>menu</mat-icon>
   </button>
-</mat-toolbar>
+</div>
