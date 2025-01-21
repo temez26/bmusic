@@ -4,6 +4,7 @@ import { PlayerService } from '../../service/player.service';
 import { CoverWsService } from '../../service/coverws.service';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../../service/api.service';
+import { PlayerStateService } from '../../service/player.state.service';
 
 @Component({
   selector: 'app-top-songs',
@@ -21,14 +22,15 @@ export class TopSongsComponent implements OnInit, OnDestroy {
   constructor(
     private playerService: PlayerService,
     private coverWsService: CoverWsService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private stateService: PlayerStateService
   ) {}
 
   ngOnInit() {
-    this.songsSubscription = this.playerService.songs$.subscribe((songs) => {
+    this.songsSubscription = this.stateService.songs$.subscribe((songs) => {
       this.songs = songs
-        .sort((a, b) => b.play_count - a.play_count) // Sort songs by play_count in descending order
-        .slice(0, 10); // Take the top 25 songs
+        .sort((a, b) => b.play_count - a.play_count)
+        .slice(0, 10); // Take the top 10 songs
 
       this.songs.forEach((song) =>
         this.coverWsService

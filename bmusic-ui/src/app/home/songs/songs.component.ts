@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { ApiService } from '../../service/api.service';
 import { MenuComponent } from './menu/menu.component';
 import { Song } from '../../service/models/song-def.class';
+import { PlayerStateService } from '../../service/player.state.service';
 
 @Component({
   selector: 'app-songs',
@@ -23,11 +24,12 @@ export class SongsComponent implements OnInit, OnDestroy {
   constructor(
     private playerService: PlayerService,
     private coverWsService: CoverWsService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private stateService: PlayerStateService
   ) {}
 
   ngOnInit() {
-    this.songsSubscription = this.playerService.songs$.subscribe((songs) => {
+    this.songsSubscription = this.stateService.songs$.subscribe((songs) => {
       this.songs = songs.sort((a, b) => a.id - b.id);
       this.songs.forEach((song) =>
         this.coverWsService

@@ -16,6 +16,7 @@ import { Song } from '../service/models/song-def.class';
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
 import { AudioService } from '../service/player/audio.service';
 import { AlbumComponent } from './album/album.component';
+import { PlayerStateService } from '../service/player.state.service';
 
 @Component({
   selector: 'app-player',
@@ -46,11 +47,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
     private playerService: PlayerService,
     private playerWsService: PlayerWsService,
     private coverWsService: CoverWsService,
-    private audioService: AudioService
+    private audioService: AudioService,
+    private stateService: PlayerStateService
   ) {}
 
   ngOnInit() {
-    this.currentSongSubscription = this.playerService.currentSong$.subscribe(
+    this.currentSongSubscription = this.stateService.currentSong$.subscribe(
       (song: Song | null) => {
         if (song) {
           this.player.currentTitle = song.title;
@@ -67,16 +69,16 @@ export class PlayerComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.playerService.filePath$.subscribe((filePath) => {
+    this.stateService.filePath$.subscribe((filePath) => {
       if (filePath) {
         this.playerWsService.startWebSocket(filePath);
         this.audioRef.nativeElement.src = filePath;
       }
     });
 
-    this.playerService.coverPath$.subscribe((coverPath) => {
+    this.stateService.coverPath$.subscribe((coverPath) => {
       this.albumCoverSrc = coverPath ?? '';
-      this.playerService.songId$.subscribe((songId) => {
+      this.stateService.songId$.subscribe((songId) => {
         this.songId = songId ?? 0;
         this.coverWsService
           .getCovers(this.songId, this.albumCoverSrc)
@@ -86,10 +88,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.playerService.title$.subscribe((title) => {
+    this.stateService.title$.subscribe((title) => {
       this.player.currentTitle = title;
     });
-    this.playerService.artistPath$.subscribe((artist) => {
+    this.stateService.artistPath$.subscribe((artist) => {
       this.player.currentArtist = artist;
     });
 
@@ -106,7 +108,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
       this.handleSongEnd.bind(this)
     );
     // check if music is playing
-    this.playerService.isPlaying$.subscribe((isPlaying) => {
+    this.stateService.isPlaying$.subscribe((isPlaying) => {
       this.player.isPlaying = isPlaying;
     });
   }
@@ -123,34 +125,34 @@ export class PlayerComponent implements OnInit, OnDestroy {
     } else {
       this.playerService.changeSong(1);
     }
-    this.playerService.setIsPlaying(true);
+    this.stateService.setIsPlaying(true);
   }
 
   previousSong() {
     this.playerService.changeSong(-1);
-    this.playerService.setIsPlaying(true);
+    this.stateService.setIsPlaying(true);
   }
 
   toggleShuffle() {
     this.player.isShuffle = !this.player.isShuffle;
     console.log('Shuffle toggled:', this.player.isShuffle);
-    this.playerService.setShuffle(this.player.isShuffle);
+    this.stateService.setShuffle(this.player.isShuffle);
   }
 
   toggleRepeat() {
     this.player.isRepeat = !this.player.isRepeat;
     console.log('Repeat toggled:', this.player.isRepeat);
-    this.playerService.setRepeat(this.player.isRepeat);
+    this.stateService.setRepeat(this.player.isRepeat);
   }
 
   togglePlayPause() {
     const audio = this.audioRef.nativeElement;
     if (audio.paused) {
       audio.play();
-      this.playerService.setIsPlaying(true);
+      this.stateService.setIsPlaying(true);
     } else {
       audio.pause();
-      this.playerService.setIsPlaying(false);
+      this.stateService.setIsPlaying(false);
     }
   }
 
