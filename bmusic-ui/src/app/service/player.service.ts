@@ -8,8 +8,6 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class PlayerService {
-  currentSongIndex = 0;
-
   private filePathSubject = new BehaviorSubject<string | null>(null);
   filePath$ = this.filePathSubject.asObservable();
 
@@ -105,7 +103,6 @@ export class PlayerService {
       })
     );
   }
-
   changeSong(offset: number) {
     const songs = this.songsSubject.getValue();
     const currentFilePath = this.filePathSubject.getValue();
@@ -114,15 +111,14 @@ export class PlayerService {
     );
 
     if (currentSongIndex !== -1) {
-      this.currentSongIndex =
+      const newIndex =
         (currentSongIndex + offset + songs.length) % songs.length;
-      const newSong = songs[this.currentSongIndex];
+      const newSong = songs[newIndex];
       this.setFilePath(newSong.file_path);
       this.setTitle(newSong.title);
       this.setCurrentSong(newSong);
     }
   }
-
   setShuffle(isShuffle: boolean) {
     this.isShuffleSubject.next(isShuffle);
     console.log('Shuffle state set to:', isShuffle);
