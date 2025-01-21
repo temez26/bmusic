@@ -26,71 +26,12 @@
   justify-content: end;
   color: white;
 }
+
 .player-header {
   position: absolute;
   display: flex;
   padding: 5px;
   width: 30%;
-}
-.title-artist {
-  width: 100%;
-}
-.album-cover {
-  display: flex;
-  justify-content: start;
-  width: 80px;
-  height: 80px;
-  border-radius: 2px;
-  padding: 5px;
-}
-
-.player-artist {
-  display: flex;
-  align-self: end;
-  font-weight: 150;
-  font-size: 0.6rem;
-}
-
-.player-title {
-  white-space: nowrap;
-  overflow: hidden;
-  position: relative;
-}
-
-.player-title-text {
-  display: inline-block;
-  white-space: nowrap;
-  position: relative;
-  transform: translateX(0);
-  transition: transform 0.3s ease-out;
-}
-
-.title-artist:hover .player-title-text {
-  animation: scroll-text 10s linear infinite;
-}
-
-.title-artist:not(:hover) .player-title-text {
-  animation: none;
-  transform: translateX(0);
-}
-
-@keyframes scroll-text {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-
-.volume-controls {
-  position: absolute;
-  top: 3px;
-  padding: 2px;
-  display: flex;
-  align-self: end;
-  align-items: center;
-  justify-content: start;
 }
 
 .player-controls {
@@ -140,20 +81,6 @@
   height: 32px;
   padding: 5px;
 }
-
-.player-extra-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-.timer {
-  color: #cac9c9;
-  font-size: 0.8em;
-  font-family: "Arial", sans-serif;
-  padding: 0 5px;
-}
-
 .shuffle-button,
 .repeat-button {
   background: none;
@@ -165,7 +92,6 @@
   height: 25px;
   padding: 5px;
 }
-
 .icon {
   filter: invert(1) sepia(1) saturate(5) hue-rotate(180deg);
   opacity: 0.7;
@@ -174,6 +100,29 @@
 
 .icon:hover {
   opacity: 0.9;
+}
+// volume slider and icons
+.volume-controls {
+  position: absolute;
+  top: 3px;
+  padding: 2px;
+  display: flex;
+  align-self: end;
+  align-items: center;
+  justify-content: start;
+}
+// song progress slider and time
+.player-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.timer {
+  color: #cac9c9;
+  font-size: 0.8em;
+  font-family: "Arial", sans-serif;
+  padding: 0 5px;
 }
 
 @media (max-width: 1200px) {

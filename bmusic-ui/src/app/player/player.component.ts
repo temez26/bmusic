@@ -15,17 +15,19 @@ import { Subscription } from 'rxjs';
 import { Song } from '../service/models/song-def.class';
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
 import { AudioService } from '../service/audio.service';
+import { AlbumComponent } from './album/album.component';
 
 @Component({
   selector: 'app-player',
   standalone: true,
-  imports: [CommonModule, VolumeIconComponent, VolumeSliderComponent],
-  templateUrl: './player.component.html',
-  styleUrls: [
-    './player.component.scss',
-    './progress.component.scss',
-    './volume-slider.component.scss',
+  imports: [
+    CommonModule,
+    VolumeIconComponent,
+    VolumeSliderComponent,
+    AlbumComponent,
   ],
+  templateUrl: './player.component.html',
+  styleUrls: ['./player.component.scss', './progress.component.scss'],
 })
 export class PlayerComponent implements OnInit, OnDestroy {
   @ViewChild('audio', { static: true }) audioRef!: ElementRef<HTMLAudioElement>;

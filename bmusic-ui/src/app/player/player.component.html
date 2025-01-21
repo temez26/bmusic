@@ -1,15 +1,11 @@
 <div class="full-player">
-  <div class="player-header" *ngIf="player.currentTitle && albumCoverSrc">
-    <img class="album-cover" [src]="albumCoverSrc" alt="Album Cover" />
-    <div class="title-artist">
-      <p class="player-title">
-        <span class="player-title-text">{{ player.currentTitle }}</span>
-      </p>
-
-      <p class="player-artist">
-        <span class="">{{ player.currentArtist }}</span>
-      </p>
-    </div>
+  <div *ngIf="player.currentTitle && albumCoverSrc">
+    <app-album
+      class="player-header"
+      [albumCoverSrc]="albumCoverSrc"
+      [currentTitle]="player.currentTitle"
+      [currentArtist]="player.currentArtist"
+    ></app-album>
   </div>
 
   <div class="player">
@@ -65,7 +61,7 @@
         (timeupdate)="updateCurrentTime($event)"
       ></audio>
     </div>
-    <div class="player-extra-controls">
+    <div class="player-timer">
       <span class="timer">{{ player.currentTime }}</span>
       <input
         type="range"
