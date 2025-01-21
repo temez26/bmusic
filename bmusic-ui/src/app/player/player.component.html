@@ -1,12 +1,10 @@
 <div class="full-player">
-  <div *ngIf="player.currentTitle && albumCoverSrc">
-    <app-album
-      class="player-header"
-      [albumCoverSrc]="albumCoverSrc"
-      [currentTitle]="player.currentTitle"
-      [currentArtist]="player.currentArtist"
-    ></app-album>
-  </div>
+  <app-album
+    class="player-header"
+    [albumCoverSrc]="albumCoverSrc"
+    [currentTitle]="player.currentTitle"
+    [currentArtist]="player.currentArtist"
+  ></app-album>
 
   <div class="player">
     <div class="volume-controls">

@@ -24,13 +24,11 @@
   align-items: center;
   flex-grow: 1;
   justify-content: end;
-  color: white;
 }
 
 .player-header {
   position: absolute;
   display: flex;
-  padding: 5px;
   width: 30%;
 }
 
@@ -44,7 +42,7 @@
   background: none;
   border: none;
   border-radius: 50%;
-  margin: 0 10px;
+  margin: 0 5px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -73,13 +71,11 @@
 .play {
   width: 43px;
   height: 43px;
-  padding: 5px;
 }
 .next,
 .previous {
   width: 32px;
   height: 32px;
-  padding: 5px;
 }
 .shuffle-button,
 .repeat-button {
@@ -90,7 +86,6 @@
   cursor: pointer;
   width: 25px;
   height: 25px;
-  padding: 5px;
 }
 .icon {
   filter: invert(1) sepia(1) saturate(5) hue-rotate(180deg);
@@ -104,7 +99,7 @@
 // volume slider and icons
 .volume-controls {
   position: absolute;
-  top: 3px;
+  top: 0;
   padding: 2px;
   display: flex;
   align-self: end;
@@ -129,10 +124,6 @@
   .full-player {
     height: 90px;
   }
-  .album-cover {
-    width: 65px;
-    height: 65px;
-  }
 }
 @media (max-width: 768px) {
   .full-player {
@@ -150,18 +141,10 @@
     justify-content: center;
     height: 25px;
   }
-  .album-cover {
-    width: 50px;
-    height: 50px;
-    border-radius: 2px;
-  }
-  .player-title {
-    font-size: 0.6em;
+  .player-timer {
+    height: 20px;
   }
   .volume-controls {
     top: 3px;
-  }
-  .player-artist {
-    font-size: 0.5rem;
   }
 }

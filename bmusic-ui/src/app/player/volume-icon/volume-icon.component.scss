@@ -3,20 +3,6 @@
   align-items: center;
 }
 
-.volume-controls {
-  position: absolute;
-  top: 3px;
-  display: flex;
-  align-self: end;
-  align-items: center;
-  justify-content: start;
-}
-
-.volume-percentage {
-  margin-left: 5px;
-  color: rgb(255, 255, 255);
-  font-size: 0.8em;
-}
 .volume-icon {
   height: 26px;
   width: 26px;
