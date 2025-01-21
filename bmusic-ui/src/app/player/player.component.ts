@@ -109,14 +109,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.playerService.isPlaying$.subscribe((isPlaying) => {
       this.player.isPlaying = isPlaying;
     });
-    // Set initial volume
-    this.audioRef.nativeElement.volume = this.player.volumePercentage / 100;
-    this.volumeSliderRef.nativeElement.value = String(
-      this.player.volumePercentage
-    );
-
-    // Initialize volume slider styles
-    this.audioService.initializeSlider(this.volumeSliderRef.nativeElement);
   }
 
   ngOnDestroy() {

@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlayerModel } from '../../service/models/player.model';
 
 @Component({
   selector: 'app-volume-icon',
