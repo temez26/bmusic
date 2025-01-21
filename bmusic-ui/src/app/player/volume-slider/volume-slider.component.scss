@@ -3,6 +3,7 @@ https://toughengineer.github.io/demo/slider-styler*/
 input[type="range"].styled-slider {
   height: 0.3em;
   border-radius: 4px;
+  cursor: pointer;
   width: 90%;
   -webkit-appearance: none;
 }
