@@ -8,7 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { PlayerService } from '../service/player.service';
 import { PlayerWsService } from '../service/playerws.service';
-import { ProgressService } from '../service/progress.service';
+import { VolumeSliderComponent } from './volume-slider/volume-slider.component';
 import { CoverWsService } from '../service/coverws.service';
 import { PlayerModel } from '../service/models/player.model';
 import { Subscription } from 'rxjs';
@@ -19,7 +19,7 @@ import { AudioService } from '../service/audio.service';
 @Component({
   selector: 'app-player',
   standalone: true,
-  imports: [CommonModule, VolumeIconComponent],
+  imports: [CommonModule, VolumeIconComponent, VolumeSliderComponent],
   templateUrl: './player.component.html',
   styleUrls: [
     './player.component.scss',

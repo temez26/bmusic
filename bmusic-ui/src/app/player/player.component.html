@@ -14,9 +14,9 @@
 
   <div class="player">
     <div class="volume-controls">
-      <app-volume-icon
+      <app-volume-slider
         (volumeChange)="onVolumeChange($event)"
-      ></app-volume-icon>
+      ></app-volume-slider>
 
       <div class="volume-percentage-container">
         <ng-container *ngIf="player.volumePercentage == 0">
