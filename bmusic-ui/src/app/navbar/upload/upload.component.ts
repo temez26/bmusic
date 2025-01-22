@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../service/api.service';
-import { PlayerStateService } from '../../service/player.state.service';
 
 @Component({
   selector: 'app-upload',
@@ -15,10 +14,7 @@ export class UploadComponent implements OnInit {
   fileCount: number = 0;
   successMessage: string = '';
 
-  constructor(
-    private apiService: ApiService,
-    private stateService: PlayerStateService
-  ) {}
+  constructor(private apiService: ApiService) {}
 
   ngOnInit() {
     this.initializeFileInput();

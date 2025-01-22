@@ -98,19 +98,17 @@ export class AudioService {
   changeSong(offset: number) {
     const songs = this.stateService.getSongs();
     const currentFilePath = this.stateService.getFilePath();
-    console.log('Current File Path:', currentFilePath);
+
     console.log('Songs:', songs);
 
     const currentSongIndex = songs.findIndex(
       (song) => song.file_path === currentFilePath
     );
-    console.log('Current Song Index:', currentSongIndex);
 
     if (currentSongIndex !== -1) {
       const newIndex =
         (currentSongIndex + offset + songs.length) % songs.length;
       const newSong = songs[newIndex];
-      console.log('New Song:', newSong);
 
       this.stateService.setCurrentSong(newSong);
       this.setData(
