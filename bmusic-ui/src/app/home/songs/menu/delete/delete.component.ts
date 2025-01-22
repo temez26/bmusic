@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlayerService } from '../../../../service/player.service';
+import { ApiService } from '../../../../service/api.service';
 
 @Component({
   selector: 'app-delete',
@@ -13,10 +13,10 @@ export class DeleteComponent {
   @Input() songId!: number;
   @Output() songDeleted = new EventEmitter<void>();
 
-  constructor(private playerService: PlayerService) {}
+  constructor(private apiService: ApiService) {}
 
   deleteSong() {
-    this.playerService.deleteSong(this.songId).subscribe(
+    this.apiService.deleteSong(this.songId).subscribe(
       () => {
         console.log('Song deleted successfully');
         this.songDeleted.emit();

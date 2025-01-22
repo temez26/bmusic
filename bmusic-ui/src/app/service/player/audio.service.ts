@@ -2,6 +2,7 @@ import { Injectable, ElementRef } from '@angular/core';
 import { ProgressService } from './progress.service';
 import { PlayerModel } from '../models/player.model';
 import { PlayerStateService } from '../player.state.service';
+import { Song } from '../models/song-def.class';
 
 @Injectable({
   providedIn: 'root',
@@ -78,6 +79,7 @@ export class AudioService {
       nextSong();
     }
   }
+
   setData(
     songId: number,
     filePath: string,
@@ -92,24 +94,39 @@ export class AudioService {
     this.stateService.setArtist(artist);
     this.stateService.setIsPlaying(true);
   }
+
   changeSong(offset: number) {
-    const songs = this.stateService.songsSubject.getValue();
-    const currentFilePath = this.stateService.filePathSubject.getValue();
+    const songs = this.stateService.getSongs();
+    const currentFilePath = this.stateService.getFilePath();
+    console.log('Current File Path:', currentFilePath);
+    console.log('Songs:', songs);
+
     const currentSongIndex = songs.findIndex(
       (song) => song.file_path === currentFilePath
     );
+    console.log('Current Song Index:', currentSongIndex);
 
     if (currentSongIndex !== -1) {
       const newIndex =
         (currentSongIndex + offset + songs.length) % songs.length;
       const newSong = songs[newIndex];
-      this.stateService.setFilePath(newSong.file_path);
-      this.stateService.setTitle(newSong.title);
+      console.log('New Song:', newSong);
+
       this.stateService.setCurrentSong(newSong);
+      this.setData(
+        newSong.id,
+        newSong.file_path,
+        newSong.title,
+        newSong.album_cover_url,
+        newSong.artist
+      );
+    } else {
+      console.error('Current song not found in the list');
     }
   }
+
   playRandomSong() {
-    const songs = this.stateService.songsSubject.getValue();
+    const songs = this.stateService.getSongs();
     const randomIndex = Math.floor(Math.random() * songs.length);
     const randomSong = songs[randomIndex];
     this.setData(

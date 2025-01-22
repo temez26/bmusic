@@ -1,10 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlayerService } from '../../service/player.service';
 import { CoverWsService } from '../../service/websocket/coverws.service';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../../service/api.service';
-import { PlayerStateService } from '../../service/player.state.service';
 import { AudioService } from '../../service/player/audio.service';
 
 @Component({
@@ -21,15 +19,13 @@ export class TopSongsComponent implements OnInit, OnDestroy {
   private songsSubscription!: Subscription;
 
   constructor(
-    private playerService: PlayerService,
     private coverWsService: CoverWsService,
     private apiService: ApiService,
-    private stateService: PlayerStateService,
     private audioService: AudioService
   ) {}
 
   ngOnInit() {
-    this.songsSubscription = this.stateService.songs$.subscribe((songs) => {
+    this.songsSubscription = this.apiService.fetchSongs().subscribe((songs) => {
       this.songs = songs
         .sort((a, b) => b.play_count - a.play_count)
         .slice(0, 10); // Take the top 10 songs
@@ -45,7 +41,6 @@ export class TopSongsComponent implements OnInit, OnDestroy {
           })
       );
     });
-    this.playerService.fetchSongs().subscribe();
   }
 
   ngOnDestroy() {
@@ -78,6 +73,6 @@ export class TopSongsComponent implements OnInit, OnDestroy {
     });
   }
   onSongDeleted() {
-    this.playerService.fetchSongs().subscribe();
+    this.apiService.fetchSongs().subscribe();
   }
 }

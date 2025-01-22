@@ -11,8 +11,7 @@
     <div *ngFor="let song of songs; let i = index" class="song-item">
       <div class="song-column">
         <img
-          *ngIf="coverImageSrcMap[song.id]"
-          [src]="coverImageSrcMap[song.id]"
+          [src]="song.album_cover_url"
           (click)="
             playSong(
               song.id,

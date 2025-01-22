@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlayerService } from '../../service/player.service';
+import { ApiService } from '../../service/api.service';
+import { PlayerStateService } from '../../service/player.state.service';
 
 @Component({
   selector: 'app-upload',
@@ -14,7 +15,10 @@ export class UploadComponent implements OnInit {
   fileCount: number = 0;
   successMessage: string = '';
 
-  constructor(private playerService: PlayerService) {}
+  constructor(
+    private apiService: ApiService,
+    private stateService: PlayerStateService
+  ) {}
 
   ngOnInit() {
     this.initializeFileInput();
@@ -37,24 +41,18 @@ export class UploadComponent implements OnInit {
 
   uploadFiles() {
     if (this.selectedFiles.length > 0) {
-      this.playerService.uploadFiles(this.selectedFiles).subscribe({
+      this.apiService.uploadFiles(this.selectedFiles).subscribe({
         next: (response) => {
           console.log('Files uploaded successfully', response);
+
           this.selectedFiles = [];
           this.fileCount = 0;
           this.successMessage = 'Files uploaded successfully!';
         },
         error: (error) => {
           console.error('Error uploading files:', error);
-          this.successMessage = 'Error uploading files. Please try again.';
-        },
-        complete: () => {
-          console.log('Upload request completed');
         },
       });
-    } else {
-      console.error('No files selected');
-      this.successMessage = 'No files selected. Please choose files to upload.';
     }
   }
 }

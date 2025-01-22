@@ -1,15 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Song, UploadResponse } from './models/song-def.class';
+import { PlayerStateService } from './player.state.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
   private baseUrl = `http://127.0.0.1:4000`;
-  constructor(private http: HttpClient) {}
+
+  constructor(
+    private http: HttpClient,
+    private stateService: PlayerStateService
+  ) {}
 
   incrementPlayCount(songId: number): Observable<{ playCount: number }> {
     const url = `${this.baseUrl}/increment`;
@@ -24,6 +29,9 @@ export class ApiService {
   fetchSongs(): Observable<Song[]> {
     const url = `${this.baseUrl}/songs`;
     return this.http.get<Song[]>(url).pipe(
+      tap((fetchedSongs: Song[]) => {
+        this.stateService.setSongs(fetchedSongs);
+      }),
       catchError((error) => {
         console.error('Error fetching songs:', error);
         return throwError(() => error);
@@ -34,19 +42,27 @@ export class ApiService {
   deleteSong(songId: number): Observable<Song[]> {
     const url = `${this.baseUrl}/delete`;
     return this.http.delete<Song[]>(url, { body: { id: songId } }).pipe(
+      tap((updatedSongs: Song[]) => {
+        this.stateService.setSongs(updatedSongs);
+      }),
       catchError((error) => {
         console.error('Error deleting song:', error);
         return throwError(() => error);
       })
     );
   }
-
-  uploadFiles(files: File[]): Observable<UploadResponse> {
+  uploadFiles(files: File[]): Observable<{ songs: Song[] }> {
     const url = `${this.baseUrl}/upload`;
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
 
-    return this.http.post<UploadResponse>(url, formData).pipe(
+    return this.http.post<{ songs: Song[] }>(url, formData).pipe(
+      tap((response) => {
+        if (response.songs) {
+          console.log(response.songs);
+          this.stateService.setSongs(response.songs);
+        }
+      }),
       catchError((error) => {
         console.error('Error uploading files:', error);
         return throwError(() => error);

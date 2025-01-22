@@ -6,7 +6,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlayerService } from '../service/player.service';
 import { PlayerWsService } from '../service/websocket/playerws.service';
 import { VolumeSliderComponent } from './volume-slider/volume-slider.component';
 import { CoverWsService } from '../service/websocket/coverws.service';
@@ -44,7 +43,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
   private currentSongSubscription!: Subscription;
 
   constructor(
-    private playerService: PlayerService,
     private playerWsService: PlayerWsService,
     private coverWsService: CoverWsService,
     private audioService: AudioService,
