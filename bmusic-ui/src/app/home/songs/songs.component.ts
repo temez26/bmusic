@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoverWsService } from '../../service/websocket/coverws.service';
 import { ApiService } from '../../service/api.service';
@@ -14,7 +14,7 @@ import { PlayerStateService } from '../../service/player.state.service';
   styleUrls: ['./songs.component.scss'],
 })
 export class SongsComponent implements OnInit {
-  songs: any[] = [];
+  songs: Song[] = [];
 
   constructor(
     private apiService: ApiService,
@@ -24,7 +24,6 @@ export class SongsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.apiService.fetchSongs().subscribe();
     this.playerStateService.songs$.subscribe((songs) => {
       this.songs = songs.sort((a, b) => a.id - b.id);
       songs.forEach((song) => {

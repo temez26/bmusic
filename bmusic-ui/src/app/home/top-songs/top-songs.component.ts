@@ -24,7 +24,6 @@ export class TopSongsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.apiService.fetchSongs().subscribe();
     this.playerStateService.songs$.subscribe((songs) => {
       this.songs = songs
         .sort((a, b) => b.play_count - a.play_count)

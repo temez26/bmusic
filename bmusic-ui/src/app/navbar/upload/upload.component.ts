@@ -42,9 +42,7 @@ export class UploadComponent implements OnInit {
   uploadFiles() {
     if (this.selectedFiles.length > 0) {
       this.apiService.uploadFiles(this.selectedFiles).subscribe({
-        next: (response) => {
-          console.log('Files uploaded successfully', response);
-
+        next: () => {
           this.selectedFiles = [];
           this.fileCount = 0;
           this.successMessage = 'Files uploaded successfully!';
