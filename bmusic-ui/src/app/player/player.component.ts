@@ -7,9 +7,9 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayerService } from '../service/player.service';
-import { PlayerWsService } from '../service/playerws.service';
+import { PlayerWsService } from '../service/websocket/playerws.service';
 import { VolumeSliderComponent } from './volume-slider/volume-slider.component';
-import { CoverWsService } from '../service/coverws.service';
+import { CoverWsService } from '../service/websocket/coverws.service';
 import { PlayerModel } from '../service/models/player.model';
 import { Subscription } from 'rxjs';
 import { Song } from '../service/models/song-def.class';
@@ -111,6 +111,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.stateService.isPlaying$.subscribe((isPlaying) => {
       this.player.isPlaying = isPlaying;
     });
+    // sets the inital volume on startup
+    this.onVolumeChange(this.player.volumePercentage);
   }
 
   ngOnDestroy() {
@@ -164,6 +166,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.player.volumePercentage = volumePercentage;
     this.audioRef.nativeElement.volume = volumePercentage / 100;
   }
+  //updates the time in progressbar
   updateCurrentTime(event: any) {
     this.audioService.updateCurrentTime(
       event,
@@ -171,7 +174,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
       this.progressSliderRef
     );
   }
-
+  // handle progress bar status
   seek(event: any) {
     this.audioService.seek(
       event,

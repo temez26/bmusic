@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayerService } from '../../service/player.service';
-import { CoverWsService } from '../../service/coverws.service';
+import { CoverWsService } from '../../service/websocket/coverws.service';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../../service/api.service';
 import { PlayerStateService } from '../../service/player.state.service';
