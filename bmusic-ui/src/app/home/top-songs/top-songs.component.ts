@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoverWsService } from '../../service/websocket/coverws.service';
-import { Subscription } from 'rxjs';
-import { ApiService } from '../../service/api.service';
-import { AudioService } from '../../service/player/audio.service';
+import { PlayComponent } from '../shared/play/play.component';
+
 import { PlayerStateService } from '../../service/player.state.service';
 
 @Component({
   selector: 'app-top-songs',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PlayComponent],
   templateUrl: './top-songs.component.html',
   styleUrl: './top-songs.component.scss',
 })
@@ -18,8 +17,6 @@ export class TopSongsComponent implements OnInit {
 
   constructor(
     private coverService: CoverWsService,
-    private apiService: ApiService,
-    private audioService: AudioService,
     private playerStateService: PlayerStateService
   ) {}
 
@@ -38,29 +35,6 @@ export class TopSongsComponent implements OnInit {
             console.error('Error fetching cover:', error);
           });
       });
-    });
-  }
-
-  playSong(
-    songId: number,
-    filePath: string,
-    title: string,
-    album_cover_url: string,
-    artist: string
-  ) {
-    this.apiService.incrementPlayCount(songId).subscribe({
-      next: () => {
-        this.audioService.setData(
-          songId,
-          filePath,
-          title,
-          album_cover_url,
-          artist
-        );
-      },
-      error: (error) => {
-        console.error('Error incrementing play count:', error);
-      },
     });
   }
 }

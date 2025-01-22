@@ -4,35 +4,18 @@
     <div *ngFor="let song of songs; let i = index" class="song-item">
       <div class="song-column">
         <span class="song-number">{{ i + 1 }}</span>
-        <img
-          *ngIf="song.id"
-          [src]="song.album_cover_url"
-          (click)="
-            playSong(
-              song.id,
-              song.file_path,
-              song.title,
-              song.album_cover_url,
-              song.artist
-            )
-          "
-          alt="Cover Image"
-          class="cover-image-large"
-          style="cursor: pointer"
-        />
+
+        <app-play
+          [customClass]="'cover-image-large'"
+          [songId]="song.id"
+          [filePath]="song.file_path"
+          [title]="song.title"
+          [albumCoverUrl]="song.album_cover_url"
+          [artist]="song.artist"
+          [img]="song.album_cover_url"
+        ></app-play>
         <div class="song-details">
-          <p
-            (click)="
-              playSong(
-                song.id,
-                song.file_path,
-                song.title,
-                song.album_cover_url,
-                song.artist
-              )
-            "
-            style="cursor: pointer"
-          >
+          <p>
             {{ song.title }}
           </p>
         </div>

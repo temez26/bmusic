@@ -17,13 +17,16 @@ export class PlayComponent implements OnInit {
   @Input() albumCoverUrl: string = '';
   @Input() artist: string = '';
   @Input() img: string = '';
+  @Input() customClass: string = '';
 
   constructor(
     private apiService: ApiService,
     private audioService: AudioService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('Custom Class:', this.customClass);
+  }
 
   playSong(
     songId: number,
