@@ -14,7 +14,7 @@ import { PlayerStateService } from '../../service/player.state.service';
   styleUrls: ['./songs.component.scss'],
 })
 export class SongsComponent implements OnInit {
-  songs: Song[] = [];
+  songs: any[] = [];
 
   constructor(
     private apiService: ApiService,

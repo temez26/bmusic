@@ -5,8 +5,8 @@
       <div class="song-column">
         <span class="song-number">{{ i + 1 }}</span>
         <img
-          *ngIf="coverImageSrcMap[song.id]"
-          [src]="coverImageSrcMap[song.id]"
+          *ngIf="song.id"
+          [src]="song.album_cover_url"
           (click)="
             playSong(
               song.id,
