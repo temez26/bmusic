@@ -8,6 +8,7 @@ import {
 
 import { PlayerModel } from '../../service/models/player.model';
 import { AudioService } from '../../service/player/audio.service';
+import { ProgressService } from '../../service/player/progress.service';
 
 @Component({
   selector: 'app-volume-slider',
@@ -23,10 +24,13 @@ export class VolumeSliderComponent {
 
   player: PlayerModel = new PlayerModel();
 
-  constructor(private audioService: AudioService) {}
+  constructor(
+    private audioService: AudioService,
+    private progressService: ProgressService
+  ) {}
 
   ngOnInit() {
-    this.audioService.initializeSlider(this.volumeSliderRef.nativeElement);
+    this.progressService.initializeSlider(this.volumeSliderRef.nativeElement);
     this.volumeSliderRef.nativeElement.value = String(
       this.player.volumePercentage
     );

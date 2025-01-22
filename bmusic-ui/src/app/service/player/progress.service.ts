@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
+// Service for managing music playback progress and updating the progress bar
 export class ProgressService {
   updateDuration(audio: HTMLAudioElement): {
     duration: number;
@@ -29,6 +30,15 @@ export class ProgressService {
     const value = (audio.currentTime / audio.duration) * 100;
     slider.style.setProperty('--progress', `${value}%`);
     slider.value = String(audio.currentTime);
+  }
+
+  initializeSlider(slider: HTMLInputElement) {
+    slider.style.setProperty('--value', slider.value);
+    slider.style.setProperty('--min', slider.min === '' ? '0' : slider.min);
+    slider.style.setProperty('--max', slider.max === '' ? '100' : slider.max);
+    slider.addEventListener('input', () =>
+      slider.style.setProperty('--value', slider.value)
+    );
   }
 
   private formatTime(seconds: number): string {

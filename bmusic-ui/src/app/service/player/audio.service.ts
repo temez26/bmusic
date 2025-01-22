@@ -5,17 +5,9 @@ import { PlayerModel } from '../models/player.model';
 @Injectable({
   providedIn: 'root',
 })
+// Service for managing audio playback and volume control
 export class AudioService {
   constructor(private progressService: ProgressService) {}
-
-  initializeSlider(slider: HTMLInputElement) {
-    slider.style.setProperty('--value', slider.value);
-    slider.style.setProperty('--min', slider.min === '' ? '0' : slider.min);
-    slider.style.setProperty('--max', slider.max === '' ? '100' : slider.max);
-    slider.addEventListener('input', () =>
-      slider.style.setProperty('--value', slider.value)
-    );
-  }
 
   changeVolume(
     event: any,
@@ -28,7 +20,7 @@ export class AudioService {
       audio.volume = volume;
     }
     player.volumePercentage = event.target.value;
-    this.initializeSlider(event.target);
+    this.progressService.initializeSlider(event.target);
   }
 
   updateDuration(event: any, player: PlayerModel) {
@@ -49,7 +41,7 @@ export class AudioService {
       this.progressService.updateCurrentTime(audio);
     player.audioCurrentTime = currentTime;
     player.currentTime = formattedCurrentTime;
-    this.updateProgress(progressSliderRef, audio);
+    this.progressService.updateProgress(progressSliderRef.nativeElement, audio);
   }
 
   seek(
@@ -64,14 +56,10 @@ export class AudioService {
       seekTime
     );
     player.audioCurrentTime = currentTime;
-    this.updateProgress(progressSliderRef, audioRef.nativeElement);
-  }
-
-  updateProgress(
-    sliderRef: ElementRef<HTMLInputElement>,
-    audio: HTMLAudioElement
-  ) {
-    this.progressService.updateProgress(sliderRef.nativeElement, audio);
+    this.progressService.updateProgress(
+      progressSliderRef.nativeElement,
+      audioRef.nativeElement
+    );
   }
 
   handleSongEnd(
