@@ -123,15 +123,15 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   nextSong() {
     if (this.player.isShuffle) {
-      this.playerService.playRandomSong();
+      this.audioService.playRandomSong();
     } else {
-      this.playerService.changeSong(1);
+      this.audioService.changeSong(1);
     }
     this.stateService.setIsPlaying(true);
   }
 
   previousSong() {
-    this.playerService.changeSong(-1);
+    this.audioService.changeSong(-1);
     this.stateService.setIsPlaying(true);
   }
 

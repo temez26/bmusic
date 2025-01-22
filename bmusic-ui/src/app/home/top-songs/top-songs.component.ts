@@ -5,6 +5,7 @@ import { CoverWsService } from '../../service/websocket/coverws.service';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../../service/api.service';
 import { PlayerStateService } from '../../service/player.state.service';
+import { AudioService } from '../../service/player/audio.service';
 
 @Component({
   selector: 'app-top-songs',
@@ -23,7 +24,8 @@ export class TopSongsComponent implements OnInit, OnDestroy {
     private playerService: PlayerService,
     private coverWsService: CoverWsService,
     private apiService: ApiService,
-    private stateService: PlayerStateService
+    private stateService: PlayerStateService,
+    private audioService: AudioService
   ) {}
 
   ngOnInit() {
@@ -62,7 +64,7 @@ export class TopSongsComponent implements OnInit, OnDestroy {
     this.apiService.incrementPlayCount(songId).subscribe({
       next: (response) => {
         console.log('Play count incremented:', response.playCount);
-        this.playerService.setData(
+        this.audioService.setData(
           songId,
           filePath,
           title,

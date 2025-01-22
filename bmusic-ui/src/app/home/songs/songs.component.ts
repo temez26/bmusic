@@ -7,6 +7,7 @@ import { ApiService } from '../../service/api.service';
 import { MenuComponent } from './menu/menu.component';
 import { Song } from '../../service/models/song-def.class';
 import { PlayerStateService } from '../../service/player.state.service';
+import { AudioService } from '../../service/player/audio.service';
 
 @Component({
   selector: 'app-songs',
@@ -25,7 +26,8 @@ export class SongsComponent implements OnInit, OnDestroy {
     private playerService: PlayerService,
     private coverWsService: CoverWsService,
     private apiService: ApiService,
-    private stateService: PlayerStateService
+    private stateService: PlayerStateService,
+    private audioService: AudioService
   ) {}
 
   ngOnInit() {
@@ -60,7 +62,7 @@ export class SongsComponent implements OnInit, OnDestroy {
   ) {
     this.apiService.incrementPlayCount(songId).subscribe({
       next: () => {
-        this.playerService.setData(
+        this.audioService.setData(
           songId,
           filePath,
           title,
