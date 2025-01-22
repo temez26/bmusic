@@ -63,7 +63,4 @@ export class TopSongsComponent implements OnInit {
       },
     });
   }
-  onSongDeleted() {
-    this.apiService.fetchSongs().subscribe();
-  }
 }

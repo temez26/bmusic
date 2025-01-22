@@ -1,0 +1,8 @@
+<img
+  *ngIf="songId"
+  [src]="img"
+  (click)="playSong(songId, filePath, title, albumCoverUrl, artist)"
+  alt="Cover Image"
+  class="cover-image"
+  style="cursor: pointer"
+/>
