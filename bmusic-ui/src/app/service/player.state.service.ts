@@ -5,7 +5,7 @@ import { Song } from './models/song-def.class';
 @Injectable({
   providedIn: 'root',
 })
-// handles the data of the application
+// handles the states of the application
 export class PlayerStateService {
   private songsSubject = new BehaviorSubject<Song[]>([]);
   public songs$: Observable<Song[]> = this.songsSubject.asObservable();

@@ -19,13 +19,20 @@ export class ApiService {
   incrementPlayCount(songId: number): Observable<{ playCount: number }> {
     const url = `${this.baseUrl}/increment`;
     return this.http.post<{ playCount: number }>(url, { id: songId }).pipe(
+      tap((response) => {
+        const updatedPlayCount = response.playCount;
+        const currentSongs = this.stateService.getSongs();
+        const updatedSongs = currentSongs.map((song) =>
+          song.id === songId ? { ...song, play_count: updatedPlayCount } : song
+        );
+        this.stateService.setSongs(updatedSongs);
+      }),
       catchError((error) => {
         console.error('Error incrementing play count:', error);
         return throwError(() => error);
       })
     );
   }
-
   fetchSongs(): Observable<Song[]> {
     const url = `${this.baseUrl}/songs`;
     return this.http.get<Song[]>(url).pipe(
