@@ -11,7 +11,9 @@
     <div *ngFor="let song of songs; let i = index" class="song-item">
       <div class="song-column">
         <app-play
-          [customClass]="'cover-image'"
+          [customCover]="'cover-image'"
+          [customTitle]="'songs-title'"
+          [customColumn]="'songs-column'"
           [songId]="song.id"
           [filePath]="song.file_path"
           [title]="song.title"
@@ -19,11 +21,6 @@
           [artist]="song.artist"
           [img]="song.album_cover_url"
         ></app-play>
-        <div class="song-details">
-          <p>
-            {{ song.title }}
-          </p>
-        </div>
       </div>
 
       <div class="artist-column">

@@ -17,7 +17,9 @@ export class PlayComponent implements OnInit {
   @Input() albumCoverUrl: string = '';
   @Input() artist: string = '';
   @Input() img: string = '';
-  @Input() customClass: string = '';
+  @Input() customCover: string = '';
+  @Input() customTitle: string = '';
+  @Input() customColumn: string = '';
 
   constructor(
     private apiService: ApiService,
@@ -25,7 +27,8 @@ export class PlayComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('Custom Class:', this.customClass);
+    console.log('Custom Class:', this.customCover);
+    console.log('CustomTitle:', this.customTitle);
   }
 
   playSong(

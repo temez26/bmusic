@@ -6,7 +6,8 @@
         <span class="song-number">{{ i + 1 }}</span>
 
         <app-play
-          [customClass]="'cover-image-large'"
+          [customCover]="'cover-image-large'"
+          [customTitle]="'top-songs-title'"
           [songId]="song.id"
           [filePath]="song.file_path"
           [title]="song.title"
@@ -14,11 +15,6 @@
           [artist]="song.artist"
           [img]="song.album_cover_url"
         ></app-play>
-        <div class="song-details">
-          <p>
-            {{ song.title }}
-          </p>
-        </div>
       </div>
     </div>
   </div>
