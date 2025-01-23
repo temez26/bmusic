@@ -8,6 +8,7 @@ import { AudioService } from '../service/player/audio.service';
 import { AlbumComponent } from './album/album.component';
 import { PlayerStateService } from '../service/player.state.service';
 import { environment } from '../../environments/environment';
+import { PlayerService } from './player.service';
 
 @Component({
   selector: 'app-player',
@@ -28,13 +29,16 @@ export class PlayerComponent implements OnInit {
   @ViewChild('volumeSlider', { static: true })
   volumeSliderRef!: ElementRef<HTMLInputElement>;
 
-  player: PlayerModel = new PlayerModel();
+  player: PlayerModel;
 
   constructor(
     private playerWsService: PlayerWsService,
     private audioService: AudioService,
-    private stateService: PlayerStateService
-  ) {}
+    private stateService: PlayerStateService,
+    private playerService: PlayerService
+  ) {
+    this.player = this.playerService.player;
+  }
 
   ngOnInit() {
     this.stateService.filePath$.subscribe((filePath) => {
