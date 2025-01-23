@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PlayerModel } from '../service/models/player.model';
+import { PlayerModel } from '../models/player.model';
 
 @Injectable({
   providedIn: 'root',

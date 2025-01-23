@@ -7,7 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { ProgressService } from '../../service/player/progress.service';
-import { PlayerService } from '../player.service';
+import { PlayerService } from '../../service/player/player.service';
 import { PlayerModel } from '../../service/models/player.model';
 
 @Component({

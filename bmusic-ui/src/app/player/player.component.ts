@@ -8,7 +8,7 @@ import { AudioService } from '../service/player/audio.service';
 import { AlbumComponent } from './album/album.component';
 import { PlayerStateService } from '../service/player.state.service';
 import { environment } from '../../environments/environment';
-import { PlayerService } from './player.service';
+import { PlayerService } from '../service/player/player.service';
 
 @Component({
   selector: 'app-player',

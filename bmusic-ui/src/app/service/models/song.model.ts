@@ -10,6 +10,3 @@ export interface Song {
   upload_date: string;
   length: string;
 }
-export interface UploadResponse {
-  songs: Song[];
-}
