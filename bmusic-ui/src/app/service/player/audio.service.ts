@@ -87,8 +87,6 @@ export class AudioService {
     const songs = this.stateService.getSongs();
     const currentFilePath = this.stateService.getFilePath();
 
-    console.log('Songs:', songs);
-
     const currentSongIndex = songs.findIndex(
       (song) => song.file_path === currentFilePath
     );

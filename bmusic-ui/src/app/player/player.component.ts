@@ -9,8 +9,6 @@ import { CommonModule } from '@angular/common';
 import { PlayerWsService } from '../service/websocket/playerws.service';
 import { VolumeSliderComponent } from './volume-slider/volume-slider.component';
 import { PlayerModel } from '../service/models/player.model';
-import { Subscription } from 'rxjs';
-import { Song } from '../service/models/song-def.class';
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
 import { AudioService } from '../service/player/audio.service';
 import { AlbumComponent } from './album/album.component';
@@ -29,7 +27,7 @@ import { environment } from '../../environments/environment';
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.scss', './progress.component.scss'],
 })
-export class PlayerComponent implements OnInit, OnDestroy {
+export class PlayerComponent implements OnInit {
   @ViewChild('audio', { static: true }) audioRef!: ElementRef<HTMLAudioElement>;
   @ViewChild('progressSlider', { static: true })
   progressSliderRef!: ElementRef<HTMLInputElement>;
@@ -37,10 +35,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
   volumeSliderRef!: ElementRef<HTMLInputElement>;
 
   player: PlayerModel = new PlayerModel();
-  albumCoverSrc: string = '/cd-cover.png';
-  songId: number = 0;
-
-  private currentSongSubscription!: Subscription;
 
   constructor(
     private playerWsService: PlayerWsService,
@@ -49,15 +43,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.currentSongSubscription = this.stateService.currentSong$.subscribe(
-      (song: Song | null) => {
-        if (song) {
-          this.player.currentTitle = song.title;
-          this.player.currentArtist = song.artist;
-        }
-      }
-    );
-
     this.stateService.filePath$.subscribe((filePath) => {
       if (filePath) {
         this.playerWsService.startWebSocket(filePath);
@@ -66,8 +51,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     });
 
     this.stateService.coverPath$.subscribe((coverPath) => {
-      this.albumCoverSrc = `${environment.apiBaseUrl}${coverPath}`;
-      console.log(this.albumCoverSrc);
+      this.player.currentAlbumCover = `${environment.apiBaseUrl}${coverPath}`;
     });
 
     this.stateService.title$.subscribe((title) => {
@@ -76,7 +60,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.stateService.artistPath$.subscribe((artist) => {
       this.player.currentArtist = artist;
     });
-
+    // handles what to do when song ends
     this.progressSliderRef.nativeElement.addEventListener(
       'input',
       this.seek.bind(this)
@@ -97,15 +81,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.onVolumeChange(this.player.volumePercentage);
   }
 
-  ngOnDestroy() {
-    if (this.currentSongSubscription) {
-      this.currentSongSubscription.unsubscribe();
-    }
-  }
-  getCover(): void {
-    const cover = this.stateService.getCover();
-    this.albumCoverSrc = `${environment.apiBaseUrl}${cover}`;
-  }
   nextSong() {
     if (this.player.isShuffle) {
       this.audioService.playRandomSong();
@@ -122,13 +97,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   toggleShuffle() {
     this.player.isShuffle = !this.player.isShuffle;
-    console.log('Shuffle toggled:', this.player.isShuffle);
+
     this.stateService.setShuffle(this.player.isShuffle);
   }
 
   toggleRepeat() {
     this.player.isRepeat = !this.player.isRepeat;
-    console.log('Repeat toggled:', this.player.isRepeat);
     this.stateService.setRepeat(this.player.isRepeat);
   }
 

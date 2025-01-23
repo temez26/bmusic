@@ -1,7 +1,7 @@
 export class PlayerModel {
   currentTitle: string | null = null;
   currentArtist: string | null = null;
-  currentAlbumCover: string | null = null;
+  currentAlbumCover: string = '';
   //fordisplaying the time
   currentTime: string = '0:00';
   duration: string = '0:00';
