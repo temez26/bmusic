@@ -8,7 +8,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { PlayerWsService } from '../service/websocket/playerws.service';
 import { VolumeSliderComponent } from './volume-slider/volume-slider.component';
-import { CoverWsService } from '../service/websocket/coverws.service';
 import { PlayerModel } from '../service/models/player.model';
 import { Subscription } from 'rxjs';
 import { Song } from '../service/models/song-def.class';
@@ -16,6 +15,7 @@ import { VolumeIconComponent } from './volume-icon/volume-icon.component';
 import { AudioService } from '../service/player/audio.service';
 import { AlbumComponent } from './album/album.component';
 import { PlayerStateService } from '../service/player.state.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-player',
@@ -37,14 +37,13 @@ export class PlayerComponent implements OnInit, OnDestroy {
   volumeSliderRef!: ElementRef<HTMLInputElement>;
 
   player: PlayerModel = new PlayerModel();
-  albumCoverSrc: string = '';
+  albumCoverSrc: string = '/cd-cover.png';
   songId: number = 0;
 
   private currentSongSubscription!: Subscription;
 
   constructor(
     private playerWsService: PlayerWsService,
-    private coverWsService: CoverWsService,
     private audioService: AudioService,
     private stateService: PlayerStateService
   ) {}
@@ -55,14 +54,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
         if (song) {
           this.player.currentTitle = song.title;
           this.player.currentArtist = song.artist;
-          this.coverWsService
-            .getCovers(song.id, song.album_cover_url)
-            .then((imageSrc) => {
-              this.albumCoverSrc = imageSrc;
-            })
-            .catch((error) => {
-              console.error('Error fetching cover:', error);
-            });
         }
       }
     );
@@ -75,15 +66,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
     });
 
     this.stateService.coverPath$.subscribe((coverPath) => {
-      this.albumCoverSrc = coverPath ?? '';
-      this.stateService.songId$.subscribe((songId) => {
-        this.songId = songId ?? 0;
-        this.coverWsService
-          .getCovers(this.songId, this.albumCoverSrc)
-          .then((imageSrc) => {
-            this.albumCoverSrc = imageSrc;
-          });
-      });
+      this.albumCoverSrc = `${environment.apiBaseUrl}${coverPath}`;
+      console.log(this.albumCoverSrc);
     });
 
     this.stateService.title$.subscribe((title) => {
@@ -118,7 +102,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
       this.currentSongSubscription.unsubscribe();
     }
   }
-
+  getCover(): void {
+    const cover = this.stateService.getCover();
+    this.albumCoverSrc = `${environment.apiBaseUrl}${cover}`;
+  }
   nextSong() {
     if (this.player.isShuffle) {
       this.audioService.playRandomSong();

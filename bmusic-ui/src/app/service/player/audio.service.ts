@@ -80,22 +80,10 @@ export class AudioService {
     }
   }
 
-  setData(
-    songId: number,
-    filePath: string,
-    title: string,
-    album_cover_url: string,
-    artist: string
-  ) {
-    this.stateService.setId(songId);
-    this.stateService.setTitle(title);
-    this.stateService.setFilePath(filePath);
-    this.stateService.setCover(album_cover_url);
-    this.stateService.setArtist(artist);
-    this.stateService.setIsPlaying(true);
+  setData(songId: number): void {
+    this.stateService.setCurrentSongById(songId);
   }
-
-  changeSong(offset: number) {
+  changeSong(offset: number): void {
     const songs = this.stateService.getSongs();
     const currentFilePath = this.stateService.getFilePath();
 
@@ -110,29 +98,16 @@ export class AudioService {
         (currentSongIndex + offset + songs.length) % songs.length;
       const newSong = songs[newIndex];
 
-      this.stateService.setCurrentSong(newSong);
-      this.setData(
-        newSong.id,
-        newSong.file_path,
-        newSong.title,
-        newSong.album_cover_url,
-        newSong.artist
-      );
+      this.stateService.setCurrentSongById(newSong.id);
     } else {
       console.error('Current song not found in the list');
     }
   }
 
-  playRandomSong() {
+  playRandomSong(): void {
     const songs = this.stateService.getSongs();
     const randomIndex = Math.floor(Math.random() * songs.length);
     const randomSong = songs[randomIndex];
-    this.setData(
-      randomSong.id,
-      randomSong.file_path,
-      randomSong.title,
-      randomSong.album_cover_url,
-      randomSong.artist
-    );
+    this.stateService.setCurrentSongById(randomSong.id);
   }
 }

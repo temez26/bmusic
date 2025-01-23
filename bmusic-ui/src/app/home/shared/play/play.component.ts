@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../service/api.service';
 import { AudioService } from '../../../service/player/audio.service';
-
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'app-play',
   standalone: true,
@@ -12,10 +12,7 @@ import { AudioService } from '../../../service/player/audio.service';
 })
 export class PlayComponent implements OnInit {
   @Input() songId: number = 0;
-  @Input() filePath: string = '';
   @Input() title: string = '';
-  @Input() albumCoverUrl: string = '';
-  @Input() artist: string = '';
   @Input() img: string = '';
   @Input() customCover: string = '';
   @Input() customTitle: string = '';
@@ -26,24 +23,14 @@ export class PlayComponent implements OnInit {
     private audioService: AudioService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.img = `${environment.apiBaseUrl}${this.img}`;
+  }
 
-  playSong(
-    songId: number,
-    filePath: string,
-    title: string,
-    albumCoverUrl: string,
-    artist: string
-  ) {
-    this.apiService.incrementPlayCount(this.songId).subscribe({
+  playSong(songId: number) {
+    this.apiService.incrementPlayCount(songId).subscribe({
       next: () => {
-        this.audioService.setData(
-          songId,
-          filePath,
-          title,
-          albumCoverUrl,
-          artist
-        );
+        this.audioService.setData(songId);
       },
       error: (error) => {
         console.error('Error incrementing play count:', error);

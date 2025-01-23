@@ -5,7 +5,6 @@ import { Song } from './models/song-def.class';
 @Injectable({
   providedIn: 'root',
 })
-// handles the states of the application
 export class PlayerStateService {
   private songsSubject = new BehaviorSubject<Song[]>([]);
   public songs$: Observable<Song[]> = this.songsSubject.asObservable();
@@ -42,7 +41,7 @@ export class PlayerStateService {
   public songId$: Observable<number | null> = this.songIdSubject.asObservable();
 
   setSongs(songs: Song[]): void {
-    this.songsSubject.next(songs);
+    this.songsSubject.next([...songs]);
   }
 
   getSongs(): Song[] {
@@ -50,7 +49,7 @@ export class PlayerStateService {
   }
 
   setCurrentSong(song: Song): void {
-    this.currentSongSubject.next(song);
+    this.currentSongSubject.next({ ...song });
   }
 
   getCurrentSong(): Song | null {
@@ -119,5 +118,24 @@ export class PlayerStateService {
 
   getId(): number | null {
     return this.songIdSubject.getValue();
+  }
+
+  private updateSongDetails(song: Song): void {
+    this.setCurrentSong(song);
+    this.setTitle(song.title);
+    this.setFilePath(song.file_path);
+    this.setCover(song.album_cover_url);
+    this.setArtist(song.artist);
+    this.setId(song.id);
+    this.setIsPlaying(true);
+  }
+
+  setCurrentSongById(songId: number): void {
+    const song = this.getSongs().find((s) => s.id === songId);
+    if (song) {
+      this.updateSongDetails(song);
+    } else {
+      console.error('Song not found with id:', songId);
+    }
   }
 }

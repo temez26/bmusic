@@ -45,6 +45,17 @@ app.post("/increment", async (req, res) => {
     res.status(500).send("Error incrementing play count");
   }
 });
+// Route to serve cover images
+app.get("/data/covers/*", (req, res) => {
+  const filePath = path.join(__dirname, req.path);
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.error("File not found:", filePath);
+      return res.status(404).send("File not found");
+    }
+    res.sendFile(filePath);
+  });
+});
 
 // Route to handle file deletion
 app.delete("/delete", handleFileDelete);
