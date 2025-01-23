@@ -26,10 +26,7 @@ export class PlayComponent implements OnInit {
     private audioService: AudioService
   ) {}
 
-  ngOnInit(): void {
-    console.log('Custom Class:', this.customCover);
-    console.log('CustomTitle:', this.customTitle);
-  }
+  ngOnInit(): void {}
 
   playSong(
     songId: number,
