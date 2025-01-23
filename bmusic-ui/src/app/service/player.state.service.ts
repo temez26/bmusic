@@ -41,6 +41,16 @@ export class PlayerStateService {
   private songIdSubject = new BehaviorSubject<number | null>(null);
   public songId$: Observable<number | null> = this.songIdSubject.asObservable();
 
+  updateSong(updatedSong: Song): void {
+    const currentSongs = this.songsSubject.getValue();
+    const updatedSongs = currentSongs.map((song) =>
+      song.id === updatedSong.id
+        ? { ...song, play_count: updatedSong.play_count }
+        : song
+    );
+    this.songsSubject.next(updatedSongs);
+  }
+
   setSongs(songs: Song[]): void {
     this.songsSubject.next([...songs]);
   }

@@ -21,11 +21,14 @@ export class ApiService {
     return this.http.post<{ playCount: number }>(url, { id: songId }).pipe(
       tap((response) => {
         const updatedPlayCount = response.playCount;
-        const currentSongs = this.stateService.getSongs();
-        const updatedSongs = currentSongs.map((song) =>
-          song.id === songId ? { ...song, play_count: updatedPlayCount } : song
-        );
-        this.stateService.setSongs(updatedSongs);
+        const song = this.stateService.getSongs().find((s) => s.id === songId);
+        console.log(song);
+        if (song) {
+          this.stateService.updateSong({
+            ...song,
+            play_count: updatedPlayCount,
+          });
+        }
       }),
       catchError((error) => {
         console.error('Error incrementing play count:', error);
