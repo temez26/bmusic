@@ -2,7 +2,6 @@ import { Injectable, ElementRef } from '@angular/core';
 import { ProgressService } from './progress.service';
 import { PlayerModel } from '../models/player.model';
 import { PlayerStateService } from '../player.state.service';
-import { Song } from '../models/song-def.class';
 
 @Injectable({
   providedIn: 'root',
