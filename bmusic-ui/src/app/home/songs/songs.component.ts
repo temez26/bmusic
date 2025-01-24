@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { PlayerStateService } from '../../service/player.state.service';
 import { PlayComponent } from '../shared/play/play.component';
 

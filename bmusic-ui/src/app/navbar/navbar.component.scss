@@ -22,7 +22,6 @@
 
 .navbar-title {
   font-size: 2.5rem;
-  color: #f0f0f0;
   background: linear-gradient(45deg, #ff4081, #3f51b5, #ff4081, #3f51b5);
   background-size: 200% 200%;
   -webkit-background-clip: text;
@@ -48,13 +47,8 @@ mat-icon {
   background: rgba(255, 255, 255, 0.788);
 }
 
-button[mat-icon-button] {
-  color: #979797;
-  transition: background-color 0.3s ease;
-}
-
 button[mat-icon-button] .material-icons {
-  color: #ffffffc7; // White color for icons
+  color: #ffffffc7;
   transition: color 0.3s ease, background-color 0.3s ease;
   -webkit-background-clip: text;
   background-clip: text;
@@ -63,7 +57,7 @@ button[mat-icon-button] .material-icons {
 }
 
 button[mat-icon-button]:hover .material-icons {
-  color: #e0e0e0; // Light gray color on hover
+  color: #e0e0e0;
   background-color: #ffffff;
 }
 @media (max-width: 768px) {
