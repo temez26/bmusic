@@ -10,3 +10,4 @@
 
 - the bmusic-api partially setup
 - full database config, probably will be made along the app production
+- create music streaming to use audio buffer instead of downloading the whole audio/flac file, Looks like it needs an library to decode and encvode the audio data. libflac.js looks like it would be possible to integrate on the application
