@@ -8,7 +8,10 @@
     <div class="header-last"><h4>Actions</h4></div>
   </div>
   <div class="song-list-container">
-    <div *ngFor="let song of songs; let i = index" class="song-item">
+    <div
+      *ngFor="let song of songs$ | async; let i = index; trackBy: trackBySongId"
+      class="song-item"
+    >
       <div class="song-column">
         <app-play
           [customCover]="'cover-image'"
