@@ -5,7 +5,7 @@ import { VolumeSliderComponent } from './volume-slider/volume-slider.component';
 import { PlayerModel } from '../service/models/player.class';
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
 import { AudioService } from '../service/player/audio.service';
-import { AlbumComponent } from './album/album.component';
+import { AlbumComponent } from './album-cover/album.component';
 import { PlayerStateService } from '../service/player.state.service';
 import { environment } from '../../environments/environment';
 import { PlayerService } from '../service/player/player.service';
