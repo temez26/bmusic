@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Song } from './models/song.model';
+import { Song } from './models/song.interface';
 import { PlayerStateService } from './player.state.service';
 
 @Injectable({

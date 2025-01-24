@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ProgressService } from '../../service/player/progress.service';
 import { PlayerService } from '../../service/player/player.service';
-import { PlayerModel } from '../../service/models/player.model';
+import { PlayerModel } from '../../service/models/player.class';
 
 @Component({
   selector: 'app-volume-slider',
