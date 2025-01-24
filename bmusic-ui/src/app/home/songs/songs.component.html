@@ -9,7 +9,7 @@
   </div>
   <div class="song-list-container">
     <div
-      *ngFor="let song of songs$ | async; let i = index; trackBy: trackBySongId"
+      *ngFor="let song of songs | async; let i = index; trackBy: trackBySongId"
       class="song-item"
     >
       <div class="song-column">

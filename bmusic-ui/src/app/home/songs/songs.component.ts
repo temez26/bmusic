@@ -15,14 +15,14 @@ import { PlayComponent } from '../shared/play/play.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SongsComponent implements OnInit {
-  songs$: Observable<any[]>;
+  songs: Observable<any[]>;
 
   constructor(private playerStateService: PlayerStateService) {
-    this.songs$ = playerStateService.songs$;
+    this.songs = playerStateService.songs$;
   }
 
   ngOnInit() {
-    this.songs$ = this.playerStateService.songs$.pipe(
+    this.songs = this.playerStateService.songs$.pipe(
       map((songs) => [...songs].sort((a, b) => a.id - b.id))
     );
   }
