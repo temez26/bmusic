@@ -18,6 +18,7 @@
       <h4 class="song-title">Title</h4>
       <h4 class="song-artist">Artist</h4>
       <h4 class="song-length">Time</h4>
+      <h4 class="song-actions">Actions</h4>
     </div>
     <div *ngFor="let song of songs" class="song-item">
       <app-play
@@ -36,6 +37,7 @@
       <span class="song-length"
         ><p>{{ song.length }}</p></span
       >
+      <span class="song-actions"><app-menu></app-menu></span>
     </div>
   </div>
 </div>

@@ -2,8 +2,6 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #fff;
   background-color: rgba(10, 10, 10, 0.507);
 }
 
@@ -62,14 +60,19 @@
 
 .song-title,
 .song-artist,
-.song-length {
+.song-length,
+.song-actions {
   flex: 1;
   text-align: left;
 }
 
-.song-length {
+.song-actions {
   text-align: right;
   color: #b3b3b3;
+}
+app-menu {
+  display: flex;
+  justify-content: end;
 }
 
 @media (max-width: 768px) {

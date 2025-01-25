@@ -4,11 +4,12 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PlayerStateService } from '../../service/states/player.state.service';
 import { PlayComponent } from '../shared/play/play.component';
+import { MenuComponent } from './menu/menu.component';
 
 @Component({
   selector: 'app-songs',
   standalone: true,
-  imports: [CommonModule, PlayComponent],
+  imports: [CommonModule, PlayComponent, MenuComponent],
   templateUrl: './songs.component.html',
   styleUrls: ['./songs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

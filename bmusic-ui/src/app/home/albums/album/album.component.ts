@@ -6,11 +6,12 @@ import { Song } from '../../../service/models/song.interface';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { PlayComponent } from '../../shared/play/play.component';
+import { MenuComponent } from '../../songs/menu/menu.component';
 
 @Component({
   selector: 'app-album',
   standalone: true,
-  imports: [CommonModule, PlayComponent],
+  imports: [CommonModule, PlayComponent, MenuComponent],
   templateUrl: './album.component.html',
   styleUrl: './album.component.scss',
 })
