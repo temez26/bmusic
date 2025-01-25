@@ -1,7 +1,7 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { ProgressService } from './progress.service';
 import { PlayerModel } from '../models/player.class';
-import { PlayerStateService } from '../player.state.service';
+import { PlayerStateService } from '../states/player.state.service';
 
 @Injectable({
   providedIn: 'root',
@@ -84,17 +84,16 @@ export class AudioService {
   }
   changeSong(offset: number): void {
     const songs = this.stateService.getSongs();
-    const currentFilePath = this.stateService.getFilePath();
+    const currentSongId = this.stateService.getId();
 
     const currentSongIndex = songs.findIndex(
-      (song) => song.file_path === currentFilePath
+      (song) => song.id === currentSongId
     );
 
     if (currentSongIndex !== -1) {
       const newIndex =
         (currentSongIndex + offset + songs.length) % songs.length;
       const newSong = songs[newIndex];
-
       this.stateService.setCurrentSongById(newSong.id);
     } else {
       console.error('Current song not found in the list');

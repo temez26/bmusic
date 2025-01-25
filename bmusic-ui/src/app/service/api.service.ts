@@ -3,7 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Song } from './models/song.interface';
-import { PlayerStateService } from './player.state.service';
+import { Album } from './models/album.interface';
+import { Artist } from './models/artist.interface';
+import { ArtistStateService } from './states/artist.state.service';
+import { PlayerStateService } from './states/player.state.service';
+import { AlbumStateService } from './states/album.state.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +17,9 @@ export class ApiService {
 
   constructor(
     private http: HttpClient,
-    private stateService: PlayerStateService
+    private stateService: PlayerStateService,
+    private albumService: AlbumStateService,
+    private artistService: ArtistStateService
   ) {}
 
   incrementPlayCount(songId: number): Observable<{ playCount: number }> {
@@ -48,11 +54,11 @@ export class ApiService {
       })
     );
   }
-  fetchArtists(): Observable<any> {
+  fetchArtists(): Observable<Artist[]> {
     const url = `${this.baseUrl}/artists`;
-    return this.http.get(url).pipe(
-      tap((fetchedArtists) => {
-        console.log(fetchedArtists);
+    return this.http.get<Artist[]>(url).pipe(
+      tap((fetchedArtists: Artist[]) => {
+        this.artistService.setArtists(fetchedArtists);
       }),
       catchError((error) => {
         console.log(error);
@@ -60,11 +66,11 @@ export class ApiService {
       })
     );
   }
-  fetchAlbums(): Observable<any> {
+  fetchAlbums(): Observable<Album[]> {
     const url = `${this.baseUrl}/albums`;
-    return this.http.get(url).pipe(
-      tap((fetchedAlbums) => {
-        console.log(fetchedAlbums);
+    return this.http.get<Album[]>(url).pipe(
+      tap((fetchedAlbums: Album[]) => {
+        this.albumService.setAlbums(fetchedAlbums);
       }),
       catchError((error) => {
         console.log(error);

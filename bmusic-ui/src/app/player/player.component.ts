@@ -6,7 +6,7 @@ import { PlayerModel } from '../service/models/player.class';
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
 import { AudioService } from '../service/player/audio.service';
 import { AlbumComponent } from './album-cover/album.component';
-import { PlayerStateService } from '../service/player.state.service';
+import { PlayerStateService } from '../service/states/player.state.service';
 import { environment } from '../../environments/environment';
 import { PlayerService } from '../service/player/player.service';
 
