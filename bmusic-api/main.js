@@ -10,6 +10,8 @@ const { handleFileDelete } = require("./services/deleteController");
 const {
   handleFileUpload,
   handleAllSongs,
+  handleAllArtists,
+  handleAllAlbums,
 } = require("./services/uploadController");
 
 const app = express();
@@ -26,6 +28,8 @@ app.get("/", (req, res) => {
 
 // Route to handle fetching all songs
 app.get("/songs", handleAllSongs);
+app.get("/artists", handleAllArtists);
+app.get("/albums", handleAllAlbums);
 
 // Route to handle file uploads
 app.post("/upload", upload, handleFileUpload);

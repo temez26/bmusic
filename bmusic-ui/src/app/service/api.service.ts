@@ -48,6 +48,30 @@ export class ApiService {
       })
     );
   }
+  fetchArtists(): Observable<any> {
+    const url = `${this.baseUrl}/artists`;
+    return this.http.get(url).pipe(
+      tap((fetchedArtists) => {
+        console.log(fetchedArtists);
+      }),
+      catchError((error) => {
+        console.log(error);
+        return throwError(() => error);
+      })
+    );
+  }
+  fetchAlbums(): Observable<any> {
+    const url = `${this.baseUrl}/albums`;
+    return this.http.get(url).pipe(
+      tap((fetchedAlbums) => {
+        console.log(fetchedAlbums);
+      }),
+      catchError((error) => {
+        console.log(error);
+        return throwError(() => error);
+      })
+    );
+  }
 
   deleteSong(songId: number): Observable<Song[]> {
     const url = `${this.baseUrl}/delete`;

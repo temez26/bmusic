@@ -1,17 +1,42 @@
 const mm = require("music-metadata");
-const { insertSong, getAllSongs } = require("../database/db");
+const {
+  insertSong,
+  getAllSongs,
+  getOrInsertArtist,
+  getOrInsertAlbum,
+  getAllArtists,
+  getAllAlbums,
+} = require("../database/db");
 
 // Function to handle fetching all songs from the database
 const handleAllSongs = async (req, res) => {
   try {
     const songs = await getAllSongs();
+    const artist = await getAllArtists();
     res.status(200).json(songs);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error fetching data from database");
+    res.status(500).send("Error fetching data for Songs");
   }
 };
-
+const handleAllArtists = async (req, res) => {
+  try {
+    const artists = await getAllArtists();
+    res.status(200).json(artists);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Error fetching data for Artists");
+  }
+};
+const handleAllAlbums = async (req, res) => {
+  try {
+    const artists = await getAllAlbums();
+    res.status(200).json(artists);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Error fetching data for Artists");
+  }
+};
 // Function to handle file uploads and metadata extraction
 const handleFileUpload = async (req, res) => {
   const files = req.files.files || [];
@@ -25,6 +50,7 @@ const handleFileUpload = async (req, res) => {
       if (file.mimetype.startsWith("image/")) {
         albumCoverUrl = file.path;
         successfulUploads.push(file.originalname);
+        console.log(`Image file uploaded successfully: ${file.originalname}`);
       }
     }
 
@@ -40,27 +66,43 @@ const handleFileUpload = async (req, res) => {
           const seconds = Math.floor(duration % 60);
           const length = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 
+          // Fetch or insert artist and album to get their IDs
+          const artist_id = await getOrInsertArtist(artist);
+          const album_id = await getOrInsertAlbum(
+            album,
+            artist_id,
+            genre,
+            albumCoverUrl
+          );
+
           await insertSong(
             title || file.originalname,
-            artist,
+            artist_id,
+            album_id,
             album,
+            artist,
             genre,
             filePath,
             albumCoverUrl,
             length
           );
           successfulUploads.push(file.originalname);
+          console.log(`Audio file uploaded successfully: ${file.originalname}`);
         } catch (err) {
           errors.push({ file: file.originalname, error: err.message });
+          console.error(
+            `Error uploading audio file: ${file.originalname}`,
+            err
+          );
         }
       } else if (!file.mimetype.startsWith("image/")) {
         errors.push({ file: file.originalname, error: "Invalid file type" });
+        console.error(`Invalid file type: ${file.originalname}`);
       }
     }
 
     // Fetch all songs after upload and send response
     const songs = await getAllSongs();
-    console.log("got songs");
     res.status(201).json({ songs, errors, successfulUploads });
   } catch (err) {
     console.error(err);
@@ -71,4 +113,6 @@ const handleFileUpload = async (req, res) => {
 module.exports = {
   handleFileUpload,
   handleAllSongs,
+  handleAllArtists,
+  handleAllAlbums,
 };
