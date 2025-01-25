@@ -5,7 +5,7 @@ import { VolumeSliderComponent } from './volume-slider/volume-slider.component';
 import { PlayerModel } from '../service/models/player.class';
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
 import { AudioService } from '../service/player/audio.service';
-import { AlbumComponent } from './album-cover/album.component';
+import { AlbumCoverComponent } from './album-cover/album-cover.component';
 import { PlayerStateService } from '../service/states/player.state.service';
 import { environment } from '../../environments/environment';
 import { PlayerService } from '../service/player/player.service';
@@ -17,7 +17,7 @@ import { PlayerService } from '../service/player/player.service';
     CommonModule,
     VolumeIconComponent,
     VolumeSliderComponent,
-    AlbumComponent,
+    AlbumCoverComponent,
   ],
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.scss', './progress.component.scss'],

@@ -130,6 +130,9 @@ export class PlayerStateService {
   getId(): number | null {
     return this.songIdSubject.getValue();
   }
+  getSongsByAlbumId(albumId: number): Song[] {
+    return this.getSongs().filter((song) => song.album_id === albumId);
+  }
 
   private updateSongDetails(song: Song): void {
     this.setCurrentSong(song);

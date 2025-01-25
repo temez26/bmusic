@@ -1,1 +1,13 @@
-<p>albums works!</p>
+<div class="albums">
+  <h1>Albums</h1>
+  <div class="albums-grid">
+    <div class="album-item" *ngFor="let album of albums">
+      <img
+        [src]="url + album.cover_image_url"
+        alt="{{ album.title }}"
+        [routerLink]="['/albums', album.id]"
+      />
+      <h4>{{ album.title }}</h4>
+    </div>
+  </div>
+</div>
