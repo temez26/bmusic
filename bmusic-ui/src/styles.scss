@@ -47,9 +47,10 @@ app-root {
 // main content area
 main {
   flex-grow: 1;
-  padding: 0 0px;
+  padding: 0 5px;
   height: 100vh;
   overflow: auto;
+  background-color: rgba(10, 10, 10, 0.507);
 }
 // child components
 

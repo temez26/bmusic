@@ -39,7 +39,6 @@
 .song-item {
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
 }
 
 .songs-header {
@@ -48,7 +47,9 @@
 }
 
 .song-item {
-  border-bottom: 1px solid #444;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px;
   background-color: rgba(0, 0, 0, 0.7);
   transition: background-color 0.3s ease;
   cursor: pointer;
