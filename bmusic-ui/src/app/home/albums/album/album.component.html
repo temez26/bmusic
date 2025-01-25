@@ -20,9 +20,22 @@
       <span class="song-length">Length</span>
     </div>
     <div *ngFor="let song of songs" class="song-item">
-      <span class="song-title">{{ song.title }}</span>
-      <span class="song-artist">{{ song.artist }}</span>
-      <span class="song-length">{{ song.length }}</span>
+      <app-play
+        class="song-title"
+        [customCover]="'cover-image'"
+        [customTitle]="'songs-title'"
+        [customColumn]="'songs-column'"
+        [songId]="song.id"
+        [title]="song.title"
+        [img]="song.album_cover_url"
+      ></app-play>
+
+      <span class="song-artist"
+        ><p>{{ song.artist }}</p></span
+      >
+      <span class="song-length"
+        ><p>{{ song.length }}</p></span
+      >
     </div>
   </div>
 </div>

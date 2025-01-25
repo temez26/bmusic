@@ -5,11 +5,12 @@ import { Subscription } from 'rxjs';
 import { Song } from '../../../service/models/song.interface';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
+import { PlayComponent } from '../../shared/play/play.component';
 
 @Component({
   selector: 'app-album',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PlayComponent],
   templateUrl: './album.component.html',
   styleUrl: './album.component.scss',
 })

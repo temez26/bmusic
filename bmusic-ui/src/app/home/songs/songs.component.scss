@@ -6,22 +6,7 @@
 .song-list-container {
   overflow-y: auto;
 }
-.song-list-container::-webkit-scrollbar {
-  width: 12px;
-}
 
-.song-list-container::-webkit-scrollbar-track {
-  background: #333;
-}
-
-.song-list-container::-webkit-scrollbar-thumb {
-  background: #555;
-  border-radius: 2px;
-}
-
-.song-list-container::-webkit-scrollbar-thumb:hover {
-  background: #777;
-}
 .song-header {
   display: flex;
   justify-content: space-evenly;

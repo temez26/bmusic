@@ -19,7 +19,24 @@ body {
   padding-right: 10%;
   padding-left: 10%;
 }
+// settings for scrollbar
 
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #333;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 2px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
 // parent for all the components
 app-root {
   display: flex;
