@@ -8,12 +8,13 @@ import { Artist } from './models/artist.interface';
 import { ArtistStateService } from './states/artist.state.service';
 import { PlayerStateService } from './states/player.state.service';
 import { AlbumStateService } from './states/album.state.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private baseUrl = `http://127.0.0.1:4000`;
+  private baseUrl = environment.apiBaseUrl;
 
   constructor(
     private http: HttpClient,
@@ -23,7 +24,7 @@ export class ApiService {
   ) {}
 
   incrementPlayCount(songId: number): Observable<{ playCount: number }> {
-    const url = `${this.baseUrl}/increment`;
+    const url = `${this.baseUrl}increment`;
     return this.http.post<{ playCount: number }>(url, { id: songId }).pipe(
       tap((response) => {
         const updatedPlayCount = response.playCount;
@@ -43,7 +44,7 @@ export class ApiService {
     );
   }
   fetchSongs(): Observable<Song[]> {
-    const url = `${this.baseUrl}/songs`;
+    const url = `${this.baseUrl}songs`;
     return this.http.get<Song[]>(url).pipe(
       tap((fetchedSongs: Song[]) => {
         this.stateService.setSongs(fetchedSongs);
@@ -55,7 +56,7 @@ export class ApiService {
     );
   }
   fetchArtists(): Observable<Artist[]> {
-    const url = `${this.baseUrl}/artists`;
+    const url = `${this.baseUrl}artists`;
     return this.http.get<Artist[]>(url).pipe(
       tap((fetchedArtists: Artist[]) => {
         this.artistService.setArtists(fetchedArtists);
@@ -67,7 +68,7 @@ export class ApiService {
     );
   }
   fetchAlbums(): Observable<Album[]> {
-    const url = `${this.baseUrl}/albums`;
+    const url = `${this.baseUrl}albums`;
     return this.http.get<Album[]>(url).pipe(
       tap((fetchedAlbums: Album[]) => {
         this.albumService.setAlbums(fetchedAlbums);
@@ -80,7 +81,7 @@ export class ApiService {
   }
 
   deleteSong(songId: number): Observable<Song[]> {
-    const url = `${this.baseUrl}/delete`;
+    const url = `${this.baseUrl}delete`;
     return this.http.delete<Song[]>(url, { body: { id: songId } }).pipe(
       tap((updatedSongs: Song[]) => {
         this.stateService.setSongs(updatedSongs);
@@ -91,16 +92,21 @@ export class ApiService {
       })
     );
   }
+  // [bmusic-ui/src/app/service/api.service.ts](bmusic-ui/src/app/service/api.service.ts)
   uploadFiles(files: File[]): Observable<{ songs: Song[] }> {
-    const url = `${this.baseUrl}/upload`;
+    const url = `${this.baseUrl}upload`;
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
 
     return this.http.post<{ songs: Song[] }>(url, formData).pipe(
       tap((response) => {
         if (response.songs) {
-          console.log(response.songs);
           this.stateService.setSongs(response.songs);
+
+          // Fetch and update albums after uploading songs
+          this.fetchAlbums().subscribe((albums) => {
+            this.albumService.setAlbums(albums);
+          });
         }
       }),
       catchError((error) => {
