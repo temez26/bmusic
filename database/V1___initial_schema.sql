@@ -2,13 +2,13 @@
 -- Artists Table
 CREATE TABLE artists (
 id SERIAL PRIMARY KEY,
-name VARCHAR(255) NOT NULL
+name VARCHAR(255)
 );
 
 -- Albums Table
 CREATE TABLE albums (
 id SERIAL PRIMARY KEY,
-title VARCHAR(255) NOT NULL,
+title VARCHAR(255),
 artist_id INT REFERENCES artists(id),
 genre VARCHAR(255),
 cover_image_url VARCHAR(255)
