@@ -3,7 +3,9 @@
   <div class="album-header">
     <img
       class="album-cover"
-      [src]="coverSrc || '/cd-cover.png'"
+      [src]="
+        coverSrc && !coverSrc.includes('/null') ? coverSrc : '/cd-cover.png'
+      "
       alt="{{ songs[0].album || 'Album Cover' }}"
     />
     <div class="album-info">
