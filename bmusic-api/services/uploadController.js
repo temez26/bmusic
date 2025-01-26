@@ -1,4 +1,5 @@
 const mm = require("music-metadata");
+const path = require("path");
 const {
   insertSong,
   getAllSongs,
@@ -12,7 +13,6 @@ const {
 const handleAllSongs = async (req, res) => {
   try {
     const songs = await getAllSongs();
-    const artist = await getAllArtists();
     res.status(200).json(songs);
   } catch (err) {
     console.error(err);
@@ -37,39 +37,47 @@ const handleAllAlbums = async (req, res) => {
     res.status(500).send("Error fetching data for Artists");
   }
 };
+
 // Function to handle file uploads and metadata extraction
 const handleFileUpload = async (req, res) => {
   const files = req.files.files || [];
   const errors = [];
   const successfulUploads = [];
   let albumCoverUrl = null;
+  let albumName = null;
+  let artistName = null;
+  let genre = null;
+
+  // Find the last image file in the list
+  for (let i = files.length - 1; i >= 0; i--) {
+    if (files[i].mimetype.startsWith("image/")) {
+      albumCoverUrl = files[i].path;
+      break;
+    }
+  }
 
   try {
-    // Process image files to get album cover URL
-    for (const file of files) {
-      if (file.mimetype.startsWith("image/")) {
-        albumCoverUrl = file.path;
-        successfulUploads.push(file.originalname);
-        console.log(`Image file uploaded successfully: ${file.originalname}`);
-      }
-    }
-
     // Process audio files to extract metadata and insert into database
     for (const file of files) {
       if (file.mimetype.startsWith("audio/")) {
         try {
           const filePath = file.path;
           const metadata = await mm.parseFile(filePath);
-          const { title, artist, album, genre } = metadata.common;
+          const { title, artist, album, genre: fileGenre } = metadata.common;
           const duration = metadata.format.duration;
           const minutes = Math.floor(duration / 60);
           const seconds = Math.floor(duration % 60);
           const length = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 
+          // Use the album and artist from the first audio file for all subsequent files
+          if (!albumName) albumName = album;
+          if (!artistName) artistName = artist;
+          if (!genre) genre = fileGenre;
+
           // Fetch or insert artist and album to get their IDs
-          const artist_id = await getOrInsertArtist(artist);
+          const artist_id = await getOrInsertArtist(artistName);
           const album_id = await getOrInsertAlbum(
-            album,
+            albumName,
             artist_id,
             genre,
             albumCoverUrl
@@ -79,8 +87,8 @@ const handleFileUpload = async (req, res) => {
             title || file.originalname,
             artist_id,
             album_id,
-            album,
-            artist,
+            albumName,
+            artistName,
             genre,
             filePath,
             albumCoverUrl,

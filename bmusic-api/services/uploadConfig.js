@@ -40,7 +40,7 @@ const fileFilter = (req, file, cb) => {
   if (isExtnameValid && isMimetypeValid) {
     return cb(null, true);
   } else {
-    cb(new Error("Only music and image files are allowed!"));
+    return cb(null, false);
   }
 };
 
@@ -48,6 +48,6 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-}).fields([{ name: "files", maxCount: 100 }]);
+}).fields([{ name: "files", maxCount: 1000 }]);
 
 module.exports = upload;
