@@ -9,6 +9,9 @@
   <div class="file-input-container">
     <label for="fileInput">Choose files</label>
     <input type="file" id="fileInput" multiple accept="audio/*,image/*" />
+    <p *ngIf="uploadProgress > 0" class="upload-progress">
+      Upload Progress: {{ uploadProgress }}%
+    </p>
     <p *ngIf="fileCount > 0" class="file-count">
       {{ fileCount }} file(s) selected
     </p>

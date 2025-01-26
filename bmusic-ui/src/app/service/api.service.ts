@@ -9,6 +9,7 @@ import { ArtistStateService } from './states/artist.state.service';
 import { PlayerStateService } from './states/player.state.service';
 import { AlbumStateService } from './states/album.state.service';
 import { environment } from '../../environments/environment';
+import { HttpEvent } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -92,27 +93,32 @@ export class ApiService {
       })
     );
   }
-  // [bmusic-ui/src/app/service/api.service.ts](bmusic-ui/src/app/service/api.service.ts)
-  uploadFiles(files: File[]): Observable<{ songs: Song[] }> {
+
+  uploadFiles(files: File[]): Observable<HttpEvent<any>> {
     const url = `${this.baseUrl}upload`;
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
 
-    return this.http.post<{ songs: Song[] }>(url, formData).pipe(
-      tap((response) => {
-        if (response.songs) {
-          this.stateService.setSongs(response.songs);
-
-          // Fetch and update albums after uploading songs
-          this.fetchAlbums().subscribe((albums) => {
-            this.albumService.setAlbums(albums);
-          });
-        }
-      }),
-      catchError((error) => {
-        console.error('Error uploading files:', error);
-        return throwError(() => error);
+    return this.http
+      .post(url, formData, {
+        reportProgress: true,
+        observe: 'events',
       })
-    );
+      .pipe(
+        tap((response) => {
+          if (response && (response as any).songs) {
+            this.stateService.setSongs((response as any).songs);
+
+            // Fetch and update albums after uploading songs
+            this.fetchAlbums().subscribe((albums) => {
+              this.albumService.setAlbums(albums);
+            });
+          }
+        }),
+        catchError((error) => {
+          console.error('Error uploading files:', error);
+          return throwError(() => error);
+        })
+      );
   }
 }
