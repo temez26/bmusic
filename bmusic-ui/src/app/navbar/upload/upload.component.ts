@@ -30,14 +30,21 @@ export class UploadComponent implements OnInit {
 
   initializeFileInput() {
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    const directoryInput = document.getElementById(
+      'directoryInput'
+    ) as HTMLInputElement;
     fileInput.addEventListener('change', this.handleFileInputChange.bind(this));
+    directoryInput.addEventListener(
+      'change',
+      this.handleFileInputChange.bind(this)
+    );
   }
 
   handleFileInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
-      this.selectedFiles = Array.from(target.files);
-      this.fileCount = target.files.length;
+      this.selectedFiles = this.selectedFiles.concat(Array.from(target.files));
+      this.fileCount = this.selectedFiles.length;
     } else {
       this.fileCount = 0;
     }
