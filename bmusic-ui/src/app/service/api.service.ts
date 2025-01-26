@@ -105,16 +105,6 @@ export class ApiService {
         observe: 'events',
       })
       .pipe(
-        tap((response) => {
-          if (response && (response as any).songs) {
-            this.stateService.setSongs((response as any).songs);
-
-            // Fetch and update albums after uploading songs
-            this.fetchAlbums().subscribe((albums) => {
-              this.albumService.setAlbums(albums);
-            });
-          }
-        }),
         catchError((error) => {
           console.error('Error uploading files:', error);
           return throwError(() => error);
