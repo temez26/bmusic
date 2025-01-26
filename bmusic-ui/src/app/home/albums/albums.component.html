@@ -3,7 +3,14 @@
   <div class="albums-grid">
     <div class="album-item" *ngFor="let album of albums">
       <div [routerLink]="['/albums', album.id]">
-        <img [src]="url + album.cover_image_url" alt="{{ album.title }}" />
+        <img
+          [src]="
+            album.cover_image_url
+              ? url + album.cover_image_url
+              : '/cd-cover.png'
+          "
+          alt="{{ album.title }}"
+        />
         <h4>{{ album.title }}</h4>
       </div>
     </div>
