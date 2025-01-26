@@ -11,14 +11,14 @@
     <input type="file" id="fileInput" multiple accept="audio/*,image/*" />
     <label for="directoryInput">Choose folders</label>
     <input type="file" id="directoryInput" webkitdirectory directory multiple />
-    <p *ngIf="uploadProgress > 0" class="upload-progress">
-      Upload Progress: {{ uploadProgress }}%
-    </p>
   </div>
   <button (click)="uploadFiles()">Upload</button>
 
   <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
   <p *ngIf="fileCount > 0" class="file-count">
     {{ fileCount }} file(s) selected
+  </p>
+  <p *ngIf="uploadProgress > 0" class="upload-progress">
+    Upload Progress: {{ uploadProgress }}%
   </p>
 </div>
