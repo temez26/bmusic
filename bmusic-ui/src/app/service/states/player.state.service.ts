@@ -54,7 +54,7 @@ export class PlayerStateService {
   sortSongs(criteria: 'play_count' | 'id'): Song[] {
     const songs = this.getSongs();
     if (criteria === 'play_count') {
-      return songs.sort((a, b) => b.play_count - a.play_count);
+      return songs.sort((a, b) => b.play_count - a.play_count).slice(0, 15);
     } else if (criteria === 'id') {
       return songs.sort((a, b) => a.id - b.id);
     }
