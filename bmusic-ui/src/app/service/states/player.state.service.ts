@@ -51,6 +51,16 @@ export class PlayerStateService {
     this.songsSubject.next(updatedSongs);
   }
 
+  sortSongs(criteria: 'play_count' | 'id'): Song[] {
+    const songs = this.getSongs();
+    if (criteria === 'play_count') {
+      return songs.sort((a, b) => b.play_count - a.play_count);
+    } else if (criteria === 'id') {
+      return songs.sort((a, b) => a.id - b.id);
+    }
+    return songs;
+  }
+
   setSongs(songs: Song[]): void {
     this.songsSubject.next([...songs]);
   }

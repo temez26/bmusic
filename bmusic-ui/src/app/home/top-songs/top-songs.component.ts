@@ -16,10 +16,8 @@ export class TopSongsComponent implements OnInit {
   constructor(private playerStateService: PlayerStateService) {}
 
   ngOnInit() {
-    this.playerStateService.songs$.subscribe((songs) => {
-      this.songs = songs
-        .sort((a, b) => b.play_count - a.play_count)
-        .slice(0, 10);
+    this.playerStateService.songs$.subscribe(() => {
+      this.songs = this.playerStateService.sortSongs('play_count');
     });
   }
 }

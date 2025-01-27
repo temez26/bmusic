@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { PlayerStateService } from '../../service/states/player.state.service';
 import { Song } from '../../service/models/song.interface';
 import { RouterLink } from '@angular/router';
+import { ApiService } from '../../service/api.service';
 
 @Component({
   selector: 'app-albums',
@@ -21,10 +22,12 @@ export class AlbumsComponent implements OnInit {
 
   constructor(
     private albumState: AlbumStateService,
-    private stateService: PlayerStateService
+    private stateService: PlayerStateService,
+    private apiService: ApiService
   ) {}
 
   ngOnInit(): void {
+    this.apiService.fetchAlbums().subscribe();
     this.albumState.albums$.subscribe((albums) => {
       this.albums = albums;
       console.log(this.albums);

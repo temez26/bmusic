@@ -23,7 +23,7 @@ export class SongsComponent implements OnInit {
 
   ngOnInit() {
     this.songs = this.playerStateService.songs$.pipe(
-      map((songs) => [...songs].sort((a, b) => a.id - b.id))
+      map(() => this.playerStateService.sortSongs('id'))
     );
   }
 

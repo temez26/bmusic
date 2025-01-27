@@ -34,12 +34,15 @@ export class AlbumComponent implements OnInit, OnDestroy {
     });
 
     this.stateService.songs$.subscribe((songs) => {
-      this.songs = songs.filter((song) => song.album_id === this.albumId);
+      this.songs = this.stateService
+        .sortSongs('id')
+        .filter((song) => song.album_id === this.albumId);
       if (this.songs.length > 0) {
         this.coverSrc = `${environment.apiBaseUrl}${this.songs[0].album_cover_url}`;
       }
     });
   }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
