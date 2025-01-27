@@ -15,7 +15,6 @@ This is a web app for local music streaming.
 ### **Backend**
 
 - [Node.js][Express.js](bmusic-api/)
--
 
 ### **Database**
 
@@ -24,3 +23,7 @@ This is a web app for local music streaming.
 ### **Storage**
 
 - Local machine storage for music files ([bmusic-api/data/uploads/](bmusic-api/data/uploads/))
+
+### **Docker**
+
+- uses docker to run the app
