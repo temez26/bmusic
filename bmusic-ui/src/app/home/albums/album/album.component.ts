@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { PlayerStateService } from '../../../service/states/player.state.service';
+import { SongsStateService } from '../../../service/states/songs.state.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Song } from '../../../service/models/song.interface';
@@ -22,7 +22,7 @@ export class AlbumComponent implements OnInit, OnDestroy {
   private subscription!: Subscription;
 
   constructor(
-    private stateService: PlayerStateService,
+    private songsState: SongsStateService,
     private route: ActivatedRoute
   ) {}
 
@@ -33,8 +33,8 @@ export class AlbumComponent implements OnInit, OnDestroy {
       this.getSongsByAlbum(this.albumId);
     });
 
-    this.stateService.songs$.subscribe((songs) => {
-      this.songs = this.stateService
+    this.songsState.songs$.subscribe((songs) => {
+      this.songs = this.songsState
         .sortSongs('id')
         .filter((song) => song.album_id === this.albumId);
       if (this.songs.length > 0) {
@@ -48,7 +48,7 @@ export class AlbumComponent implements OnInit, OnDestroy {
   }
 
   getSongsByAlbum(albumId: number): void {
-    this.songs = this.stateService.getSongsByAlbumId(albumId);
+    this.songs = this.songsState.getSongsByAlbumId(albumId);
     console.log(this.songs);
     if (this.songs.length > 0) {
       this.coverSrc = `${environment.apiBaseUrl}${this.songs[0].album_cover_url}`;

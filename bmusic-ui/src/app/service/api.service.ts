@@ -6,7 +6,7 @@ import { Song } from './models/song.interface';
 import { Album } from './models/album.interface';
 import { Artist } from './models/artist.interface';
 import { ArtistStateService } from './states/artist.state.service';
-import { PlayerStateService } from './states/player.state.service';
+import { SongsStateService } from './states/songs.state.service';
 import { AlbumStateService } from './states/album.state.service';
 import { environment } from '../../environments/environment';
 import { HttpEvent } from '@angular/common/http';
@@ -19,7 +19,7 @@ export class ApiService {
 
   constructor(
     private http: HttpClient,
-    private stateService: PlayerStateService,
+    private stateService: SongsStateService,
     private albumService: AlbumStateService,
     private artistService: ArtistStateService
   ) {}

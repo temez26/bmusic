@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ApiService } from '../../service/api.service';
 import { HttpEventType } from '@angular/common/http';
 import { AlbumStateService } from '../../service/states/album.state.service';
-import { PlayerStateService } from '../../service/states/player.state.service';
+import { SongsStateService } from '../../service/states/songs.state.service';
 
 @Component({
   selector: 'app-upload',
@@ -19,9 +19,9 @@ export class UploadComponent implements OnInit {
   successMessage: string = '';
 
   constructor(
-    private apiService: ApiService,
-    private albumStateService: AlbumStateService,
-    private playerStateService: PlayerStateService
+    private api: ApiService,
+    private albumState: AlbumStateService,
+    private songsState: SongsStateService
   ) {}
 
   ngOnInit() {
@@ -53,7 +53,7 @@ export class UploadComponent implements OnInit {
   uploadFiles() {
     if (this.selectedFiles.length > 0) {
       console.log(this.selectedFiles);
-      this.apiService.uploadFiles(this.selectedFiles).subscribe({
+      this.api.uploadFiles(this.selectedFiles).subscribe({
         next: (event) => {
           if (event.type === HttpEventType.UploadProgress && event.total) {
             this.uploadProgress = Math.round(
@@ -66,11 +66,11 @@ export class UploadComponent implements OnInit {
             this.uploadProgress = 0;
 
             // Fetch updated albums and songs
-            this.apiService.fetchAlbums().subscribe((albums) => {
-              this.albumStateService.setAlbums(albums);
+            this.api.fetchAlbums().subscribe((albums) => {
+              this.albumState.setAlbums(albums);
             });
-            this.apiService.fetchSongs().subscribe((songs) => {
-              this.playerStateService.setSongs(songs);
+            this.api.fetchSongs().subscribe((songs) => {
+              this.songsState.setSongs(songs);
             });
           }
         },

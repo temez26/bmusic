@@ -1,10 +1,11 @@
 export class PlayerModel {
+  currentSongId: number | null = null;
   currentTitle: string | null = null;
   currentArtist: string | null = null;
   currentAlbumCover: string = '';
-  currentTime: string = '0:00';
+  formattedCurrentTime: string = '0:00';
   duration: string = '0:00';
-  audioCurrentTime: number = 0;
+  currentTime: number = 0;
   audioDuration: number = 0;
   isShuffle: boolean = false;
   isRepeat: boolean = false;

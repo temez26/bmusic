@@ -60,14 +60,14 @@
       ></audio>
     </div>
     <div class="player-timer">
-      <span class="timer">{{ player.currentTime }}</span>
+      <span class="timer">{{ player.formattedCurrentTime }}</span>
       <input
         type="range"
         class="progress-slider"
         #progressSlider
         (input)="seek($event)"
         [max]="player.audioDuration"
-        [value]="player.audioCurrentTime"
+        [value]="player.currentTime"
       />
       <span class="timer">{{ player.duration }}</span>
     </div>

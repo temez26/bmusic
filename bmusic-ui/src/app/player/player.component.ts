@@ -6,8 +6,6 @@ import { PlayerModel } from '../service/models/player.class';
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
 import { AudioService } from '../service/player/audio.service';
 import { AlbumCoverComponent } from './album-cover/album-cover.component';
-import { PlayerStateService } from '../service/states/player.state.service';
-import { environment } from '../../environments/environment';
 import { PlayerService } from '../service/player/player.service';
 
 @Component({
@@ -34,30 +32,19 @@ export class PlayerComponent implements OnInit {
   constructor(
     private playerWsService: PlayerWsService,
     private audioService: AudioService,
-    private stateService: PlayerStateService,
     private playerService: PlayerService
   ) {
     this.player = this.playerService.player;
   }
 
   ngOnInit() {
-    this.stateService.filePath$.subscribe((filePath) => {
+    this.playerService.filePath$.subscribe((filePath) => {
       if (filePath) {
         this.playerWsService.startWebSocket(filePath);
         this.audioRef.nativeElement.src = filePath;
       }
     });
 
-    this.stateService.coverPath$.subscribe((coverPath) => {
-      this.player.currentAlbumCover = `${environment.apiBaseUrl}${coverPath}`;
-    });
-
-    this.stateService.title$.subscribe((title) => {
-      this.player.currentTitle = title;
-    });
-    this.stateService.artistPath$.subscribe((artist) => {
-      this.player.currentArtist = artist;
-    });
     // handles what to do when song ends
     this.progressSliderRef.nativeElement.addEventListener(
       'input',
@@ -71,10 +58,7 @@ export class PlayerComponent implements OnInit {
       'ended',
       this.handleSongEnd.bind(this)
     );
-    // check if music is playing
-    this.stateService.isPlaying$.subscribe((isPlaying) => {
-      this.player.isPlaying = isPlaying;
-    });
+
     // sets the inital volume on startup
     this.onVolumeChange(this.player.volumePercentage);
   }
@@ -85,33 +69,30 @@ export class PlayerComponent implements OnInit {
     } else {
       this.audioService.changeSong(1);
     }
-    this.stateService.setIsPlaying(true);
   }
 
   previousSong() {
     this.audioService.changeSong(-1);
-    this.stateService.setIsPlaying(true);
   }
 
   toggleShuffle() {
     this.player.isShuffle = !this.player.isShuffle;
-
-    this.stateService.setShuffle(this.player.isShuffle);
+    this.playerService.updateIsShuffle(this.player.isShuffle);
   }
 
   toggleRepeat() {
     this.player.isRepeat = !this.player.isRepeat;
-    this.stateService.setRepeat(this.player.isRepeat);
+    this.playerService.updateIsRepeat(this.player.isRepeat);
   }
 
   togglePlayPause() {
     const audio = this.audioRef.nativeElement;
     if (audio.paused) {
       audio.play();
-      this.stateService.setIsPlaying(true);
+      this.playerService.updateIsPlaying(true);
     } else {
       audio.pause();
-      this.stateService.setIsPlaying(false);
+      this.playerService.updateIsPlaying(false);
     }
   }
 
@@ -123,21 +104,20 @@ export class PlayerComponent implements OnInit {
     this.player.volumePercentage = volumePercentage;
     this.audioRef.nativeElement.volume = volumePercentage / 100;
   }
-  //updates the time in progressbar
+  // Updates the time in progress bar
   updateCurrentTime(event: any) {
     this.audioService.updateCurrentTime(
-      event,
-      this.player,
-      this.progressSliderRef
+      event.target as HTMLAudioElement,
+      this.progressSliderRef.nativeElement
     );
   }
-  // handle progress bar status
+
+  // Handle progress bar status
   seek(event: any) {
     this.audioService.seek(
-      event,
-      this.audioRef,
-      this.player,
-      this.progressSliderRef
+      event.target.value,
+      this.audioRef.nativeElement,
+      this.progressSliderRef.nativeElement
     );
   }
 

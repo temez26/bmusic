@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AlbumStateService } from '../../service/states/album.state.service';
 import { Album } from '../../service/models/album.interface';
 import { environment } from '../../../environments/environment';
-import { PlayerStateService } from '../../service/states/player.state.service';
+import { SongsStateService } from '../../service/states/songs.state.service';
 import { Song } from '../../service/models/song.interface';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../service/api.service';
@@ -22,7 +22,7 @@ export class AlbumsComponent implements OnInit {
 
   constructor(
     private albumState: AlbumStateService,
-    private stateService: PlayerStateService,
+    private songsState: SongsStateService,
     private apiService: ApiService
   ) {}
 
@@ -35,7 +35,7 @@ export class AlbumsComponent implements OnInit {
   }
 
   getSongsByAlbum(albumId: number): void {
-    this.songs = this.stateService.getSongsByAlbumId(albumId);
+    this.songs = this.songsState.getSongsByAlbumId(albumId);
     console.log(this.songs);
   }
 }

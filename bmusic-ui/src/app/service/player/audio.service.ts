@@ -1,17 +1,23 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { ProgressService } from './progress.service';
 import { PlayerModel } from '../models/player.class';
-import { PlayerStateService } from '../states/player.state.service';
+
+import { PlayerService } from './player.service';
+import { SongsStateService } from '../states/songs.state.service';
 
 @Injectable({
   providedIn: 'root',
 })
 // Service for managing audio playback and volume control
 export class AudioService {
+  player: PlayerModel;
   constructor(
     private progressService: ProgressService,
-    private stateService: PlayerStateService
-  ) {}
+    private stateService: SongsStateService,
+    private playerState: PlayerService
+  ) {
+    this.player = this.playerState.player;
+  }
 
   changeVolume(
     event: any,
@@ -36,34 +42,25 @@ export class AudioService {
   }
 
   updateCurrentTime(
-    event: any,
-    player: PlayerModel,
-    progressSliderRef: ElementRef<HTMLInputElement>
-  ) {
-    const audio = event.target;
+    audio: HTMLAudioElement,
+    progressSlider: HTMLInputElement
+  ): void {
     const { currentTime, formattedCurrentTime } =
       this.progressService.updateCurrentTime(audio);
-    player.audioCurrentTime = currentTime;
-    player.currentTime = formattedCurrentTime;
-    this.progressService.updateProgress(progressSliderRef.nativeElement, audio);
+    console.log(formattedCurrentTime);
+    this.playerState.updateFormattedCurrentTime(formattedCurrentTime);
+    this.playerState.updateCurrentTime(currentTime);
+    this.progressService.updateProgress(progressSlider, audio);
   }
 
   seek(
-    event: any,
-    audioRef: ElementRef<HTMLAudioElement>,
-    player: PlayerModel,
-    progressSliderRef: ElementRef<HTMLInputElement>
-  ) {
-    const seekTime = event.target.value;
-    const { currentTime } = this.progressService.seek(
-      audioRef.nativeElement,
-      seekTime
-    );
-    player.audioCurrentTime = currentTime;
-    this.progressService.updateProgress(
-      progressSliderRef.nativeElement,
-      audioRef.nativeElement
-    );
+    seekTime: number,
+    audio: HTMLAudioElement,
+    progressSlider: HTMLInputElement
+  ): void {
+    const { currentTime } = this.progressService.seek(audio, seekTime);
+    this.playerState.updateCurrentTime(currentTime);
+    this.progressService.updateProgress(progressSlider, audio);
   }
 
   handleSongEnd(
@@ -83,20 +80,24 @@ export class AudioService {
     this.stateService.setCurrentSongById(songId);
   }
   changeSong(offset: number): void {
-    const songs = this.stateService.getSongs();
-    const currentSongId = this.stateService.getId();
+    const currentSongId = this.player.currentSongId;
 
-    const currentSongIndex = songs.findIndex(
-      (song) => song.id === currentSongId
-    );
+    if (currentSongId !== null) {
+      const songs = this.stateService.getSongs();
+      const currentSongIndex = songs.findIndex(
+        (song) => song.id === currentSongId
+      );
 
-    if (currentSongIndex !== -1) {
-      const newIndex =
-        (currentSongIndex + offset + songs.length) % songs.length;
-      const newSong = songs[newIndex];
-      this.stateService.setCurrentSongById(newSong.id);
+      if (currentSongId !== -1) {
+        const newIndex =
+          (currentSongIndex + offset + songs.length) % songs.length;
+        const newSong = songs[newIndex];
+        this.stateService.setCurrentSongById(newSong.id);
+      } else {
+        console.error('current song not found in the list');
+      }
     } else {
-      console.error('Current song not found in the list');
+      console.error('current song id is null');
     }
   }
 

@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PlayerStateService } from '../../service/states/player.state.service';
+import { SongsStateService } from '../../service/states/songs.state.service';
 import { PlayComponent } from '../shared/play/play.component';
 import { MenuComponent } from './menu/menu.component';
 
@@ -17,13 +17,13 @@ import { MenuComponent } from './menu/menu.component';
 export class SongsComponent implements OnInit {
   songs: Observable<any[]>;
 
-  constructor(private playerStateService: PlayerStateService) {
-    this.songs = playerStateService.songs$;
+  constructor(private songsState: SongsStateService) {
+    this.songs = songsState.songs$;
   }
 
   ngOnInit() {
-    this.songs = this.playerStateService.songs$.pipe(
-      map(() => this.playerStateService.sortSongs('id'))
+    this.songs = this.songsState.songs$.pipe(
+      map(() => this.songsState.sortSongs('id'))
     );
   }
 

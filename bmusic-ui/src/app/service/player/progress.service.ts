@@ -18,6 +18,8 @@ export class ProgressService {
     formattedCurrentTime: string;
   } {
     const currentTime = audio.currentTime;
+    console.log(currentTime);
+
     return { currentTime, formattedCurrentTime: this.formatTime(currentTime) };
   }
 

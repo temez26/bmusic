@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayComponent } from '../shared/play/play.component';
-import { PlayerStateService } from '../../service/states/player.state.service';
+import { SongsStateService } from '../../service/states/songs.state.service';
 
 @Component({
   selector: 'app-top-songs',
@@ -13,11 +13,11 @@ import { PlayerStateService } from '../../service/states/player.state.service';
 export class TopSongsComponent implements OnInit {
   songs: any[] = [];
 
-  constructor(private playerStateService: PlayerStateService) {}
+  constructor(private songsState: SongsStateService) {}
 
   ngOnInit() {
-    this.playerStateService.songs$.subscribe(() => {
-      this.songs = this.playerStateService.sortSongs('play_count');
+    this.songsState.songs$.subscribe(() => {
+      this.songs = this.songsState.sortSongs('play_count');
     });
   }
 }

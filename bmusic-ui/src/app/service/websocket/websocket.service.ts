@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WebSocketService {
-  createWebSocket(filePath: string, type: 'audio' | 'image'): Promise<Blob> {
+  createWebSocket(filePath: string, type: 'audio'): Promise<Blob> {
     return new Promise((resolve, reject) => {
-      const ws = new WebSocket(`ws://${window.location.hostname}:4000`);
+      const ws = new WebSocket(environment.wsUrl);
       const chunks: BlobPart[] = [];
 
       ws.binaryType = 'arraybuffer';
@@ -20,7 +21,7 @@ export class WebSocketService {
         if (typeof event.data === 'string') {
           if (event.data === 'EOF') {
             const blob = new Blob(chunks, {
-              type: type === 'audio' ? 'audio/flac' : 'image/jpeg',
+              type: 'audio',
             });
             resolve(blob);
             ws.close();
