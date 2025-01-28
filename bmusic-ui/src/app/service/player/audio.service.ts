@@ -32,27 +32,26 @@ export class AudioService {
     player.volumePercentage = event.target.value;
     this.progressService.initializeSlider(event.target);
   }
-
-  updateDuration(event: any, player: PlayerModel) {
+  // updates timer right side of the progressbar
+  updateDuration(event: any) {
     const audio = event.target;
     const { duration, formattedDuration } =
       this.progressService.updateDuration(audio);
-    player.audioDuration = duration;
-    player.duration = formattedDuration;
+    this.playerState.updateAudioDuration(duration);
+    this.playerState.updateFormattedLength(formattedDuration);
   }
-
+  // updates time left side of the progressbar
   updateCurrentTime(
     audio: HTMLAudioElement,
     progressSlider: HTMLInputElement
   ): void {
     const { currentTime, formattedCurrentTime } =
       this.progressService.updateCurrentTime(audio);
-    console.log(formattedCurrentTime);
     this.playerState.updateFormattedCurrentTime(formattedCurrentTime);
     this.playerState.updateCurrentTime(currentTime);
     this.progressService.updateProgress(progressSlider, audio);
   }
-
+  //progress bar status
   seek(
     seekTime: number,
     audio: HTMLAudioElement,
@@ -63,14 +62,13 @@ export class AudioService {
     this.progressService.updateProgress(progressSlider, audio);
   }
 
-  handleSongEnd(
-    audioRef: ElementRef<HTMLAudioElement>,
-    player: PlayerModel,
-    nextSong: () => void
-  ) {
-    if (player.isRepeat) {
+  handleSongEnd(audioRef: ElementRef<HTMLAudioElement>, nextSong: () => void) {
+    if (this.player.isRepeat) {
       audioRef.nativeElement.currentTime = 0;
       audioRef.nativeElement.play();
+    }
+    if (this.player.isShuffle) {
+      this.playRandomSong();
     } else {
       nextSong();
     }

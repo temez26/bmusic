@@ -97,7 +97,7 @@ export class PlayerComponent implements OnInit {
   }
 
   updateDuration(event: any) {
-    this.audioService.updateDuration(event, this.player);
+    this.audioService.updateDuration(event);
   }
 
   onVolumeChange(volumePercentage: number) {
@@ -122,10 +122,6 @@ export class PlayerComponent implements OnInit {
   }
 
   handleSongEnd() {
-    this.audioService.handleSongEnd(
-      this.audioRef,
-      this.player,
-      this.nextSong.bind(this)
-    );
+    this.audioService.handleSongEnd(this.audioRef, this.nextSong.bind(this));
   }
 }

@@ -49,18 +49,30 @@ export class PlayerService {
   );
   public songId$: Observable<number | null> = this.songIdSubject.asObservable();
 
-  private currentTimeSubject = new BehaviorSubject<string | null>(
+  private formattedCurrentTimeSubject = new BehaviorSubject<string | null>(
     this.player.formattedCurrentTime
   );
-  public currentTime$: Observable<string | null> =
-    this.currentTimeSubject.asObservable();
+  public formattedCurrentTime$: Observable<string | null> =
+    this.formattedCurrentTimeSubject.asObservable();
 
-  private audioCurrentTimeSubject = new BehaviorSubject<number | null>(
+  private formattedLengthSubject = new BehaviorSubject<string | null>(
+    this.player.formattedLength
+  );
+  public formattedLength$: Observable<string | null> =
+    this.formattedLengthSubject.asObservable();
+
+  private currentTimeSubject = new BehaviorSubject<number | null>(
     this.player.currentTime
   );
 
-  public audioCurrentTime$: Observable<number | null> =
-    this.audioCurrentTimeSubject.asObservable();
+  public currentTime$: Observable<number | null> =
+    this.currentTimeSubject.asObservable();
+
+  private audioDurationSubject = new BehaviorSubject<number | null>(
+    this.player.audioDuration
+  );
+  public audioDuration$: Observable<number | null> =
+    this.audioDurationSubject.asObservable();
 
   constructor() {}
 
@@ -104,10 +116,18 @@ export class PlayerService {
   }
   updateFormattedCurrentTime(formattedCurrentTime: string): void {
     this.player.formattedCurrentTime = formattedCurrentTime;
-    this.currentTimeSubject.next(formattedCurrentTime);
+    this.formattedCurrentTimeSubject.next(formattedCurrentTime);
+  }
+  updateFormattedLength(formattedLength: string): void {
+    this.player.formattedLength = formattedLength;
+    this.formattedLengthSubject.next(formattedLength);
   }
   updateCurrentTime(currentTime: number): void {
     this.player.currentTime = currentTime;
-    this.audioCurrentTimeSubject.next(currentTime);
+    this.currentTimeSubject.next(currentTime);
+  }
+  updateAudioDuration(audioDuration: number) {
+    this.player.audioDuration = audioDuration;
+    this.audioDurationSubject.next(audioDuration);
   }
 }
