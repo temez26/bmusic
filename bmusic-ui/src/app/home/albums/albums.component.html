@@ -2,7 +2,10 @@
   <h1>Albums</h1>
   <div class="albums-grid">
     <div class="album-item" *ngFor="let album of albums">
-      <div [routerLink]="['/albums', album.id]">
+      <div
+        [routerLink]="['/albums', album.id]"
+        (click)="getSongsByAlbum(album.id)"
+      >
         <img
           [src]="
             album.cover_image_url

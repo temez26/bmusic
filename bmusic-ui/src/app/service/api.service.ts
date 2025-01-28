@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Song } from './models/song.interface';
-import { Album } from './models/album.interface';
+import { Albums } from './models/album.interface';
 import { Artist } from './models/artist.interface';
 import { ArtistStateService } from './states/artist.state.service';
 import { SongsStateService } from './states/songs.state.service';
@@ -68,10 +68,10 @@ export class ApiService {
       })
     );
   }
-  fetchAlbums(): Observable<Album[]> {
+  fetchAlbums(): Observable<Albums[]> {
     const url = `${this.baseUrl}albums`;
-    return this.http.get<Album[]>(url).pipe(
-      tap((fetchedAlbums: Album[]) => {
+    return this.http.get<Albums[]>(url).pipe(
+      tap((fetchedAlbums: Albums[]) => {
         this.albumService.setAlbums(fetchedAlbums);
       }),
       catchError((error) => {

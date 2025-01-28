@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
 import { PlayComponent } from '../../shared/play/play.component';
 import { MenuComponent } from '../../songs/menu/menu.component';
+import { AlbumStateService } from '../../../service/states/album.state.service';
 
 @Component({
   selector: 'app-album',
@@ -23,6 +24,7 @@ export class AlbumComponent implements OnInit, OnDestroy {
 
   constructor(
     private songsState: SongsStateService,
+    private albumState: AlbumStateService,
     private route: ActivatedRoute
   ) {}
 

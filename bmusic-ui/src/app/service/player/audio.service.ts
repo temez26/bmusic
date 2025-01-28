@@ -1,7 +1,6 @@
 import { Injectable, ElementRef } from '@angular/core';
 import { ProgressService } from './progress.service';
 import { PlayerModel } from '../models/player.class';
-
 import { PlayerService } from './player.service';
 import { SongsStateService } from '../states/songs.state.service';
 

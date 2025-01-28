@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlbumStateService } from '../../service/states/album.state.service';
-import { Album } from '../../service/models/album.interface';
+import { Albums } from '../../service/models/album.interface';
 import { environment } from '../../../environments/environment';
 import { SongsStateService } from '../../service/states/songs.state.service';
 import { Song } from '../../service/models/song.interface';
@@ -16,7 +16,7 @@ import { ApiService } from '../../service/api.service';
   styleUrl: './albums.component.scss',
 })
 export class AlbumsComponent implements OnInit {
-  albums: Album[] = [];
+  albums: Albums[] = [];
   url: string = environment.apiBaseUrl;
   songs: Song[] = [];
 
@@ -36,6 +36,9 @@ export class AlbumsComponent implements OnInit {
 
   getSongsByAlbum(albumId: number): void {
     this.songs = this.songsState.getSongsByAlbumId(albumId);
+    console.log('albumId', albumId);
+    this.albumState.setCurrentAlbum(albumId);
     console.log(this.songs);
+    console.log(this.albumState.getCurrentAlbum());
   }
 }
