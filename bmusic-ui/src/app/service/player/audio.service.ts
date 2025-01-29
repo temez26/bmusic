@@ -3,6 +3,7 @@ import { ProgressService } from './progress.service';
 import { PlayerModel } from '../models/player.class';
 import { PlayerService } from './player.service';
 import { SongsStateService } from '../states/songs.state.service';
+import { ApiService } from '../api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,8 @@ export class AudioService {
   constructor(
     private progressService: ProgressService,
     private stateService: SongsStateService,
-    private playerState: PlayerService
+    private playerState: PlayerService,
+    private apiService: ApiService
   ) {
     this.player = this.playerState.player;
   }
@@ -61,7 +63,7 @@ export class AudioService {
     this.progressService.updateProgress(progressSlider, audio);
   }
 
-  handleSongEnd(audioRef: ElementRef<HTMLAudioElement>, nextSong: () => void) {
+  handleSongEnd(audioRef: ElementRef<HTMLAudioElement>) {
     if (this.player.isRepeat) {
       audioRef.nativeElement.currentTime = 0;
       audioRef.nativeElement.play();
@@ -69,12 +71,13 @@ export class AudioService {
     if (this.player.isShuffle) {
       this.playRandomSong();
     } else {
-      nextSong();
+      this.changeSong(1);
     }
   }
 
   setData(songId: number): void {
     this.stateService.setCurrentSongById(songId);
+    this.apiService.incrementPlayCount(songId).subscribe();
   }
   changeSong(offset: number): void {
     const currentSongId = this.player.currentSongId;
@@ -90,6 +93,7 @@ export class AudioService {
           (currentSongIndex + offset + songs.length) % songs.length;
         const newSong = songs[newIndex];
         this.stateService.setCurrentSongById(newSong.id);
+        this.apiService.incrementPlayCount(newSong.id).subscribe();
       } else {
         console.error('current song not found in the list');
       }
@@ -103,5 +107,6 @@ export class AudioService {
     const randomIndex = Math.floor(Math.random() * songs.length);
     const randomSong = songs[randomIndex];
     this.stateService.setCurrentSongById(randomSong.id);
+    this.apiService.incrementPlayCount(randomSong.id).subscribe();
   }
 }

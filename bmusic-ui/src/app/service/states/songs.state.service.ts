@@ -18,6 +18,7 @@ export class SongsStateService {
 
   updateSong(updatedSong: Song): void {
     const currentSongs = this.songsSubject.getValue();
+
     const updatedSongs = currentSongs.map((song) =>
       song.id === updatedSong.id
         ? { ...song, play_count: updatedSong.play_count }

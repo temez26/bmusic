@@ -24,7 +24,7 @@ export class ApiService {
     private artistService: ArtistStateService
   ) {}
 
-  incrementPlayCount(songId: number): Observable<{ playCount: number }> {
+  incrementPlayCount(songId: number) {
     const url = `${this.baseUrl}increment`;
     return this.http.post<{ playCount: number }>(url, { id: songId }).pipe(
       tap((response) => {
@@ -44,7 +44,7 @@ export class ApiService {
       })
     );
   }
-  fetchSongs(): Observable<Song[]> {
+  fetchSongs() {
     const url = `${this.baseUrl}songs`;
     return this.http.get<Song[]>(url).pipe(
       tap((fetchedSongs: Song[]) => {
@@ -56,7 +56,7 @@ export class ApiService {
       })
     );
   }
-  fetchArtists(): Observable<Artist[]> {
+  fetchArtists() {
     const url = `${this.baseUrl}artists`;
     return this.http.get<Artist[]>(url).pipe(
       tap((fetchedArtists: Artist[]) => {
@@ -68,7 +68,7 @@ export class ApiService {
       })
     );
   }
-  fetchAlbums(): Observable<Albums[]> {
+  fetchAlbums() {
     const url = `${this.baseUrl}albums`;
     return this.http.get<Albums[]>(url).pipe(
       tap((fetchedAlbums: Albums[]) => {
@@ -81,7 +81,7 @@ export class ApiService {
     );
   }
 
-  deleteSong(songId: number): Observable<Song[]> {
+  deleteSong(songId: number) {
     const url = `${this.baseUrl}delete`;
     return this.http.delete<Song[]>(url, { body: { id: songId } }).pipe(
       tap((updatedSongs: Song[]) => {
@@ -94,7 +94,7 @@ export class ApiService {
     );
   }
 
-  uploadFiles(files: File[]): Observable<HttpEvent<any>> {
+  uploadFiles(files: File[]) {
     const url = `${this.baseUrl}upload`;
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));

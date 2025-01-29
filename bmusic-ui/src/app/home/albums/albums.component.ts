@@ -18,11 +18,9 @@ import { ApiService } from '../../service/api.service';
 export class AlbumsComponent implements OnInit {
   albums: Albums[] = [];
   url: string = environment.apiBaseUrl;
-  songs: Song[] = [];
 
   constructor(
     private albumState: AlbumStateService,
-    private songsState: SongsStateService,
     private apiService: ApiService,
     private router: Router
   ) {}

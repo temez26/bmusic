@@ -28,13 +28,6 @@ export class PlayComponent implements OnInit {
   }
 
   playSong(songId: number) {
-    this.apiService.incrementPlayCount(songId).subscribe({
-      next: () => {
-        this.audioService.setData(songId);
-      },
-      error: (error) => {
-        console.error('Error incrementing play count:', error);
-      },
-    });
+    this.audioService.setData(songId);
   }
 }

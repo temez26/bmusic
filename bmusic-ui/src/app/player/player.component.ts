@@ -122,6 +122,6 @@ export class PlayerComponent implements OnInit {
   }
 
   handleSongEnd() {
-    this.audioService.handleSongEnd(this.audioRef, this.nextSong.bind(this));
+    this.audioService.handleSongEnd(this.audioRef);
   }
 }
