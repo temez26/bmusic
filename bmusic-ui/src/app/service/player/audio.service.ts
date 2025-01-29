@@ -20,6 +20,10 @@ export class AudioService {
     this.player = this.playerState.player;
   }
 
+  private incrementPlayCount(songId: number): void {
+    this.apiService.incrementPlayCount(songId).subscribe();
+  }
+
   changeVolume(
     event: any,
     volumeSliderRef: ElementRef<HTMLInputElement>,
@@ -33,6 +37,7 @@ export class AudioService {
     player.volumePercentage = event.target.value;
     this.progressService.initializeSlider(event.target);
   }
+
   // updates timer right side of the progressbar
   updateDuration(event: any) {
     const audio = event.target;
@@ -41,6 +46,7 @@ export class AudioService {
     this.playerState.updateAudioDuration(duration);
     this.playerState.updateFormattedLength(formattedDuration);
   }
+
   // updates time left side of the progressbar
   updateCurrentTime(
     audio: HTMLAudioElement,
@@ -52,6 +58,7 @@ export class AudioService {
     this.playerState.updateCurrentTime(currentTime);
     this.progressService.updateProgress(progressSlider, audio);
   }
+
   //progress bar status
   seek(
     seekTime: number,
@@ -67,18 +74,20 @@ export class AudioService {
     if (this.player.isRepeat) {
       audioRef.nativeElement.currentTime = 0;
       audioRef.nativeElement.play();
-    }
-    if (this.player.isShuffle) {
+      if (this.player.currentSongId !== null) {
+        this.incrementPlayCount(this.player.currentSongId);
+      }
+    } else if (this.player.isShuffle) {
       this.playRandomSong();
     } else {
       this.changeSong(1);
     }
   }
-
   setData(songId: number): void {
     this.stateService.setCurrentSongById(songId);
-    this.apiService.incrementPlayCount(songId).subscribe();
+    this.incrementPlayCount(songId);
   }
+
   changeSong(offset: number): void {
     const currentSongId = this.player.currentSongId;
 
@@ -93,7 +102,7 @@ export class AudioService {
           (currentSongIndex + offset + songs.length) % songs.length;
         const newSong = songs[newIndex];
         this.stateService.setCurrentSongById(newSong.id);
-        this.apiService.incrementPlayCount(newSong.id).subscribe();
+        this.incrementPlayCount(newSong.id);
       } else {
         console.error('current song not found in the list');
       }
@@ -107,6 +116,6 @@ export class AudioService {
     const randomIndex = Math.floor(Math.random() * songs.length);
     const randomSong = songs[randomIndex];
     this.stateService.setCurrentSongById(randomSong.id);
-    this.apiService.incrementPlayCount(randomSong.id).subscribe();
+    this.incrementPlayCount(randomSong.id);
   }
 }

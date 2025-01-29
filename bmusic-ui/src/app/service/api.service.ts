@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Song } from './models/song.interface';
 import { Albums } from './models/album.interface';
@@ -9,7 +9,6 @@ import { ArtistStateService } from './states/artist.state.service';
 import { SongsStateService } from './states/songs.state.service';
 import { AlbumStateService } from './states/album.state.service';
 import { environment } from '../../environments/environment';
-import { HttpEvent } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',

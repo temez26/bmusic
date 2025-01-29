@@ -1,6 +1,7 @@
 export class PlayerModel {
   currentSongId: number | null = null;
   currentTitle: string | null = null;
+  filePath: string = '';
   currentArtist: string | null = null;
   currentAlbumCover: string = '';
   formattedCurrentTime: string = '0:00';

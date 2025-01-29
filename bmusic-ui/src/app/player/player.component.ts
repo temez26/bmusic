@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayerWsService } from '../service/websocket/playerws.service';
 import { VolumeSliderComponent } from './volume-slider/volume-slider.component';
@@ -39,9 +45,15 @@ export class PlayerComponent implements OnInit {
 
   ngOnInit() {
     this.playerService.filePath$.subscribe((filePath) => {
+      this.playerService.updateIsPlaying(false);
       if (filePath) {
-        this.playerWsService.startWebSocket(filePath);
-        this.audioRef.nativeElement.src = filePath;
+        this.playerWsService.startWebSocket(filePath).then(() => {
+          this.audioRef.nativeElement.currentTime =
+            this.playerService.player.currentTime;
+          if (this.player.isPlaying) {
+            this.audioRef.nativeElement.play();
+          }
+        });
       }
     });
 
@@ -59,8 +71,8 @@ export class PlayerComponent implements OnInit {
       this.handleSongEnd.bind(this)
     );
 
-    // sets the inital volume on startup
-    this.onVolumeChange(this.player.volumePercentage);
+    // sets the initial volume on startup
+    this.onVolumeChange(this.playerService.player.volumePercentage);
   }
 
   nextSong() {
@@ -69,10 +81,12 @@ export class PlayerComponent implements OnInit {
     } else {
       this.audioService.changeSong(1);
     }
+    this.playerService.updateIsPlaying(true);
   }
 
   previousSong() {
     this.audioService.changeSong(-1);
+    this.playerService.updateIsPlaying(true);
   }
 
   toggleShuffle() {
@@ -101,14 +115,19 @@ export class PlayerComponent implements OnInit {
   }
 
   onVolumeChange(volumePercentage: number) {
-    this.player.volumePercentage = volumePercentage;
+    this.playerService.player.volumePercentage = volumePercentage;
     this.audioRef.nativeElement.volume = volumePercentage / 100;
+    this.playerService.updateIsPlaying(this.playerService.player.isPlaying);
   }
+
   // Updates the time in progress bar
   updateCurrentTime(event: any) {
     this.audioService.updateCurrentTime(
       event.target as HTMLAudioElement,
       this.progressSliderRef.nativeElement
+    );
+    this.playerService.updateCurrentTime(
+      this.audioRef.nativeElement.currentTime
     );
   }
 
@@ -118,6 +137,9 @@ export class PlayerComponent implements OnInit {
       event.target.value,
       this.audioRef.nativeElement,
       this.progressSliderRef.nativeElement
+    );
+    this.playerService.updateCurrentTime(
+      this.audioRef.nativeElement.currentTime
     );
   }
 

@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../../service/api.service';
 import { AudioService } from '../../../service/player/audio.service';
 import { environment } from '../../../../environments/environment';
 @Component({
@@ -18,10 +17,7 @@ export class PlayComponent implements OnInit {
   @Input() customTitle: string = '';
   @Input() customColumn: string = '';
 
-  constructor(
-    private apiService: ApiService,
-    private audioService: AudioService
-  ) {}
+  constructor(private audioService: AudioService) {}
 
   ngOnInit(): void {
     this.img = `${environment.apiBaseUrl}${this.img}`;

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PlayerModel } from '../models/player.class';
+import { PlayerStorageService } from '../storage/player-storage.service';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -8,126 +9,173 @@ import { environment } from '../../../environments/environment';
 })
 // service for handling states in PlayerModel
 export class PlayerService {
-  player: PlayerModel = new PlayerModel();
+  player: PlayerModel;
 
-  private isPlayingSubject = new BehaviorSubject<boolean>(
-    this.player.isPlaying
-  );
-  public isPlaying$: Observable<boolean> = this.isPlayingSubject.asObservable();
+  private isPlayingSubject: BehaviorSubject<boolean>;
+  public isPlaying$: Observable<boolean>;
 
-  private isShuffleSubject = new BehaviorSubject<boolean>(
-    this.player.isShuffle
-  );
-  public isShuffle$: Observable<boolean> = this.isShuffleSubject.asObservable();
+  private isShuffleSubject: BehaviorSubject<boolean>;
+  public isShuffle$: Observable<boolean>;
 
-  private isRepeatSubject = new BehaviorSubject<boolean>(this.player.isRepeat);
-  public isRepeat$: Observable<boolean> = this.isRepeatSubject.asObservable();
+  private isRepeatSubject: BehaviorSubject<boolean>;
+  public isRepeat$: Observable<boolean>;
 
-  private filePathSubject = new BehaviorSubject<string | null>(null);
-  public filePath$: Observable<string | null> =
-    this.filePathSubject.asObservable();
+  private filePathSubject: BehaviorSubject<string | null>;
+  public filePath$: Observable<string | null>;
 
-  private titleSubject = new BehaviorSubject<string | null>(
-    this.player.currentTitle
-  );
-  public title$: Observable<string | null> = this.titleSubject.asObservable();
+  private titleSubject: BehaviorSubject<string | null>;
+  public title$: Observable<string | null>;
 
-  private artistPathSubject = new BehaviorSubject<string | null>(
-    this.player.currentArtist
-  );
-  public artistPath$: Observable<string | null> =
-    this.artistPathSubject.asObservable();
+  private artistPathSubject: BehaviorSubject<string | null>;
+  public artistPath$: Observable<string | null>;
 
-  private coverPathSubject = new BehaviorSubject<string | null>(
-    this.player.currentAlbumCover
-  );
-  public coverPath$: Observable<string | null> =
-    this.coverPathSubject.asObservable();
+  private coverPathSubject: BehaviorSubject<string | null>;
+  public coverPath$: Observable<string | null>;
 
-  private songIdSubject = new BehaviorSubject<number | null>(
-    this.player.currentSongId
-  );
-  public songId$: Observable<number | null> = this.songIdSubject.asObservable();
+  private songIdSubject: BehaviorSubject<number | null>;
+  public songId$: Observable<number | null>;
 
-  private formattedCurrentTimeSubject = new BehaviorSubject<string | null>(
-    this.player.formattedCurrentTime
-  );
-  public formattedCurrentTime$: Observable<string | null> =
-    this.formattedCurrentTimeSubject.asObservable();
+  private formattedCurrentTimeSubject: BehaviorSubject<string | null>;
+  public formattedCurrentTime$: Observable<string | null>;
 
-  private formattedLengthSubject = new BehaviorSubject<string | null>(
-    this.player.formattedLength
-  );
-  public formattedLength$: Observable<string | null> =
-    this.formattedLengthSubject.asObservable();
+  private formattedLengthSubject: BehaviorSubject<string | null>;
+  public formattedLength$: Observable<string | null>;
 
-  private currentTimeSubject = new BehaviorSubject<number | null>(
-    this.player.currentTime
-  );
+  private currentTimeSubject: BehaviorSubject<number | null>;
+  public currentTime$: Observable<number | null>;
 
-  public currentTime$: Observable<number | null> =
-    this.currentTimeSubject.asObservable();
+  private audioDurationSubject: BehaviorSubject<number | null>;
+  public audioDuration$: Observable<number | null>;
 
-  private audioDurationSubject = new BehaviorSubject<number | null>(
-    this.player.audioDuration
-  );
-  public audioDuration$: Observable<number | null> =
-    this.audioDurationSubject.asObservable();
+  constructor(private playerStorageService: PlayerStorageService) {
+    this.player = this.playerStorageService.loadPlayerState();
 
-  constructor() {}
+    this.isPlayingSubject = new BehaviorSubject<boolean>(this.player.isPlaying);
+    this.isPlaying$ = this.isPlayingSubject.asObservable();
+
+    this.isShuffleSubject = new BehaviorSubject<boolean>(this.player.isShuffle);
+    this.isShuffle$ = this.isShuffleSubject.asObservable();
+
+    this.isRepeatSubject = new BehaviorSubject<boolean>(this.player.isRepeat);
+    this.isRepeat$ = this.isRepeatSubject.asObservable();
+
+    this.filePathSubject = new BehaviorSubject<string | null>(
+      this.player.filePath
+    );
+    this.filePath$ = this.filePathSubject.asObservable();
+
+    this.titleSubject = new BehaviorSubject<string | null>(
+      this.player.currentTitle
+    );
+    this.title$ = this.titleSubject.asObservable();
+
+    this.artistPathSubject = new BehaviorSubject<string | null>(
+      this.player.currentArtist
+    );
+    this.artistPath$ = this.artistPathSubject.asObservable();
+
+    this.coverPathSubject = new BehaviorSubject<string | null>(
+      this.player.currentAlbumCover
+    );
+    this.coverPath$ = this.coverPathSubject.asObservable();
+
+    this.songIdSubject = new BehaviorSubject<number | null>(
+      this.player.currentSongId
+    );
+    this.songId$ = this.songIdSubject.asObservable();
+
+    this.formattedCurrentTimeSubject = new BehaviorSubject<string | null>(
+      this.player.formattedCurrentTime
+    );
+    this.formattedCurrentTime$ =
+      this.formattedCurrentTimeSubject.asObservable();
+
+    this.formattedLengthSubject = new BehaviorSubject<string | null>(
+      this.player.formattedLength
+    );
+    this.formattedLength$ = this.formattedLengthSubject.asObservable();
+
+    this.currentTimeSubject = new BehaviorSubject<number | null>(
+      this.player.currentTime
+    );
+    this.currentTime$ = this.currentTimeSubject.asObservable();
+
+    this.audioDurationSubject = new BehaviorSubject<number | null>(
+      this.player.audioDuration
+    );
+    this.audioDuration$ = this.audioDurationSubject.asObservable();
+  }
 
   updateIsPlaying(isPlaying: boolean): void {
     this.player.isPlaying = isPlaying;
     this.isPlayingSubject.next(isPlaying);
+    this.playerStorageService.savePlayerState(this.player);
   }
 
   updateIsShuffle(isShuffle: boolean): void {
     this.player.isShuffle = isShuffle;
     this.isShuffleSubject.next(isShuffle);
+    this.playerStorageService.savePlayerState(this.player);
   }
 
   updateIsRepeat(isRepeat: boolean): void {
     this.player.isRepeat = isRepeat;
     this.isRepeatSubject.next(isRepeat);
+    this.playerStorageService.savePlayerState(this.player);
   }
 
-  updateFilePath(filePath: string | null): void {
+  updateFilePath(filePath: string | ''): void {
+    this.player.filePath = filePath;
+    this.player.currentTime = 0;
     this.filePathSubject.next(filePath);
+    this.playerStorageService.savePlayerState(this.player);
   }
 
   updateTitle(title: string | null): void {
     this.player.currentTitle = title;
     this.titleSubject.next(title);
+    this.playerStorageService.savePlayerState(this.player);
   }
 
   updateArtistPath(artistPath: string | null): void {
     this.player.currentArtist = artistPath;
     this.artistPathSubject.next(artistPath);
+    this.playerStorageService.savePlayerState(this.player);
   }
 
   updateCoverPath(coverPath: string): void {
     this.player.currentAlbumCover = environment.apiBaseUrl + coverPath;
     this.coverPathSubject.next(coverPath);
+    this.playerStorageService.savePlayerState(this.player);
   }
 
   updateSongId(songId: number | null): void {
     this.player.currentSongId = songId;
     this.songIdSubject.next(songId);
+    this.playerStorageService.savePlayerState(this.player);
   }
+
   updateFormattedCurrentTime(formattedCurrentTime: string): void {
     this.player.formattedCurrentTime = formattedCurrentTime;
     this.formattedCurrentTimeSubject.next(formattedCurrentTime);
+    this.playerStorageService.savePlayerState(this.player);
   }
+
   updateFormattedLength(formattedLength: string): void {
     this.player.formattedLength = formattedLength;
     this.formattedLengthSubject.next(formattedLength);
+    this.playerStorageService.savePlayerState(this.player);
   }
+
   updateCurrentTime(currentTime: number): void {
     this.player.currentTime = currentTime;
     this.currentTimeSubject.next(currentTime);
+    this.playerStorageService.savePlayerState(this.player);
   }
-  updateAudioDuration(audioDuration: number) {
+
+  updateAudioDuration(audioDuration: number): void {
     this.player.audioDuration = audioDuration;
     this.audioDurationSubject.next(audioDuration);
+    this.playerStorageService.savePlayerState(this.player);
   }
 }

@@ -2,13 +2,17 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Song } from '../models/song.interface';
 import { PlayerService } from '../player/player.service';
+import { PlayerStorageService } from '../storage/player-storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 // Handles Song data that is fetched from the server
 export class SongsStateService {
-  constructor(private playerService: PlayerService) {}
+  constructor(
+    private playerService: PlayerService,
+    private playerStorage: PlayerStorageService
+  ) {}
   private songsSubject = new BehaviorSubject<Song[]>([]);
   public songs$: Observable<Song[]> = this.songsSubject.asObservable();
 
@@ -69,6 +73,8 @@ export class SongsStateService {
 
   setCurrentSongById(songId: number): void {
     const song = this.getSongs().find((s) => s.id === songId);
+    this.playerService.updateAudioDuration(0);
+    this.playerService.updateCurrentTime(0);
     if (song) {
       this.updateSongDetails(song);
     } else {
