@@ -1,0 +1,17 @@
+<div class="song-list-container">
+  <div class="top-songs-row">
+    <div *ngFor="let song of songs; let i = index" class="song-item">
+      <div class="song-column">
+        <span class="song-number">{{ i + 1 }}</span>
+
+        <app-play
+          [customCover]="'cover-image-large'"
+          [customTitle]="'top-songs-title'"
+          [songId]="song.id"
+          [title]="song.title"
+          [img]="song.album_cover_url"
+        ></app-play>
+      </div>
+    </div>
+  </div>
+</div>

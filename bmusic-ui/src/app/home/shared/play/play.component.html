@@ -1,0 +1,17 @@
+<div
+  [ngClass]="customColumn"
+  (click)="playSong(songId)"
+  style="cursor: pointer"
+>
+  <img
+    *ngIf="songId"
+    [src]="img && !img.includes('/null') ? img : '/cd-cover.png'"
+    [ngClass]="customCover"
+    alt="Cover Image"
+  />
+  <div [ngClass]="customTitle">
+    <p>
+      {{ title }}
+    </p>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="album-container">
+  <!-- Album Header -->
+  <div class="album-header">
+    <img
+      class="album-cover"
+      [src]="
+        coverSrc && !coverSrc.includes('/null') ? coverSrc : '/cd-cover.png'
+      "
+      alt="{{ songs[0].album || 'Album Cover' }}"
+    />
+    <div class="album-info">
+      <h1 class="album-title">{{ songs[0].album }}</h1>
+      <h2 class="album-artist">{{ songs[0].artist }}</h2>
+    </div>
+  </div>
+
+  <!-- Songs List -->
+  <div class="songs-list">
+    <div class="songs-header">
+      <h4 class="song-title">Title</h4>
+      <h4 class="song-artist">Artist</h4>
+      <h4 class="song-length">Time</h4>
+      <h4 class="song-actions">Actions</h4>
+    </div>
+    <div *ngFor="let song of songs" class="song-item">
+      <app-play
+        class="song-title"
+        [customCover]="'cover-image'"
+        [customTitle]="'songs-title'"
+        [customColumn]="'songs-column'"
+        [songId]="song.id"
+        [title]="song.title"
+        [img]="song.album_cover_url"
+      ></app-play>
+
+      <span class="song-artist"
+        ><p>{{ song.artist }}</p></span
+      >
+      <span class="song-length"
+        ><p>{{ song.length }}</p></span
+      >
+      <span class="song-actions"><app-menu></app-menu></span>
+    </div>
+  </div>
+</div>

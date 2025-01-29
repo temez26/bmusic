@@ -1,0 +1,33 @@
+<div class="myapp">
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with share icon"
+    routerLink=""
+  >
+    <mat-icon>home</mat-icon>
+  </button>
+  <app-search></app-search>
+
+  <span class="example-spacer"></span>
+
+  <div class="navbar-title-container">
+    <span class="navbar-title">Bmusic</span>
+  </div>
+  <span class="example-spacer"></span>
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with upload icon"
+    (click)="toggleUploadDialog()"
+  >
+    <mat-icon>upload</mat-icon>
+  </button>
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with menu icon"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+</div>

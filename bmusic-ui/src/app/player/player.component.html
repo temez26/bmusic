@@ -1,0 +1,75 @@
+<div class="full-player">
+  <app-album
+    class="player-header"
+    [albumCoverSrc]="player.currentAlbumCover"
+    [currentTitle]="player.currentTitle"
+    [currentArtist]="player.currentArtist"
+  ></app-album>
+
+  <div class="player">
+    <div class="volume-controls">
+      <app-volume-slider
+        (volumeChange)="onVolumeChange($event)"
+      ></app-volume-slider>
+      <app-volume-icon
+        [volumePercentage]="player.volumePercentage"
+      ></app-volume-icon>
+    </div>
+
+    <div class="player-controls">
+      <button
+        class="player-button shuffle-button"
+        [class.active]="player.isShuffle"
+        (click)="toggleShuffle()"
+      >
+        <img class="icon" src="/shuffle.png" alt="Shuffle" />
+      </button>
+      <button class="player-button previous" (click)="previousSong()">
+        <img class="icon" src="/previous.png" alt="Previous" />
+      </button>
+      <button class="player-button play" (click)="togglePlayPause()">
+        <img
+          *ngIf="!player.isPlaying"
+          class="icon"
+          src="/play.png"
+          alt="Play"
+        />
+        <img
+          *ngIf="player.isPlaying"
+          class="icon"
+          src="/pause.png"
+          alt="Pause"
+        />
+      </button>
+      <button class="player-button next" (click)="nextSong()">
+        <img class="icon" src="/next.png" alt="Next" />
+      </button>
+      <button
+        class="player-button repeat-button"
+        [class.active]="player.isRepeat"
+        (click)="toggleRepeat()"
+      >
+        <img class="icon" src="/repeat.png" alt="Repeat" />
+      </button>
+      <audio
+        #audio
+        id="audio"
+        class="player-audio"
+        (loadedmetadata)="updateDuration($event)"
+        (timeupdate)="updateCurrentTime($event)"
+      ></audio>
+    </div>
+    <div class="player-timer">
+      <span class="timer">{{ player.formattedCurrentTime }}</span>
+      <input
+        type="range"
+        class="progress-slider"
+        #progressSlider
+        (input)="seek($event)"
+        [max]="player.audioDuration"
+        [value]="player.currentTime"
+      />
+      <span class="timer">{{ player.formattedLength }}</span>
+    </div>
+  </div>
+</div>

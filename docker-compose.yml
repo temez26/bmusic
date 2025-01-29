@@ -7,6 +7,8 @@ services:
     volumes:
       - ./bmusic-api/:/app
       - express_node_modules:/app/node_modules
+      - uploads_data:/app/data/uploads
+      - covers_data:/app/data/covers
     ports:
       - "4000:4000"
     env_file:
@@ -24,7 +26,7 @@ services:
   database:
     container_name: db-bmusic
     image: postgres:latest
-    restart: "always"
+    restart: "unless-stopped"
     volumes:
       - database_data:/var/lib/postgresql/data
       - ./database/V1___initial_schema.sql:/docker-entrypoint-initdb.d/create_database.sql
@@ -33,5 +35,7 @@ services:
 
 volumes:
   database_data:
+  uploads_data:
+  covers_data:
   angular_node_modules:
   express_node_modules:

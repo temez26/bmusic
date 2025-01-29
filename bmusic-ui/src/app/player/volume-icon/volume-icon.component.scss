@@ -1,0 +1,15 @@
+.volume-percentage-container {
+  display: flex;
+  align-items: center;
+}
+
+.volume-icon {
+  height: 26px;
+  width: 26px;
+}
+@media (max-width: 768px) {
+  .volume-icon {
+    width: 22px;
+    height: 22px;
+  }
+}

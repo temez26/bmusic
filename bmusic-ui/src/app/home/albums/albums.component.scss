@@ -1,0 +1,37 @@
+.albums {
+  .albums-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+    padding: 20px;
+  }
+
+  .album-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    img:hover {
+      transform: scale(1.01);
+    }
+
+    h4 {
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: rgb(255, 255, 255);
+      }
+    }
+  }
+}
