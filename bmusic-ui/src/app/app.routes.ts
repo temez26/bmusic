@@ -10,7 +10,7 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'songs', component: SongsComponent },
   { path: 'albums', component: AlbumsComponent },
-  { path: 'albums/:id', component: AlbumComponent },
+  { path: 'album/:albumId', component: AlbumComponent },
   { path: 'playlists', component: PlaylistsComponent },
   { path: 'artists', component: ArtistsComponent },
 ];

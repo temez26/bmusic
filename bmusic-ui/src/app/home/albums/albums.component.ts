@@ -5,7 +5,7 @@ import { Albums } from '../../service/models/album.interface';
 import { environment } from '../../../environments/environment';
 import { SongsStateService } from '../../service/states/songs.state.service';
 import { Song } from '../../service/models/song.interface';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../service/api.service';
 
 @Component({
@@ -23,22 +23,19 @@ export class AlbumsComponent implements OnInit {
   constructor(
     private albumState: AlbumStateService,
     private songsState: SongsStateService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.apiService.fetchAlbums().subscribe();
     this.albumState.albums$.subscribe((albums) => {
       this.albums = albums;
-      console.log(this.albums);
     });
   }
 
-  getSongsByAlbum(albumId: number): void {
-    this.songs = this.songsState.getSongsByAlbumId(albumId);
-    console.log('albumId', albumId);
+  setAlbum(albumId: number): void {
     this.albumState.setCurrentAlbum(albumId);
-    console.log(this.songs);
-    console.log(this.albumState.getCurrentAlbum());
+    this.router.navigate(['/album', albumId]);
   }
 }

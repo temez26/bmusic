@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Albums, CurrentAlbum } from '../models/album.interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -30,10 +31,16 @@ export class AlbumStateService {
       });
     }
   }
-  getCurrentAlbum(): CurrentAlbum | null {
-    return this.currentAlbumSubject.getValue();
-  }
+
   getAlbums(): Albums[] {
     return this.albumsSubject.getValue();
+  }
+  getAlbumCover(albumId: number): string {
+    const currentAlbums = this.albumsSubject.getValue();
+    console.log(currentAlbums);
+    const currentAlbum = currentAlbums.find((album) => album.id === albumId);
+    return currentAlbum
+      ? environment.apiBaseUrl + currentAlbum.cover_image_url
+      : '';
   }
 }
