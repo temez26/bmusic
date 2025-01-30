@@ -46,6 +46,7 @@ export class PlayerComponent implements OnInit {
   ngOnInit() {
     this.playerService.filePath$.subscribe((filePath) => {
       this.playerService.updateIsPlaying(false);
+      this.audioRef.nativeElement.pause();
       if (filePath) {
         this.playerWsService.startWebSocket(filePath).then(() => {
           this.audioRef.nativeElement.currentTime =
