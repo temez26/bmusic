@@ -2,17 +2,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Song } from '../models/song.interface';
 import { PlayerService } from '../player/player.service';
-import { PlayerStorageService } from '../storage/player-storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 // Handles Song data that is fetched from the server
 export class SongsStateService {
-  constructor(
-    private playerService: PlayerService,
-    private playerStorage: PlayerStorageService
-  ) {}
+  constructor(private playerService: PlayerService) {}
   private songsSubject = new BehaviorSubject<Song[]>([]);
   public songs$: Observable<Song[]> = this.songsSubject.asObservable();
 

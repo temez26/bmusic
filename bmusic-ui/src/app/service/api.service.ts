@@ -18,7 +18,7 @@ export class ApiService {
 
   constructor(
     private http: HttpClient,
-    private stateService: SongsStateService,
+    private songService: SongsStateService,
     private albumService: AlbumStateService,
     private artistService: ArtistStateService
   ) {}
@@ -28,10 +28,10 @@ export class ApiService {
     return this.http.post<{ playCount: number }>(url, { id: songId }).pipe(
       tap((response) => {
         const updatedPlayCount = response.playCount;
-        const song = this.stateService.getSongs().find((s) => s.id === songId);
+        const song = this.songService.getSongs().find((s) => s.id === songId);
         console.log(song);
         if (song) {
-          this.stateService.updateSong({
+          this.songService.updateSong({
             ...song,
             play_count: updatedPlayCount,
           });
@@ -47,7 +47,7 @@ export class ApiService {
     const url = `${this.baseUrl}songs`;
     return this.http.get<Song[]>(url).pipe(
       tap((fetchedSongs: Song[]) => {
-        this.stateService.setSongs(fetchedSongs);
+        this.songService.setSongs(fetchedSongs);
       }),
       catchError((error) => {
         console.error('Error fetching songs:', error);
@@ -84,7 +84,7 @@ export class ApiService {
     const url = `${this.baseUrl}delete`;
     return this.http.delete<Song[]>(url, { body: { id: songId } }).pipe(
       tap((updatedSongs: Song[]) => {
-        this.stateService.setSongs(updatedSongs);
+        this.songService.setSongs(updatedSongs);
       }),
       catchError((error) => {
         console.error('Error deleting song:', error);

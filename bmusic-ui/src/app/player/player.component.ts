@@ -41,15 +41,17 @@ export class PlayerComponent implements OnInit, OnDestroy {
   constructor(
     private playerWsService: PlayerWsService,
     private audioService: AudioService,
-    private playerService: PlayerService,
-    private playerState: PlayerStateService
+    private playerService: PlayerService
   ) {
     this.player = this.playerService.player;
   }
 
   ngOnInit() {
     // triggers the audio playback by checking the filepath change
-    this.playerState.filePath$
+    console.log(this.player);
+
+    this.playerService
+      .subscribeToFilePath()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((filePath) => {
         this.playerService.updateIsPlaying(false);
