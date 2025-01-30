@@ -13,6 +13,9 @@ import { VolumeIconComponent } from './volume-icon/volume-icon.component';
 import { AudioService } from '../service/player/audio.service';
 import { AlbumCoverComponent } from './album-cover/album-cover.component';
 import { PlayerService } from '../service/player/player.service';
+import { PlayerStateService } from '../service/states/player.state.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-player',
@@ -26,7 +29,7 @@ import { PlayerService } from '../service/player/player.service';
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.scss', './progress.component.scss'],
 })
-export class PlayerComponent implements OnInit {
+export class PlayerComponent implements OnInit, OnDestroy {
   @ViewChild('audio', { static: true }) audioRef!: ElementRef<HTMLAudioElement>;
   @ViewChild('progressSlider', { static: true })
   progressSliderRef!: ElementRef<HTMLInputElement>;
@@ -34,30 +37,33 @@ export class PlayerComponent implements OnInit {
   volumeSliderRef!: ElementRef<HTMLInputElement>;
 
   player: PlayerModel;
-
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private playerWsService: PlayerWsService,
     private audioService: AudioService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private playerState: PlayerStateService
   ) {
     this.player = this.playerService.player;
   }
 
   ngOnInit() {
-    this.playerService.filePath$.subscribe((filePath) => {
-      this.playerService.updateIsPlaying(false);
-      this.audioRef.nativeElement.pause();
-      if (filePath) {
-        this.playerWsService.startWebSocket(filePath).then(() => {
-          this.audioRef.nativeElement.currentTime =
-            this.playerService.player.currentTime;
-          if (this.player.isPlaying) {
-            this.audioRef.nativeElement.play();
-          }
-        });
-      }
-    });
-
+    // triggers the audio playback by checking the filepath change
+    this.playerState.filePath$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((filePath) => {
+        this.playerService.updateIsPlaying(false);
+        this.audioRef.nativeElement.pause();
+        if (filePath) {
+          this.playerWsService.startWebSocket(filePath).then(() => {
+            this.audioRef.nativeElement.currentTime =
+              this.playerService.player.currentTime;
+            if (this.player.isPlaying) {
+              this.audioRef.nativeElement.play();
+            }
+          });
+        }
+      });
     // handles what to do when song ends
     this.progressSliderRef.nativeElement.addEventListener(
       'input',
@@ -75,7 +81,10 @@ export class PlayerComponent implements OnInit {
     // sets the initial volume on startup
     this.onVolumeChange(this.playerService.player.volumePercentage);
   }
-
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
   nextSong() {
     if (this.player.isShuffle) {
       this.audioService.playRandomSong();
@@ -91,13 +100,11 @@ export class PlayerComponent implements OnInit {
   }
 
   toggleShuffle() {
-    this.player.isShuffle = !this.player.isShuffle;
-    this.playerService.updateIsShuffle(this.player.isShuffle);
+    this.playerService.updateIsShuffle(!this.player.isShuffle);
   }
 
   toggleRepeat() {
-    this.player.isRepeat = !this.player.isRepeat;
-    this.playerService.updateIsRepeat(this.player.isRepeat);
+    this.playerService.updateIsRepeat(!this.player.isRepeat);
   }
 
   togglePlayPause() {

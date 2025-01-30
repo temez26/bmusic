@@ -14,10 +14,10 @@ export class AudioService {
   constructor(
     private progressService: ProgressService,
     private stateService: SongsStateService,
-    private playerState: PlayerService,
+    private playerService: PlayerService,
     private apiService: ApiService
   ) {
-    this.player = this.playerState.player;
+    this.player = this.playerService.player;
   }
 
   private incrementPlayCount(songId: number): void {
@@ -43,8 +43,8 @@ export class AudioService {
     const audio = event.target;
     const { duration, formattedDuration } =
       this.progressService.updateDuration(audio);
-    this.playerState.updateAudioDuration(duration);
-    this.playerState.updateFormattedLength(formattedDuration);
+    this.playerService.updateAudioDuration(duration);
+    this.playerService.updateFormattedLength(formattedDuration);
   }
 
   // updates time left side of the progressbar
@@ -54,8 +54,8 @@ export class AudioService {
   ): void {
     const { currentTime, formattedCurrentTime } =
       this.progressService.updateCurrentTime(audio);
-    this.playerState.updateFormattedCurrentTime(formattedCurrentTime);
-    this.playerState.updateCurrentTime(currentTime);
+    this.playerService.updateFormattedCurrentTime(formattedCurrentTime);
+    this.playerService.updateCurrentTime(currentTime);
     this.progressService.updateProgress(progressSlider, audio);
   }
 
@@ -66,7 +66,7 @@ export class AudioService {
     progressSlider: HTMLInputElement
   ): void {
     const { currentTime } = this.progressService.seek(audio, seekTime);
-    this.playerState.updateCurrentTime(currentTime);
+    this.playerService.updateCurrentTime(currentTime);
     this.progressService.updateProgress(progressSlider, audio);
   }
 
