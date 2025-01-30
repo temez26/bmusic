@@ -22,15 +22,15 @@ export class PlayerService {
   }
 
   updateIsPlaying(isPlaying: boolean): void {
-    this.updateState('isPlaying', isPlaying);
+    this.updateState('isPlaying', !!isPlaying);
   }
 
   updateIsShuffle(isShuffle: boolean): void {
-    this.updateState('isShuffle', isShuffle);
+    this.updateState('isShuffle', !!isShuffle);
   }
 
   updateIsRepeat(isRepeat: boolean): void {
-    this.updateState('isRepeat', isRepeat);
+    this.updateState('isRepeat', !!isRepeat);
   }
 
   updateFilePath(filePath: string | ''): void {
