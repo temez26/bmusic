@@ -68,7 +68,7 @@ export class PlayerService {
   updateAudioDuration(audioDuration: number): void {
     this.updateState('audioDuration', audioDuration);
   }
-  // Updated Method to Return filePath$ Observable
+  // Methods for returning subscribable dataitem form playerStateService
   subscribeToFilePath(): Observable<string | null> {
     return this.playerStateService.filePath$;
   }
