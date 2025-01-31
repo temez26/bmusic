@@ -3,9 +3,6 @@ const path = require("path");
 const http = require("http");
 const express = require("express");
 const cors = require("cors");
-const ffmpeg = require("fluent-ffmpeg");
-const ffmpegPath = require("ffmpeg-static");
-ffmpeg.setFfmpegPath(ffmpegPath);
 const { incrementPlayCount } = require("./database/db");
 const upload = require("./services/uploadConfig");
 const { handleFileDelete } = require("./services/deleteController");
@@ -82,35 +79,7 @@ app.get("/data/uploads/:filename", (req, res) => {
     stream.on("error", (err) => res.status(500).send(err));
   });
 });
-// Endpoint to get detailed info about the quality of the audio file
-app.get("/audio-info/:filename", (req, res) => {
-  const filename = req.params.filename;
-  const filePath = path.join(__dirname, "data/uploads", filename);
 
-  ffmpeg(filePath).ffprobe((err, metadata) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send("Error extracting metadata");
-    }
-
-    const audioStream = metadata.streams.find(
-      (stream) => stream.codec_type === "audio"
-    );
-    if (!audioStream) {
-      return res.status(404).send("No audio stream found");
-    }
-
-    const audioInfo = {
-      codec: audioStream.codec_name,
-      sampleRate: audioStream.sample_rate,
-      channels: audioStream.channels,
-      bitrate: audioStream.bit_rate,
-      duration: metadata.format.duration,
-    };
-
-    res.json(audioInfo);
-  });
-});
 // Route to handle file uploads
 app.post("/upload", upload, handleFileUpload);
 

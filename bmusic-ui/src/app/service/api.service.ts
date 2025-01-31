@@ -110,4 +110,17 @@ export class ApiService {
         })
       );
   }
+
+  initializeAudio(
+    audioElement: HTMLAudioElement,
+    filePath: string
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      console.log(environment.apiBaseUrl + filePath);
+      audioElement.src = environment.apiBaseUrl + filePath;
+      audioElement.load();
+      audioElement.oncanplaythrough = () => resolve();
+      audioElement.onerror = (error) => reject(error);
+    });
+  }
 }

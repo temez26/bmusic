@@ -6,16 +6,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlayerWsService } from '../service/websocket/playerws.service';
 import { VolumeSliderComponent } from './volume-slider/volume-slider.component';
 import { PlayerModel } from '../service/models/player.class';
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
 import { AudioService } from '../service/player/audio.service';
 import { AlbumCoverComponent } from './album-cover/album-cover.component';
 import { PlayerService } from '../service/player/player.service';
-import { PlayerStateService } from '../service/states/player.state.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { ApiService } from '../service/api.service';
 
 @Component({
   selector: 'app-player',
@@ -39,9 +38,9 @@ export class PlayerComponent implements OnInit, OnDestroy {
   player: PlayerModel;
   private unsubscribe$ = new Subject<void>();
   constructor(
-    private playerWsService: PlayerWsService,
     private audioService: AudioService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private apiService: ApiService
   ) {
     this.player = this.playerService.player;
   }
@@ -57,7 +56,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
         this.playerService.updateIsPlaying(false);
         this.audioRef.nativeElement.pause();
         if (filePath) {
-          this.playerWsService
+          this.apiService
             .initializeAudio(this.audioRef.nativeElement, filePath)
             .then(() => {
               this.audioRef.nativeElement.currentTime =
