@@ -2,7 +2,6 @@ const fs = require("fs");
 const path = require("path");
 const http = require("http");
 const express = require("express");
-const WebSocket = require("ws");
 const cors = require("cors");
 const ffmpeg = require("fluent-ffmpeg");
 const ffmpegPath = require("ffmpeg-static");
@@ -33,7 +32,85 @@ app.get("/", (req, res) => {
 app.get("/songs", handleAllSongs);
 app.get("/artists", handleAllArtists);
 app.get("/albums", handleAllAlbums);
+// Endpoint for music streaming
+app.get("/data/uploads/:filename", (req, res) => {
+  console.log("triggered music stream");
+  const filename = req.params.filename;
 
+  const filePath = path.join(__dirname, "data/uploads", filename);
+
+  fs.stat(filePath, (err, stats) => {
+    if (err) {
+      console.error(err);
+      return res.status(404).send("File not found");
+    }
+
+    const { range } = req.headers;
+    console.log("Range header:", range);
+    if (!range) {
+      const head = {
+        "Content-Length": stats.size,
+        "Content-Type": "audio/mpeg",
+      };
+      console.log(head);
+      res.writeHead(200, head);
+      console.log("No range header, sending entire file");
+      const stream = fs.createReadStream(filePath);
+
+      stream.pipe(res);
+      stream.on("error", (err) => res.status(500).send(err));
+      return;
+    }
+
+    const positions = range.replace(/bytes=/, "").split("-");
+
+    const start = parseInt(positions[0], 10);
+    const total = stats.size;
+    const end = positions[1] ? parseInt(positions[1], 10) : total - 1;
+    const chunksize = end - start + 1;
+
+    res.writeHead(206, {
+      "Content-Range": `bytes ${start}-${end}/${total}`,
+      "Accept-Ranges": "bytes",
+      "Content-Length": chunksize,
+      "Content-Type": "audio/mpeg",
+    });
+
+    const stream = fs.createReadStream(filePath, { start, end });
+    console.log("Streaming range:", start, "-", end);
+    stream.pipe(res);
+    stream.on("error", (err) => res.status(500).send(err));
+  });
+});
+// Endpoint to get detailed info about the quality of the audio file
+app.get("/audio-info/:filename", (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, "data/uploads", filename);
+
+  ffmpeg(filePath).ffprobe((err, metadata) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Error extracting metadata");
+    }
+
+    const audioStream = metadata.streams.find(
+      (stream) => stream.codec_type === "audio"
+    );
+    if (!audioStream) {
+      return res.status(404).send("No audio stream found");
+    }
+
+    const audioInfo = {
+      codec: audioStream.codec_name,
+      sampleRate: audioStream.sample_rate,
+      channels: audioStream.channels,
+      bitrate: audioStream.bit_rate,
+      duration: metadata.format.duration,
+    };
+
+    res.json(audioInfo);
+  });
+});
 // Route to handle file uploads
 app.post("/upload", upload, handleFileUpload);
 
@@ -67,87 +144,7 @@ app.get("/data/covers/*", (req, res) => {
 // Route to handle file deletion
 app.delete("/delete", handleFileDelete);
 
-// Create HTTP server and WebSocket server
+// Create HTTP server
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
-
-// Handle WebSocket connections
-wss.on("connection", (ws) => {
-  console.log("New client connected");
-
-  ws.on("message", (message) => {
-    let request;
-    try {
-      request = JSON.parse(message);
-    } catch (err) {
-      console.error("Invalid message format:", err);
-      ws.send(
-        "Invalid message format. Expected JSON with 'filePath' and 'type'."
-      );
-      return;
-    }
-
-    const { filePath, type } = request;
-
-    if (!filePath || !type) {
-      ws.send("Missing 'filePath' or 'type' in the message.");
-      return;
-    }
-
-    const absolutePath = path.join(__dirname, filePath);
-    console.log(absolutePath);
-    const ext = path.extname(absolutePath).toLowerCase();
-    console.log(ext);
-
-    if (type === "mp3") {
-      // Convert FLAC to MP3 and stream
-      console.log("converting flac to mp3 to client");
-      if (ext !== ".flac") {
-        ws.send(
-          "Unsupported file format for MP3 conversion. Expected a FLAC file."
-        );
-        return;
-      }
-
-      ffmpeg(absolutePath)
-        .format("mp3")
-        .on("start", () => {
-          console.log(`Starting conversion of ${absolutePath} to MP3.`);
-        })
-        .on("error", (err) => {
-          console.error("FFmpeg error:", err);
-          ws.send("Error processing file with FFmpeg.");
-        })
-        .on("end", () => {
-          ws.send("EOF");
-        })
-        .pipe()
-        .on("data", (chunk) => {
-          console.log(chunk);
-          ws.send(chunk);
-        });
-    } else if (type === "flac") {
-      // Stream original FLAC file
-      if (ext !== ".flac" && ext !== ".mp3") {
-        ws.send("Unsupported file format for streaming.");
-        return;
-      }
-      console.log("Sending flac file to the client");
-      const readStream = fs.createReadStream(absolutePath);
-
-      readStream.on("data", (chunk) => ws.send(chunk));
-      readStream.on("end", () => ws.send("EOF"));
-      readStream.on("error", (err) => {
-        console.error("Error reading file:", err);
-        ws.send("Error reading file.");
-      });
-    } else {
-      ws.send("Unsupported type. Use 'mp3' or 'flac'.");
-    }
-  });
-
-  ws.on("close", () => console.log("Client disconnected"));
-  ws.send("Welcome to the WebSocket server!");
-});
 // Start the server
 server.listen(port, () => console.log(`Listening on port ${port}`));

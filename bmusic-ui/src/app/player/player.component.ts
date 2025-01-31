@@ -57,13 +57,15 @@ export class PlayerComponent implements OnInit, OnDestroy {
         this.playerService.updateIsPlaying(false);
         this.audioRef.nativeElement.pause();
         if (filePath) {
-          this.playerWsService.startWebSocket(filePath).then(() => {
-            this.audioRef.nativeElement.currentTime =
-              this.playerService.player.currentTime;
-            if (this.player.isPlaying) {
-              this.audioRef.nativeElement.play();
-            }
-          });
+          this.playerWsService
+            .initializeAudio(this.audioRef.nativeElement, filePath)
+            .then(() => {
+              this.audioRef.nativeElement.currentTime =
+                this.playerService.player.currentTime;
+              if (this.player.isPlaying) {
+                this.audioRef.nativeElement.play();
+              }
+            });
         }
       });
     // handles what to do when song ends

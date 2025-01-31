@@ -5,7 +5,6 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class WebSocketService {
-  private mediaSource = new MediaSource();
   createWebSocket(filePath: string, type: 'mp3' | 'flac'): Promise<Blob> {
     return new Promise((resolve, reject) => {
       const ws = new WebSocket(environment.wsUrl);
