@@ -5,7 +5,8 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class WebSocketService {
-  createWebSocket(filePath: string, type: 'audio'): Promise<Blob> {
+  private mediaSource = new MediaSource();
+  createWebSocket(filePath: string, type: 'mp3' | 'flac'): Promise<Blob> {
     return new Promise((resolve, reject) => {
       const ws = new WebSocket(environment.wsUrl);
       const chunks: BlobPart[] = [];
@@ -14,18 +15,24 @@ export class WebSocketService {
 
       ws.onopen = () => {
         console.log('WebSocket connection opened');
-        ws.send(filePath);
+        const message = JSON.stringify({ filePath, type });
+        ws.send(message);
       };
 
       ws.onmessage = (event) => {
         if (typeof event.data === 'string') {
           if (event.data === 'EOF') {
+            const mimeType = type === 'mp3' ? 'audio/mpeg' : 'audio/flac';
             const blob = new Blob(chunks, {
-              type: 'audio',
+              type: mimeType,
             });
             resolve(blob);
             ws.close();
-          } else if (event.data === 'Error reading file') {
+          } else if (
+            event.data === 'Error reading file' ||
+            event.data.startsWith('Invalid') ||
+            event.data.startsWith('Unsupported')
+          ) {
             console.error('Error reading file');
             ws.close();
             reject('Error reading file');

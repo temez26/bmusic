@@ -9,7 +9,7 @@ export class PlayerWsService {
 
   startWebSocket(filePath: string): Promise<void> {
     return this.webSocketService
-      .createWebSocket(filePath, 'audio')
+      .createWebSocket(filePath, 'flac')
       .then((blob) => {
         const url = URL.createObjectURL(blob);
         const audio = document.getElementById('audio') as HTMLAudioElement;

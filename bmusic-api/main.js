@@ -4,6 +4,9 @@ const http = require("http");
 const express = require("express");
 const WebSocket = require("ws");
 const cors = require("cors");
+const ffmpeg = require("fluent-ffmpeg");
+const ffmpegPath = require("ffmpeg-static");
+ffmpeg.setFfmpegPath(ffmpegPath);
 const { incrementPlayCount } = require("./database/db");
 const upload = require("./services/uploadConfig");
 const { handleFileDelete } = require("./services/deleteController");
@@ -73,20 +76,78 @@ wss.on("connection", (ws) => {
   console.log("New client connected");
 
   ws.on("message", (message) => {
-    const filePath = path.join(__dirname, message.toString());
-    const readStream = fs.createReadStream(filePath);
+    let request;
+    try {
+      request = JSON.parse(message);
+    } catch (err) {
+      console.error("Invalid message format:", err);
+      ws.send(
+        "Invalid message format. Expected JSON with 'filePath' and 'type'."
+      );
+      return;
+    }
 
-    readStream.on("data", (chunk) => ws.send(chunk));
-    readStream.on("end", () => ws.send("EOF"));
-    readStream.on("error", (err) => {
-      console.error("Error reading file:", err);
-      ws.send("Error reading file");
-    });
+    const { filePath, type } = request;
+
+    if (!filePath || !type) {
+      ws.send("Missing 'filePath' or 'type' in the message.");
+      return;
+    }
+
+    const absolutePath = path.join(__dirname, filePath);
+    console.log(absolutePath);
+    const ext = path.extname(absolutePath).toLowerCase();
+    console.log(ext);
+
+    if (type === "mp3") {
+      // Convert FLAC to MP3 and stream
+      console.log("converting flac to mp3 to client");
+      if (ext !== ".flac") {
+        ws.send(
+          "Unsupported file format for MP3 conversion. Expected a FLAC file."
+        );
+        return;
+      }
+
+      ffmpeg(absolutePath)
+        .format("mp3")
+        .on("start", () => {
+          console.log(`Starting conversion of ${absolutePath} to MP3.`);
+        })
+        .on("error", (err) => {
+          console.error("FFmpeg error:", err);
+          ws.send("Error processing file with FFmpeg.");
+        })
+        .on("end", () => {
+          ws.send("EOF");
+        })
+        .pipe()
+        .on("data", (chunk) => {
+          console.log(chunk);
+          ws.send(chunk);
+        });
+    } else if (type === "flac") {
+      // Stream original FLAC file
+      if (ext !== ".flac" && ext !== ".mp3") {
+        ws.send("Unsupported file format for streaming.");
+        return;
+      }
+      console.log("Sending flac file to the client");
+      const readStream = fs.createReadStream(absolutePath);
+
+      readStream.on("data", (chunk) => ws.send(chunk));
+      readStream.on("end", () => ws.send("EOF"));
+      readStream.on("error", (err) => {
+        console.error("Error reading file:", err);
+        ws.send("Error reading file.");
+      });
+    } else {
+      ws.send("Unsupported type. Use 'mp3' or 'flac'.");
+    }
   });
 
   ws.on("close", () => console.log("Client disconnected"));
   ws.send("Welcome to the WebSocket server!");
 });
-
 // Start the server
 server.listen(port, () => console.log(`Listening on port ${port}`));
