@@ -72,10 +72,6 @@ export class SongsStateService {
     this.playerService.updateCurrentTime(0);
     if (song) {
       this.updateSongDetails(song);
-      const audioElement = document.querySelector('audio');
-      if (audioElement) {
-        audioElement.currentTime = 0;
-      }
     } else {
       console.error('Song not found with id:', songId);
     }

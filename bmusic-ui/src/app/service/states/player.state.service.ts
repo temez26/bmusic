@@ -39,9 +39,6 @@ export class PlayerStateService {
 
   // Setter methods
   setState<T>(key: string, value: T): void {
-    if (key === 'filePath') {
-      this.player.currentTime = 0;
-    }
     // Special handling for coverPath
     if (key === 'coverPath') {
       value = (environment.apiBaseUrl + value) as any;

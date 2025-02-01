@@ -72,7 +72,6 @@ export class AudioService {
 
   handleSongEnd(audioRef: ElementRef<HTMLAudioElement>) {
     if (this.player.isRepeat) {
-      audioRef.nativeElement.currentTime = 0;
       audioRef.nativeElement.play();
       if (this.player.currentSongId !== null) {
         this.incrementPlayCount(this.player.currentSongId);

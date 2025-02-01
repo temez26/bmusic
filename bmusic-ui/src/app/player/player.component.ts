@@ -37,6 +37,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   player: PlayerModel;
   private unsubscribe$ = new Subject<void>();
+
   constructor(
     private audioService: AudioService,
     private playerService: PlayerService,
@@ -55,19 +56,22 @@ export class PlayerComponent implements OnInit, OnDestroy {
       .subscribe((filePath) => {
         this.playerService.updateIsPlaying(false);
         this.audioRef.nativeElement.pause();
+
         if (filePath) {
           this.apiService
-            .initializeAudio(this.audioRef.nativeElement, filePath)
+            .initializeAudio(
+              this.audioRef.nativeElement,
+              filePath,
+              this.player.currentTime
+            )
             .then(() => {
-              this.audioRef.nativeElement.currentTime =
-                this.playerService.player.currentTime;
               if (this.player.isPlaying) {
                 this.audioRef.nativeElement.play();
               }
             });
         }
       });
-    // handles what to do when song ends
+
     this.progressSliderRef.nativeElement.addEventListener(
       'input',
       this.seek.bind(this)
@@ -121,14 +125,13 @@ export class PlayerComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateDuration(event: any) {
-    this.audioService.updateDuration(event);
-  }
-
   onVolumeChange(volumePercentage: number) {
     this.playerService.player.volumePercentage = volumePercentage;
     this.audioRef.nativeElement.volume = volumePercentage / 100;
     this.playerService.updateIsPlaying(this.playerService.player.isPlaying);
+  }
+  updateDuration(event: any) {
+    this.audioService.updateDuration(event);
   }
 
   // Updates the time in progress bar
@@ -152,6 +155,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.playerService.updateCurrentTime(
       this.audioRef.nativeElement.currentTime
     );
+    console.log(this.player);
   }
 
   handleSongEnd() {
