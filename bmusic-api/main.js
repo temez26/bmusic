@@ -33,8 +33,13 @@ app.get("/albums", handleAllAlbums);
 app.get("/data/uploads/:filename", (req, res) => {
   console.log("triggered music stream");
   const filename = req.params.filename;
-
   const filePath = path.join(__dirname, "data/uploads", filename);
+
+  // Determine MIME type based on file extension
+  let mimeType = "audio/mpeg";
+  if (path.extname(filename).toLowerCase() === ".flac") {
+    mimeType = "audio/flac";
+  }
 
   fs.stat(filePath, (err, stats) => {
     if (err) {
@@ -47,20 +52,18 @@ app.get("/data/uploads/:filename", (req, res) => {
     if (!range) {
       const head = {
         "Content-Length": stats.size,
-        "Content-Type": "audio/mpeg",
+        "Content-Type": mimeType,
       };
       console.log(head);
       res.writeHead(200, head);
       console.log("No range header, sending entire file");
       const stream = fs.createReadStream(filePath);
-
       stream.pipe(res);
       stream.on("error", (err) => res.status(500).send(err));
       return;
     }
 
     const positions = range.replace(/bytes=/, "").split("-");
-
     const start = parseInt(positions[0], 10);
     const total = stats.size;
     const end = positions[1] ? parseInt(positions[1], 10) : total - 1;
@@ -70,7 +73,7 @@ app.get("/data/uploads/:filename", (req, res) => {
       "Content-Range": `bytes ${start}-${end}/${total}`,
       "Accept-Ranges": "bytes",
       "Content-Length": chunksize,
-      "Content-Type": "audio/mpeg",
+      "Content-Type": mimeType,
     });
 
     const stream = fs.createReadStream(filePath, { start, end });
