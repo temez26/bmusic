@@ -29,7 +29,7 @@ export class ApiService {
       tap((response) => {
         const updatedPlayCount = response.playCount;
         const song = this.songService.getSongs().find((s) => s.id === songId);
-        console.log(song);
+
         if (song) {
           this.songService.updateSong({
             ...song,
@@ -117,7 +117,6 @@ export class ApiService {
     startTime: number = 0
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      console.log(environment.apiBaseUrl + filePath);
       audioElement.src = environment.apiBaseUrl + filePath;
       audioElement.load();
       audioElement.oncanplaythrough = () => {

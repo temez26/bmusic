@@ -48,7 +48,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // triggers the audio playback by checking the filepath change
-    console.log(this.player);
 
     this.playerService
       .subscribeToFilePath()
@@ -155,7 +154,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.playerService.updateCurrentTime(
       this.audioRef.nativeElement.currentTime
     );
-    console.log(this.player);
   }
 
   handleSongEnd() {

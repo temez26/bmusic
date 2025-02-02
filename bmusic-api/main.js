@@ -35,11 +35,17 @@ app.get("/data/uploads/:filename", (req, res) => {
   const filename = req.params.filename;
   const filePath = path.join(__dirname, "data/uploads", filename);
 
-  // Determine MIME type based on file extension
-  let mimeType = "audio/mpeg";
-  if (path.extname(filename).toLowerCase() === ".flac") {
-    mimeType = "audio/flac";
-  }
+  // Determine MIME type dynamically based on file extension
+  const ext = path.extname(filename).toLowerCase();
+  const mimeTypes = {
+    ".mp3": "audio/mpeg",
+    ".flac": "audio/flac",
+    ".wav": "audio/wav",
+    ".ogg": "audio/ogg",
+    ".aac": "audio/aac",
+  };
+
+  let mimeType = mimeTypes[ext] || "application/octet-stream";
 
   fs.stat(filePath, (err, stats) => {
     if (err) {

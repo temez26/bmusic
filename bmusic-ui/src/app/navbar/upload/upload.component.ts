@@ -52,7 +52,6 @@ export class UploadComponent implements OnInit {
 
   uploadFiles() {
     if (this.selectedFiles.length > 0) {
-      console.log(this.selectedFiles);
       this.api.uploadFiles(this.selectedFiles).subscribe({
         next: (event) => {
           if (event.type === HttpEventType.UploadProgress && event.total) {
