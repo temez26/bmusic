@@ -1,3 +1,6 @@
+.menu {
+  z-index: 1000;
+}
 button {
   background: none;
   border: none;
@@ -16,6 +19,31 @@ button {
   stroke: rgba(141, 141, 141, 0.705);
   transition: stroke 0.3s ease;
 }
-button[mat-icon-button]:hover {
+.button-svg:hover {
   background-color: rgba(255, 255, 255, 0.1);
+}
+.dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 90%;
+  right: 2px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #ccc;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-menu button {
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.877);
+}
+
+.dropdown-menu button:hover {
+  background-color: #838383;
+  transition: transform 0.3s ease;
 }

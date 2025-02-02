@@ -16,7 +16,7 @@ import { MenuComponent } from './menu/menu.component';
 })
 export class SongsComponent implements OnInit {
   songs: Observable<any[]>;
-
+  openMenuSongId: number | null = null;
   constructor(private songsState: SongsStateService) {
     this.songs = songsState.songs$;
   }
@@ -26,7 +26,13 @@ export class SongsComponent implements OnInit {
       map(() => this.songsState.sortSongs('id'))
     );
   }
-
+  toggleMenu(songId: number) {
+    if (this.openMenuSongId === songId) {
+      this.openMenuSongId = null;
+    } else {
+      this.openMenuSongId = songId;
+    }
+  }
   trackBySongId(index: number, song: any): number {
     return song.id;
   }
