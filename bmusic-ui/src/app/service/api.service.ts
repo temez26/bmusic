@@ -4,7 +4,7 @@ import { throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Song } from './models/song.interface';
 import { Albums } from './models/album.interface';
-import { Artist } from './models/artist.interface';
+import { Artists } from './models/artist.interface';
 import { ArtistStateService } from './states/artist.state.service';
 import { SongsStateService } from './states/songs.state.service';
 import { AlbumStateService } from './states/album.state.service';
@@ -57,8 +57,8 @@ export class ApiService {
   }
   fetchArtists() {
     const url = `${this.baseUrl}artists`;
-    return this.http.get<Artist[]>(url).pipe(
-      tap((fetchedArtists: Artist[]) => {
+    return this.http.get<Artists[]>(url).pipe(
+      tap((fetchedArtists: Artists[]) => {
         this.artistService.setArtists(fetchedArtists);
       }),
       catchError((error) => {

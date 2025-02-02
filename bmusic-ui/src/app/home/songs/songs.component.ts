@@ -15,7 +15,7 @@ import { MenuComponent } from './menu/menu.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SongsComponent implements OnInit {
-  songs: Observable<any[]>;
+  songs!: Observable<any[]>;
   openMenuSongId: number | null = null;
   constructor(private songsState: SongsStateService) {
     this.songs = songsState.songs$;

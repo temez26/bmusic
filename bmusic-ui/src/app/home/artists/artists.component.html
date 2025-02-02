@@ -1,1 +1,12 @@
-<p>artists works!</p>
+<div class="artist-grid">
+  <div class="artist-card" *ngFor="let artist of artists">
+    <div
+      class="artist-thumbnail"
+      (click)="setArtist(artist.id, artist.artworkUrl100)"
+      [routerLink]="['/artist']"
+    >
+      <span>{{ artist.name.charAt(0) }}</span>
+    </div>
+    <div class="artist-name">{{ artist.name }}</div>
+  </div>
+</div>
