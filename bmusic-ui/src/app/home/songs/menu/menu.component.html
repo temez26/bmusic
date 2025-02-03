@@ -1,5 +1,5 @@
 <div class="menu">
-  <button (click)="onToggleMenu()">
+  <button (click)="onToggleMenu($event)">
     <img src="/menu.svg" alt="" class="button-svg" />
   </button>
   <div *ngIf="isMenuOpen" class="dropdown-menu">

@@ -7,20 +7,20 @@ import { MenuComponent } from '../../songs/menu/menu.component';
 import { AlbumStateService } from '../../../service/states/album.state.service';
 import { ApiService } from '../../../service/api.service';
 import { ActivatedRoute } from '@angular/router';
+import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
 
 @Component({
   selector: 'app-album',
   standalone: true,
-  imports: [CommonModule, PlayComponent, MenuComponent],
+  imports: [CommonModule, SongsListComponent],
   templateUrl: './album.component.html',
   styleUrl: './album.component.scss',
 })
 export class AlbumComponent implements OnInit {
   private albumId: number = 0;
-  openMenuSongId: number | null = null;
   public coverSrc: string = '';
   public songs: Song[] = [];
-
+  albumFilter = (song: any): boolean => song.album_id === this.albumId;
   constructor(
     private songsState: SongsStateService,
     private albumState: AlbumStateService,
@@ -46,12 +46,5 @@ export class AlbumComponent implements OnInit {
         .sortSongs('id')
         .filter((song) => song.album_id === this.albumId);
     });
-  }
-  toggleMenu(songId: number) {
-    if (this.openMenuSongId === songId) {
-      this.openMenuSongId = null;
-    } else {
-      this.openMenuSongId = songId;
-    }
   }
 }

@@ -33,49 +33,28 @@
   margin: 0;
 }
 
-.songs-header,
-.song-item {
+.parent-container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
+  background-color: rgba(10, 10, 10, 0.507);
+}
+.song-list-container {
+  overflow-y: auto;
+  position: relative;
 }
 
-.songs-header {
-  border-bottom: 2px solid #444;
+.song-header {
+  display: flex;
+  justify-content: space-evenly;
+  background-color: rgba(10, 10, 10, 0.507);
+  border-bottom: 1px solid grey;
+}
+
+.header-item {
+  flex: 1;
   font-weight: bold;
 }
-
-.song-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-bottom: 2px;
-  padding: 0.3rem;
-  color: #fff;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.song-item:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-}
-
-.song-title,
-.song-album,
-.song-length,
-.song-actions {
-  flex: 1;
-  text-align: left;
-}
-
-.song-actions {
-  text-align: right;
-  color: #b3b3b3;
-}
-
-app-menu {
-  display: flex;
-  justify-content: end;
-}
-
 @media (max-width: 768px) {
   .artist-header {
     flex-direction: column;

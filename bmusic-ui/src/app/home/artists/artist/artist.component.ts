@@ -4,24 +4,26 @@ import { CommonModule } from '@angular/common';
 import { SongsStateService } from '../../../service/states/songs.state.service';
 import { ArtistStateService } from '../../../service/states/artist.state.service';
 import { Song } from '../../../service/models/song.interface';
-import { PlayComponent } from '../../shared/play/play.component';
-import { MenuComponent } from '../../songs/menu/menu.component';
 import { ApiService } from '../../../service/api.service';
 import { AlbumStateService } from '../../../service/states/album.state.service';
+import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
 
 @Component({
   selector: 'app-artist',
   standalone: true,
-  imports: [CommonModule, PlayComponent, MenuComponent],
+  imports: [CommonModule, SongsListComponent],
   templateUrl: './artist.component.html',
   styleUrls: ['./artist.component.scss'],
 })
 export class ArtistComponent implements OnInit {
-  private artistId: number = 0;
-  openMenuSongId: number | null = null;
+  public artistId: number = 0;
   public songs: Song[] = [];
   public artist: any = {};
   public coverSrc: string = '';
+
+  // Define the filter function as a public property
+  public artistFilter = (song: Song): boolean =>
+    song.artist_id === this.artistId;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,12 +54,5 @@ export class ArtistComponent implements OnInit {
         }
       });
     });
-  }
-  toggleMenu(songId: number) {
-    if (this.openMenuSongId === songId) {
-      this.openMenuSongId = null;
-    } else {
-      this.openMenuSongId = songId;
-    }
   }
 }

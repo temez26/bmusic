@@ -15,36 +15,21 @@
   </div>
 
   <!-- Songs List -->
-  <div class="songs-list">
-    <div class="songs-header">
-      <h4 class="song-title">Title</h4>
-      <h4 class="song-album">Album</h4>
-      <h4 class="song-length">Time</h4>
-      <h4 class="song-actions">Actions</h4>
+  <div class="parent-container">
+    <div class="song-header">
+      <div class="header-item"><h4>Song</h4></div>
+      <div class="header-item"><h4>Artist</h4></div>
+      <div class="header-item"><h4>Album</h4></div>
+      <div class="header-item"><h4>Time</h4></div>
+      <div class="header-last"><h4>Actions</h4></div>
     </div>
-    <div *ngFor="let song of songs" class="song-item">
-      <app-play
-        class="song-title"
-        [customCover]="'cover-image'"
-        [customTitle]="'songs-title'"
-        [customColumn]="'songs-column'"
-        [songId]="song.id"
-        [title]="song.title"
-        [img]="song.album_cover_url"
-      ></app-play>
-      <span class="song-album">
-        <p>{{ song.album }}</p>
-      </span>
-      <span class="song-length">
-        <p>{{ song.length }}</p>
-      </span>
-      <span class="song-actions">
-        <app-menu
-          [isMenuOpen]="openMenuSongId === song.id"
-          [songId]="song.id"
-          (toggleMenu)="toggleMenu(song.id)"
-        ></app-menu>
-      </span>
+    <div class="song-list-container">
+      <div class="song-list-container">
+        <app-songs-list
+          [filterFn]="artistFilter"
+          sortCriteria="id"
+        ></app-songs-list>
+      </div>
     </div>
   </div>
 </div>

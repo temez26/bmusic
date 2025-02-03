@@ -23,10 +23,10 @@ export class MenuComponent {
 
   constructor(private elementRef: ElementRef, private apiService: ApiService) {}
 
-  onToggleMenu() {
+  onToggleMenu(event: MouseEvent) {
+    event.stopPropagation();
     this.toggleMenu.emit();
   }
-
   onDeleteSong() {
     if (this.songId) {
       console.log(this.songId);
