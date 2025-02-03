@@ -18,6 +18,7 @@ import { AlbumStateService } from '../../../service/states/album.state.service';
 })
 export class ArtistComponent implements OnInit {
   private artistId: number = 0;
+  openMenuSongId: number | null = null;
   public songs: Song[] = [];
   public artist: any = {};
   public coverSrc: string = '';
@@ -43,7 +44,13 @@ export class ArtistComponent implements OnInit {
       this.coverSrc = this.albumState.getAlbumCover(this.artistId);
     });
   }
-
+  toggleMenu(songId: number) {
+    if (this.openMenuSongId === songId) {
+      this.openMenuSongId = null;
+    } else {
+      this.openMenuSongId = songId;
+    }
+  }
   private loadArtistSongs(): void {
     this.songsState.songs$.subscribe(() => {
       this.songs = this.songsState

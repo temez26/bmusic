@@ -17,6 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AlbumComponent implements OnInit {
   private albumId: number = 0;
+  openMenuSongId: number | null = null;
   public coverSrc: string = '';
   public songs: Song[] = [];
 
@@ -45,5 +46,12 @@ export class AlbumComponent implements OnInit {
         .sortSongs('id')
         .filter((song) => song.album_id === this.albumId);
     });
+  }
+  toggleMenu(songId: number) {
+    if (this.openMenuSongId === songId) {
+      this.openMenuSongId = null;
+    } else {
+      this.openMenuSongId = songId;
+    }
   }
 }

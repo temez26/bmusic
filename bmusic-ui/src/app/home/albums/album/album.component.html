@@ -39,7 +39,12 @@
       <span class="song-length"
         ><p>{{ song.length }}</p></span
       >
-      <span class="song-actions"><app-menu></app-menu></span>
+      <span class="song-actions">
+        <app-menu
+          [isMenuOpen]="openMenuSongId === song.id"
+          (toggleMenu)="toggleMenu(song.id)"
+        ></app-menu
+      ></span>
     </div>
   </div>
 </div>

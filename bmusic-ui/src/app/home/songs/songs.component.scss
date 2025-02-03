@@ -19,27 +19,19 @@
 .header-item {
   flex: 1;
   font-weight: bold;
-  color: #fff;
 }
 
 .song-item {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background-size: cover;
-  background-position: center;
   margin-bottom: 2px;
   padding: 0.3rem;
   color: #fff;
-  background-color: rgba(0, 0, 0, 0.7);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, background-color 0.3s ease;
-  animation: fadeIn 0.5s ease forwards;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .song-item:hover {
-  transform: translateY(-5px);
   background-color: rgba(0, 0, 0, 0.8);
 }
 
@@ -47,36 +39,23 @@
 .artist-column,
 .album-column,
 .actions-column {
-  display: flex;
-  align-items: center;
-}
-
-.song-column,
-.artist-column,
-.time-column,
-.album-column {
   flex: 1;
+  text-align: left;
 }
 
-button[mat-icon-button] {
-  transition: background-color 0.3s ease;
+.time-column {
+  text-align: right;
 }
 
 .icon-img {
   width: 20px;
   height: 20px;
 }
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+app-menu {
+  display: flex;
+  justify-content: end;
 }
+
 @media (max-width: 768px) {
   .song-header {
     display: none;

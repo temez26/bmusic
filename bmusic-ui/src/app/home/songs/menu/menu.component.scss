@@ -1,6 +1,8 @@
 .menu {
+  position: relative;
   z-index: 1000;
 }
+
 button {
   background: none;
   border: none;
@@ -10,40 +12,84 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  outline: none;
 }
+
 .button-svg {
   width: 24px;
   height: 24px;
+  transition: transform 0.3s ease;
+  /* Optionally, add a dark filter */
+  filter: brightness(0.8);
 }
-.button-svg:hover path {
-  stroke: rgba(141, 141, 141, 0.705);
-  transition: stroke 0.3s ease;
-}
+
 .button-svg:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+  filter: brightness(1);
 }
+
+/* Dark themed dropdown menu styling with animation */
 .dropdown-menu {
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 90%;
+  top: 100%;
   right: 2px;
-  background-color: rgb(255, 255, 255);
-  border: 1px solid #ccc;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background-color: #222;
+  border-radius: 0.2rem;
+  border: 1px solid #444;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  animation: fadeInDown 0.3s ease forwards;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .dropdown-menu button {
-  padding: 8px 16px;
+  padding: 10px 20px;
   border: none;
   background: none;
   cursor: pointer;
   text-align: left;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.877);
+  color: #fff;
+  background-color: #222;
+  border-radius: 0.2rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.dropdown-menu button:not(:last-child) {
+  border-bottom: 1px solid #444;
 }
 
 .dropdown-menu button:hover {
-  background-color: #838383;
-  transition: transform 0.3s ease;
+  background-color: #444;
+  transform: translateX(2px);
+}
+
+.dropdown-menu div {
+  padding: 10px 20px;
+  color: #ccc;
+  background-color: #2a2a2a;
+  font-size: 0.9rem;
+  border-top: 1px solid #444;
+  animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
