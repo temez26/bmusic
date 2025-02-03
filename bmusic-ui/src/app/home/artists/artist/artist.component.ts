@@ -6,6 +6,8 @@ import { ArtistStateService } from '../../../service/states/artist.state.service
 import { Song } from '../../../service/models/song.interface';
 import { PlayComponent } from '../../shared/play/play.component';
 import { MenuComponent } from '../../songs/menu/menu.component';
+import { ApiService } from '../../../service/api.service';
+import { AlbumStateService } from '../../../service/states/album.state.service';
 
 @Component({
   selector: 'app-artist',
@@ -17,24 +19,28 @@ import { MenuComponent } from '../../songs/menu/menu.component';
 export class ArtistComponent implements OnInit {
   private artistId: number = 0;
   public songs: Song[] = [];
-  public artist: any = {}; // holds the artist details from the state
-  public artistPicture: string = '';
+  public artist: any = {};
+  public coverSrc: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private songsState: SongsStateService,
-    private artistState: ArtistStateService
+    private artistState: ArtistStateService,
+    private apiService: ApiService,
+    private albumState: AlbumStateService
   ) {}
 
   ngOnInit(): void {
-    // Get the artist id from the route parameters (e.g., /artist/:artistId)
     this.route.paramMap.subscribe((params) => {
       const idParam = params.get('artistId');
       if (idParam) {
         this.artistId = +idParam;
+        this.artist = this.artistState.getCurrentArtist();
         this.loadArtistSongs();
-        this.loadArtistDetails();
       }
+    });
+    this.apiService.fetchAlbums().subscribe(() => {
+      this.coverSrc = this.albumState.getAlbumCover(this.artistId);
     });
   }
 
@@ -43,16 +49,11 @@ export class ArtistComponent implements OnInit {
       this.songs = this.songsState
         .sortSongs('id')
         .filter((song: Song) => song.artist_id === this.artistId);
-    });
-  }
-
-  private loadArtistDetails(): void {
-    this.artistState.artist$.subscribe((currentArtist) => {
-      // Ensure the current artist's id matches the route parameter
-      if (currentArtist && currentArtist.id === this.artistId) {
-        this.artist = currentArtist;
-        this.artistPicture = currentArtist.artworkUrl100 || '';
-      }
+      this.songs.forEach((song) => {
+        if (song.genre) {
+          song.genre = song.genre.replace(/[{}"]/g, '');
+        }
+      });
     });
   }
 }

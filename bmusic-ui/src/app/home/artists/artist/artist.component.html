@@ -4,9 +4,7 @@
     <img
       class="artist-cover"
       [src]="
-        artistPicture && !artistPicture.includes('/null')
-          ? artistPicture
-          : '/cd-cover.png'
+        coverSrc && !coverSrc.includes('/null') ? coverSrc : '/cd-cover.png'
       "
       alt="{{ songs[0].artist || 'Artist' }}"
     />

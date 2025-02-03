@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { AlbumStateService } from '../../service/states/album.state.service';
 import { Albums } from '../../service/models/album.interface';
 import { environment } from '../../../environments/environment';
-import { SongsStateService } from '../../service/states/songs.state.service';
-import { Song } from '../../service/models/song.interface';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../../service/api.service';
 

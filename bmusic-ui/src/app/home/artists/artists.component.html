@@ -3,7 +3,7 @@
   <div class="artist-card" *ngFor="let artist of artists">
     <div
       class="artist-thumbnail"
-      (click)="setArtist(artist.id, artist.artworkUrl100)"
+      (click)="setArtist(artist.id)"
       [routerLink]="['/artist']"
     >
       <span>{{ artist.name.charAt(0) }}</span>
