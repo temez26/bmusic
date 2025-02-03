@@ -39,6 +39,7 @@
       <div class="actions-column">
         <app-menu
           [isMenuOpen]="openMenuSongId === song.id"
+          [songId]="song.id"
           (toggleMenu)="toggleMenu(song.id)"
         ></app-menu>
       </div>

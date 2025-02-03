@@ -9,6 +9,9 @@ import {
 import { DeleteComponent } from './delete/delete.component';
 import { CommonModule } from '@angular/common';
 
+import { throwError } from 'rxjs';
+import { ApiService } from '../../../service/api.service';
+
 @Component({
   selector: 'app-menu',
   standalone: true,
@@ -18,12 +21,26 @@ import { CommonModule } from '@angular/common';
 })
 export class MenuComponent {
   @Input() isMenuOpen: boolean = false;
+  @Input() songId!: number;
   @Output() toggleMenu = new EventEmitter<void>();
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(private elementRef: ElementRef, private apiService: ApiService) {}
 
   onToggleMenu() {
     this.toggleMenu.emit();
+  }
+
+  onDeleteSong() {
+    if (this.songId) {
+      console.log(this.songId);
+      this.apiService.deleteSong(this.songId).subscribe({
+        next: () => {
+          // Optionally add logic after deletion (e.g., show a notification)
+          this.toggleMenu.emit();
+        },
+        error: (error) => console.error('Error deleting song:', error),
+      });
+    }
   }
 
   @HostListener('document:click', ['$event'])
