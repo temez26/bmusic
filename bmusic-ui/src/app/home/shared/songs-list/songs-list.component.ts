@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PlayComponent } from '../play/play.component';
-import { MenuComponent } from '../../songs/menu/menu.component';
+import { PlayComponent } from './play/play.component';
+import { MenuComponent } from './menu/menu.component';
 import { CommonModule } from '@angular/common';
 import { SongsStateService } from '../../../service/states/songs.state.service';
 import { Song } from '../../../service/models/song.interface';

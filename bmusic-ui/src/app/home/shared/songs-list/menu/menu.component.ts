@@ -7,7 +7,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../../service/api.service';
+import { ApiService } from '../../../../service/api.service';
 
 @Component({
   selector: 'app-menu',
@@ -32,7 +32,6 @@ export class MenuComponent {
       console.log(this.songId);
       this.apiService.deleteSong(this.songId).subscribe({
         next: () => {
-          // Optionally add logic after deletion (e.g., show a notification)
           this.toggleMenu.emit();
         },
         error: (error) => console.error('Error deleting song:', error),
