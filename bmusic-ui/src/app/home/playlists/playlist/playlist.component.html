@@ -1,0 +1,10 @@
+<div class="playlist-container">
+  <h1>{{ playlist?.name }}</h1>
+  <p>{{ playlist?.description }}</p>
+
+  <!-- Display the filtered songs in the playlist -->
+  <app-songs-list
+    [filterFn]="playlistFilter"
+    sortCriteria="id"
+  ></app-songs-list>
+</div>

@@ -2,8 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SongsStateService } from '../../../service/states/songs.state.service';
 import { Song } from '../../../service/models/song.interface';
 import { CommonModule } from '@angular/common';
-import { PlayComponent } from '../../shared/songs-list/play/play.component';
-import { MenuComponent } from '../../shared/songs-list/menu/menu.component';
 import { AlbumStateService } from '../../../service/states/album.state.service';
 import { ApiService } from '../../../service/api.service';
 import { ActivatedRoute } from '@angular/router';

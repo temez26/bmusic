@@ -47,6 +47,7 @@ export class ApiService {
     const url = `${this.baseUrl}songs`;
     return this.http.get<Song[]>(url).pipe(
       tap((fetchedSongs: Song[]) => {
+        console.log(fetchedSongs);
         this.songService.setSongs(fetchedSongs);
       }),
       catchError((error) => {

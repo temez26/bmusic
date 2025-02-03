@@ -2,6 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const http = require("http");
 const express = require("express");
+// Import playlist router
+const playlistRouter = require("./services/playlistController");
 const cors = require("cors");
 const { incrementPlayCount } = require("./database/db");
 const upload = require("./services/uploadConfig");
@@ -24,11 +26,13 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send(["Welcome", "to", "bmusic"].map((str) => str.toUpperCase()));
 });
-
+// Mount the playlist router
+app.use("/playlists", playlistRouter);
 // Route to handle fetching all songs
 app.get("/songs", handleAllSongs);
 app.get("/artists", handleAllArtists);
 app.get("/albums", handleAllAlbums);
+
 // Endpoint for music streaming
 app.get("/data/uploads/:filename", (req, res) => {
   console.log("triggered music stream");

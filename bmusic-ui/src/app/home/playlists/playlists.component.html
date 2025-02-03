@@ -1,1 +1,44 @@
-<p>playlists works!</p>
+<div class="playlists-container">
+  <h1>Playlists</h1>
+  <form (submit)="createPlaylist(); $event.preventDefault()">
+    <input
+      type="text"
+      [(ngModel)]="newPlaylistName"
+      name="playlistName"
+      placeholder="Playlist Name"
+      required
+    />
+    <input
+      type="text"
+      [(ngModel)]="newPlaylistDescription"
+      name="playlistDescription"
+      placeholder="Playlist Description"
+    />
+    <button type="submit">Create Playlist</button>
+  </form>
+
+  <!-- Display list of playlists -->
+  <ul>
+    <li *ngFor="let playlist of playlists">
+      {{ playlist.name }} - {{ playlist.description }}
+      <button [routerLink]="['/playlist', playlist.id]">Open</button>
+      <button (click)="selectPlaylist(playlist.id)">
+        Select for Adding Song
+      </button>
+    </li>
+  </ul>
+
+  <div *ngIf="selectedPlaylistId">
+    <h2>Add Song to Playlist (ID: {{ selectedPlaylistId }})</h2>
+    <form (submit)="addSongToPlaylist(); $event.preventDefault()">
+      <input
+        type="number"
+        [(ngModel)]="songIdToAdd"
+        name="songId"
+        placeholder="Song ID"
+        required
+      />
+      <button type="submit">Add Song</button>
+    </form>
+  </div>
+</div>

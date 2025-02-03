@@ -27,8 +27,18 @@ export class SongsStateService {
     this.songsSubject.next(updatedSongs);
   }
 
-  sortSongs(criteria: 'play_count' | 'id'): Song[] {
+  sortSongs(criteria: 'play_count' | 'id', specificIds?: number[]): Song[] {
     const songs = this.getSongs();
+
+    // Section to find and return songs matching specific IDs if provided.
+    if (specificIds && specificIds.length > 0) {
+      const foundSongs = specificIds
+        .map((id) => songs.find((song) => song.id === id))
+        .filter((song): song is Song => !!song);
+      console.log('Found specific songs:', foundSongs);
+      return foundSongs;
+    }
+
     if (criteria === 'play_count') {
       return songs.sort((a, b) => b.play_count - a.play_count).slice(0, 15);
     } else if (criteria === 'id') {

@@ -116,7 +116,47 @@ const getOrInsertAlbum = async (
   }
 };
 
-// Export the functions for use in other modules
+// --- New Playlist Functions ---
+const createPlaylist = async (name, description, created_by) => {
+  const result = await pool.query(
+    "INSERT INTO playlists (name, description, created_by) VALUES ($1, $2, $3) RETURNING *",
+    [name, description, created_by]
+  );
+  return result.rows[0];
+};
+
+const addSongToPlaylist = async (playlist_id, song_id) => {
+  const result = await pool.query(
+    "INSERT INTO playlist_songs (playlist_id, song_id) VALUES ($1, $2) RETURNING *",
+    [playlist_id, song_id]
+  );
+  return result.rows[0];
+};
+
+const removeSongFromPlaylist = async (playlist_id, song_id) => {
+  const result = await pool.query(
+    "DELETE FROM playlist_songs WHERE playlist_id = $1 AND song_id = $2 RETURNING *",
+    [playlist_id, song_id]
+  );
+  return result.rows[0];
+};
+
+const getPlaylistSongs = async (playlist_id) => {
+  const result = await pool.query(
+    `SELECT s.* FROM songs s
+     JOIN playlist_songs ps ON s.id = ps.song_id
+     WHERE ps.playlist_id = $1`,
+    [playlist_id]
+  );
+  return result.rows;
+};
+
+const getAllPlaylists = async () => {
+  const result = await pool.query("SELECT * FROM playlists");
+  return result.rows;
+};
+
+// Export all functions for use in other modules
 module.exports = {
   insertSong,
   getAllSongs,
@@ -127,4 +167,9 @@ module.exports = {
   incrementPlayCount,
   getOrInsertArtist,
   getOrInsertAlbum,
+  createPlaylist,
+  addSongToPlaylist,
+  removeSongFromPlaylist,
+  getPlaylistSongs,
+  getAllPlaylists,
 };

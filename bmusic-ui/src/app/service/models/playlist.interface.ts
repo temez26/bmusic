@@ -1,8 +1,8 @@
 export interface Playlist {
   id: number;
+  songIds: number[];
   name: string;
   description: string;
-  songIds: number[];
-  createdBy: number;
-  creationDate: string;
+  created_by: number;
+  creation_date?: string;
 }
