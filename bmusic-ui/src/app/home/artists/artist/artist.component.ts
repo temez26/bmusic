@@ -37,11 +37,20 @@ export class ArtistComponent implements OnInit {
       if (idParam) {
         this.artistId = +idParam;
         this.artist = this.artistState.getCurrentArtist();
-        this.loadArtistSongs();
       }
     });
     this.apiService.fetchAlbums().subscribe(() => {
       this.coverSrc = this.albumState.getAlbumCover(this.artistId);
+    });
+    this.songsState.songs$.subscribe(() => {
+      this.songs = this.songsState
+        .sortSongs('id')
+        .filter((song) => song.artist_id === this.artistId);
+      this.songs.forEach((song) => {
+        if (song.genre) {
+          song.genre = song.genre.replace(/[{}"]/g, '');
+        }
+      });
     });
   }
   toggleMenu(songId: number) {
@@ -50,17 +59,5 @@ export class ArtistComponent implements OnInit {
     } else {
       this.openMenuSongId = songId;
     }
-  }
-  private loadArtistSongs(): void {
-    this.songsState.songs$.subscribe(() => {
-      this.songs = this.songsState
-        .sortSongs('id')
-        .filter((song: Song) => song.artist_id === this.artistId);
-      this.songs.forEach((song) => {
-        if (song.genre) {
-          song.genre = song.genre.replace(/[{}"]/g, '');
-        }
-      });
-    });
   }
 }
