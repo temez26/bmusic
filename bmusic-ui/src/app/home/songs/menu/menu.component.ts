@@ -6,16 +6,13 @@ import {
   HostListener,
   ElementRef,
 } from '@angular/core';
-import { DeleteComponent } from './delete/delete.component';
 import { CommonModule } from '@angular/common';
-
-import { throwError } from 'rxjs';
 import { ApiService } from '../../../service/api.service';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [DeleteComponent, CommonModule],
+  imports: [CommonModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })

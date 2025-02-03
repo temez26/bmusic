@@ -1,39 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { SongsStateService } from '../../service/states/songs.state.service';
-import { PlayComponent } from '../shared/play/play.component';
-import { MenuComponent } from './menu/menu.component';
+import { SongsListComponent } from '../shared/songs-list/songs-list.component';
 
 @Component({
   selector: 'app-songs',
   standalone: true,
-  imports: [CommonModule, PlayComponent, MenuComponent],
+  imports: [CommonModule, SongsListComponent],
   templateUrl: './songs.component.html',
   styleUrls: ['./songs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SongsComponent implements OnInit {
-  songs!: Observable<any[]>;
-  openMenuSongId: number | null = null;
-  constructor(private songsState: SongsStateService) {
-    this.songs = songsState.songs$;
-  }
-
-  ngOnInit() {
-    this.songs = this.songsState.songs$.pipe(
-      map(() => this.songsState.sortSongs('id'))
-    );
-  }
-  toggleMenu(songId: number) {
-    if (this.openMenuSongId === songId) {
-      this.openMenuSongId = null;
-    } else {
-      this.openMenuSongId = songId;
-    }
-  }
-  trackBySongId(index: number, song: any): number {
-    return song.id;
-  }
-}
+export class SongsComponent {}
