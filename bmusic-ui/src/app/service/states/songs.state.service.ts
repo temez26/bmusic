@@ -16,6 +16,8 @@ export class SongsStateService {
   public currentSong$: Observable<Song | null> =
     this.currentSongSubject.asObservable();
 
+  private playlistSongs: Song[] = [];
+
   updateSong(updatedSong: Song): void {
     const currentSongs = this.songsSubject.getValue();
 
@@ -27,17 +29,8 @@ export class SongsStateService {
     this.songsSubject.next(updatedSongs);
   }
 
-  sortSongs(criteria: 'play_count' | 'id', specificIds?: number[]): Song[] {
+  sortSongs(criteria: 'play_count' | 'id'): Song[] {
     const songs = this.getSongs();
-
-    // Section to find and return songs matching specific IDs if provided.
-    if (specificIds && specificIds.length > 0) {
-      const foundSongs = specificIds
-        .map((id) => songs.find((song) => song.id === id))
-        .filter((song): song is Song => !!song);
-      console.log('Found specific songs:', foundSongs);
-      return foundSongs;
-    }
 
     if (criteria === 'play_count') {
       return songs.sort((a, b) => b.play_count - a.play_count).slice(0, 15);
@@ -47,8 +40,24 @@ export class SongsStateService {
     return songs;
   }
 
+  // New function to get songs based on a list of playlist IDs and store them separately.
+  getSongsByPlaylistIds(specificIds: number[]): Song[] {
+    const songs = this.getSongs();
+    const foundSongs = specificIds
+      .map((id) => songs.find((song) => song.id === id))
+      .filter((song): song is Song => !!song);
+    this.playlistSongs = foundSongs;
+    console.log('Stored playlist songs:', this.playlistSongs);
+    return foundSongs;
+  }
+  getPlaylistSongs(): Song[] {
+    return this.playlistSongs;
+  }
   setSongs(songs: Song[]): void {
     this.songsSubject.next([...songs]);
+  }
+  clearPlaylistSongs(): void {
+    this.playlistSongs = [];
   }
 
   getSongs(): Song[] {

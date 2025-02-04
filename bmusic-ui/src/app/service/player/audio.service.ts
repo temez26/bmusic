@@ -91,22 +91,26 @@ export class AudioService {
     const currentSongId = this.player.currentSongId;
 
     if (currentSongId !== null) {
-      const songs = this.stateService.getSongs();
+      // Use playlist songs if available; otherwise use all songs.
+      let songs = this.stateService.getPlaylistSongs();
+      if (!songs || songs.length === 0) {
+        songs = this.stateService.getSongs();
+      }
       const currentSongIndex = songs.findIndex(
         (song) => song.id === currentSongId
       );
 
-      if (currentSongId !== -1) {
+      if (currentSongIndex !== -1) {
         const newIndex =
           (currentSongIndex + offset + songs.length) % songs.length;
         const newSong = songs[newIndex];
         this.stateService.setCurrentSongById(newSong.id);
         this.incrementPlayCount(newSong.id);
       } else {
-        console.error('current song not found in the list');
+        console.error('Current song not found in the list');
       }
     } else {
-      console.error('current song id is null');
+      console.error('Current song id is null');
     }
   }
 

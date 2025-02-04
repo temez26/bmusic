@@ -6,6 +6,7 @@ import { SongsStateService } from '../../../service/states/songs.state.service';
 import { ApiPlaylistService } from '../../../service/api-playlist.service';
 import { Playlist } from '../../../service/models/playlist.interface';
 import { Song } from '../../../service/models/song.interface';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-playlist',
@@ -16,33 +17,57 @@ import { Song } from '../../../service/models/song.interface';
 })
 export class PlaylistComponent implements OnInit {
   playlistId = 0;
-  playlist?: Playlist;
+  // Note: If the API returns an array of songs instead of a Playlist object,
+  // you need to transform the data to match the Playlist interface.
+  playlist!: Playlist;
+
+  // Declare playlists array
+  playlists!: Playlist;
 
   // Filter function to only match songs in this playlist
   playlistFilter = (song: Song): boolean => {
-    console.log(this.playlist?.songIds?.includes(song.id));
     return !!this.playlist?.songIds?.includes(song.id);
   };
 
   constructor(
     private route: ActivatedRoute,
-    private songsState: SongsStateService,
-    private apiPlaylistService: ApiPlaylistService
+    private apiService: ApiPlaylistService
   ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       const idParam = params.get('playlistId');
+
       if (idParam) {
         this.playlistId = +idParam;
-        this.apiPlaylistService.fetchPlaylistSongs(this.playlistId).subscribe({
+        console.log(this.playlistId);
+        this.fetchPlaylists();
+        this.apiService.fetchPlaylistSongs(this.playlistId).subscribe({
           next: (data: unknown) => {
-            this.playlist = data as Playlist;
+            // If the API returns an array of songs rather than a Playlist object,
+            // transform it into a Playlist object.
+            const songs = data as Song[];
+            this.playlist = {
+              ...this.playlist,
+              songIds: songs.map((song) => song.id),
+            };
             console.log('Loaded playlist:', this.playlist);
           },
           error: (error) => console.error('Error fetching playlist', error),
         });
       }
+    });
+  }
+
+  fetchPlaylists(): void {
+    (this.apiService.fetchPlaylists() as Observable<Playlist[]>).subscribe({
+      next: (data: Playlist[]) => {
+        this.playlists = data[this.playlistId - 1];
+        console.log(this.playlists);
+      },
+      error: (error) => {
+        console.error('Error fetching playlists', error);
+      },
     });
   }
 }
