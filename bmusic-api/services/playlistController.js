@@ -6,6 +6,7 @@ const {
   removeSongFromPlaylist,
   getPlaylistSongs,
   getAllPlaylists,
+  deletePlaylist,
 } = require("../database/db");
 
 // Create a new playlist
@@ -30,6 +31,19 @@ router.post("/:playlistId/songs", async (req, res) => {
   } catch (err) {
     console.error("Error adding song to playlist:", err);
     res.status(500).json({ error: "Error adding song to playlist" });
+  }
+});
+// remove playlist
+router.delete("/:playlistId", async (req, res) => {
+  const { playlistId } = req.params;
+
+  try {
+    const playlist = await deletePlaylist(playlistId);
+    console.log("Delete successful, returning:", playlist);
+    res.status(200).json(playlist);
+  } catch (err) {
+    console.error("Error deleting playlist", err);
+    res.status(500).json({ error: "Error deleting playlist" });
   }
 });
 

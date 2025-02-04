@@ -41,7 +41,7 @@ creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 -- Playlist Songs Table (Join Table)
 CREATE TABLE playlist_songs (
-playlist_id INT REFERENCES playlists(id),
-song_id INT REFERENCES songs(id),
-PRIMARY KEY (playlist_id, song_id)
+  playlist_id INT REFERENCES playlists(id) ON DELETE CASCADE,
+  song_id INT REFERENCES songs(id) ON DELETE CASCADE,
+  PRIMARY KEY (playlist_id, song_id)
 );

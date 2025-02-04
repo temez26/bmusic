@@ -86,5 +86,9 @@ export class PlaylistsComponent implements OnInit {
   selectPlaylist(playlistId: number): void {
     this.selectedPlaylistId = playlistId;
   }
+  deletePlaylist(playlistId: number): void {
+    console.log(playlistId);
+    this.apiService.deletePlaylist(playlistId);
+  }
   // Additional functions to remove songs can be added here
 }

@@ -21,7 +21,7 @@ const port = 4000;
 // Middleware to parse JSON and enable CORS
 app.use(express.json());
 app.use(cors());
-
+app.options("*", cors());
 // Route to handle the root endpoint
 app.get("/", (req, res) => {
   res.send(["Welcome", "to", "bmusic"].map((str) => str.toUpperCase()));

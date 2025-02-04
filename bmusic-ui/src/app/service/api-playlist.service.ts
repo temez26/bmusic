@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { throwError, Observable } from 'rxjs';
+import { throwError, Observable, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Song } from './models/song.interface';
 import { environment } from '../../environments/environment';
@@ -59,7 +59,20 @@ export class ApiPlaylistService {
       })
     );
   }
-
+  // Language: TypeScript
+  deletePlaylist(playlistId: number) {
+    const url = `${this.baseUrl}playlists/${playlistId}`;
+    console.log(`Deleting playlist with ID: ${playlistId}`);
+    return this.http.delete(url).pipe(
+      tap(() =>
+        console.log(`Successfully deleted playlist with ID: ${playlistId}`)
+      ),
+      catchError((error) => {
+        console.error('Error removing song from playlist:', error);
+        return throwError(() => error);
+      })
+    );
+  }
   fetchPlaylists(): Observable<Playlist[]> {
     const url = `${this.baseUrl}playlists`;
     return this.http.get<Playlist[]>(url).pipe(

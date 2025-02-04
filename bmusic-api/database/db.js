@@ -151,6 +151,14 @@ const getPlaylistSongs = async (playlist_id) => {
   return result.rows;
 };
 
+const deletePlaylist = async (playlist_id) => {
+  const result = await pool.query(
+    `DELETE FROM playlists WHERE id = $1 RETURNING *`,
+    [playlist_id]
+  );
+  return result.rows;
+};
+
 const getAllPlaylists = async () => {
   const result = await pool.query("SELECT * FROM playlists");
   return result.rows;
@@ -172,4 +180,5 @@ module.exports = {
   removeSongFromPlaylist,
   getPlaylistSongs,
   getAllPlaylists,
+  deletePlaylist,
 };
