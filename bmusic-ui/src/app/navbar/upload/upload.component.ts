@@ -4,6 +4,7 @@ import { ApiService } from '../../service/api.service';
 import { HttpEventType } from '@angular/common/http';
 import { AlbumStateService } from '../../service/states/album.state.service';
 import { SongsStateService } from '../../service/states/songs.state.service';
+import { ArtistStateService } from '../../service/states/artist.state.service';
 
 @Component({
   selector: 'app-upload',
@@ -21,7 +22,8 @@ export class UploadComponent implements OnInit {
   constructor(
     private api: ApiService,
     private albumState: AlbumStateService,
-    private songsState: SongsStateService
+    private songsState: SongsStateService,
+    private artistState: ArtistStateService
   ) {}
 
   ngOnInit() {
@@ -70,6 +72,9 @@ export class UploadComponent implements OnInit {
             });
             this.api.fetchSongs().subscribe((songs) => {
               this.songsState.setSongs(songs);
+            });
+            this.api.fetchArtists().subscribe((artists) => {
+              this.artistState.setArtists(artists);
             });
           }
         },
