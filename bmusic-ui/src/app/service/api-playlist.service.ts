@@ -59,10 +59,9 @@ export class ApiPlaylistService {
       })
     );
   }
-  // Language: TypeScript
+
   deletePlaylist(playlistId: number) {
     const url = `${this.baseUrl}playlists/${playlistId}`;
-    console.log(`Deleting playlist with ID: ${playlistId}`);
     return this.http.delete(url).pipe(
       tap(() =>
         console.log(`Successfully deleted playlist with ID: ${playlistId}`)

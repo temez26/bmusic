@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../../service/api.service';
+import { ApiPlaylistService } from '../../../../service/api-playlist.service';
 
 @Component({
   selector: 'app-menu',
@@ -21,7 +22,11 @@ export class MenuComponent {
   @Input() songId!: number;
   @Output() toggleMenu = new EventEmitter<void>();
 
-  constructor(private elementRef: ElementRef, private apiService: ApiService) {}
+  constructor(
+    private elementRef: ElementRef,
+    private apiService: ApiService,
+    private apiPlaylistService: ApiPlaylistService
+  ) {}
 
   onToggleMenu(event: MouseEvent) {
     event.stopPropagation();
@@ -38,7 +43,12 @@ export class MenuComponent {
       });
     }
   }
-
+  onAddSongFavorites(songId: number) {
+    if (songId) {
+      console.log(songId);
+      this.apiPlaylistService.addSongToPlaylist(1, songId).subscribe();
+    }
+  }
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (

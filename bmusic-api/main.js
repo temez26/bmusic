@@ -26,8 +26,10 @@ app.options("*", cors());
 app.get("/", (req, res) => {
   res.send(["Welcome", "to", "bmusic"].map((str) => str.toUpperCase()));
 });
+
 // Mount the playlist router
 app.use("/playlists", playlistRouter);
+
 // Route to handle fetching all songs
 app.get("/songs", handleAllSongs);
 app.get("/artists", handleAllArtists);
