@@ -1,26 +1,9 @@
 <h1>Playlists</h1>
 <div class="playlists-container">
-  <form (submit)="createPlaylist(); $event.preventDefault()">
-    <input
-      type="text"
-      [(ngModel)]="newPlaylistName"
-      name="playlistName"
-      placeholder="Playlist Name"
-      required
-    />
-    <input
-      type="text"
-      [(ngModel)]="newPlaylistDescription"
-      name="playlistDescription"
-      placeholder="Playlist Description"
-    />
-    <button type="submit">Create Playlist</button>
-  </form>
-
   <!-- Display list of playlists -->
   <ul>
     <li *ngFor="let playlist of playlists">
-      <div class="playlist-card">
+      <a [routerLink]="['/playlist', playlist.id]" class="playlist-card">
         <img
           class="playlist-image"
           [src]="
@@ -33,29 +16,28 @@
         <div class="playlist-info">
           <h3>{{ playlist.name }}</h3>
           <p>{{ playlist.description }}</p>
-          <div class="playlist-actions">
-            <button [routerLink]="['/playlist', playlist.id]">Open</button>
-            <button (click)="selectPlaylist(playlist.id)">
-              Select for Adding Song
-            </button>
-            <button (click)="deletePlaylist(playlist.id)">Delete</button>
-          </div>
         </div>
-      </div>
+      </a>
     </li>
   </ul>
 
-  <div *ngIf="selectedPlaylistId" class="add-song-container">
-    <h2>Add Song to Playlist (ID: {{ selectedPlaylistId }})</h2>
-    <form (submit)="addSongToPlaylist(); $event.preventDefault()">
+  <div class="form-container">
+    <h2>Create new Playlist</h2>
+    <form (submit)="createPlaylist(); $event.preventDefault()">
       <input
-        type="number"
-        [(ngModel)]="songIdToAdd"
-        name="songId"
-        placeholder="Song ID"
+        type="text"
+        [(ngModel)]="newPlaylistName"
+        name="playlistName"
+        placeholder="Playlist Name"
         required
       />
-      <button type="submit">Add Song</button>
+      <input
+        type="text"
+        [(ngModel)]="newPlaylistDescription"
+        name="playlistDescription"
+        placeholder="Playlist Description"
+      />
+      <button type="submit">Create Playlist</button>
     </form>
   </div>
 </div>

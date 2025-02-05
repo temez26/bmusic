@@ -51,7 +51,6 @@ main {
   height: 100vh;
   overflow: auto;
   margin: 0 10px;
-
   background-color: rgba(10, 10, 10, 0.507);
 }
 // child components
@@ -116,6 +115,9 @@ p {
   body {
     padding-right: 6%;
     padding-left: 6%;
+  }
+  main {
+    margin: 0;
   }
   h1 {
     font-size: 2.5rem;
