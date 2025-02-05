@@ -4,7 +4,7 @@ import { throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Song } from './models/song.interface';
 import { Albums } from './models/album.interface';
-import { Artist } from './models/artist.interface';
+import { Artists } from './models/artist.interface';
 import { ArtistStateService } from './states/artist.state.service';
 import { SongsStateService } from './states/songs.state.service';
 import { AlbumStateService } from './states/album.state.service';
@@ -18,7 +18,7 @@ export class ApiService {
 
   constructor(
     private http: HttpClient,
-    private stateService: SongsStateService,
+    private songService: SongsStateService,
     private albumService: AlbumStateService,
     private artistService: ArtistStateService
   ) {}
@@ -28,10 +28,10 @@ export class ApiService {
     return this.http.post<{ playCount: number }>(url, { id: songId }).pipe(
       tap((response) => {
         const updatedPlayCount = response.playCount;
-        const song = this.stateService.getSongs().find((s) => s.id === songId);
-        console.log(song);
+        const song = this.songService.getSongs().find((s) => s.id === songId);
+
         if (song) {
-          this.stateService.updateSong({
+          this.songService.updateSong({
             ...song,
             play_count: updatedPlayCount,
           });
@@ -47,7 +47,8 @@ export class ApiService {
     const url = `${this.baseUrl}songs`;
     return this.http.get<Song[]>(url).pipe(
       tap((fetchedSongs: Song[]) => {
-        this.stateService.setSongs(fetchedSongs);
+        console.log(fetchedSongs);
+        this.songService.setSongs(fetchedSongs);
       }),
       catchError((error) => {
         console.error('Error fetching songs:', error);
@@ -57,8 +58,8 @@ export class ApiService {
   }
   fetchArtists() {
     const url = `${this.baseUrl}artists`;
-    return this.http.get<Artist[]>(url).pipe(
-      tap((fetchedArtists: Artist[]) => {
+    return this.http.get<Artists[]>(url).pipe(
+      tap((fetchedArtists: Artists[]) => {
         this.artistService.setArtists(fetchedArtists);
       }),
       catchError((error) => {
@@ -84,7 +85,7 @@ export class ApiService {
     const url = `${this.baseUrl}delete`;
     return this.http.delete<Song[]>(url, { body: { id: songId } }).pipe(
       tap((updatedSongs: Song[]) => {
-        this.stateService.setSongs(updatedSongs);
+        this.songService.setSongs(updatedSongs);
       }),
       catchError((error) => {
         console.error('Error deleting song:', error);
@@ -109,5 +110,25 @@ export class ApiService {
           return throwError(() => error);
         })
       );
+  }
+
+  initializeAudio(
+    audioElement: HTMLAudioElement,
+    filePath: string,
+    startTime: number = 0
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      audioElement.src = environment.apiBaseUrl + filePath;
+      audioElement.load();
+      audioElement.oncanplaythrough = () => {
+        // Remove handler to avoid multiple calls when setting currentTime
+        audioElement.oncanplaythrough = null;
+        if (startTime > 0) {
+          audioElement.currentTime = startTime;
+        }
+        resolve();
+      };
+      audioElement.onerror = (error) => reject(error);
+    });
   }
 }

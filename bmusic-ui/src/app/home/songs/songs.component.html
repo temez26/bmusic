@@ -1,44 +1,7 @@
 <div class="parent-container">
   <h1>Songs</h1>
-  <div class="song-header">
-    <div class="header-item"><h4>Song</h4></div>
-    <div class="header-item"><h4>Artist</h4></div>
-    <div class="header-item"><h4>Album</h4></div>
-    <div class="header-item"><h4>Time</h4></div>
-    <div class="header-last"><h4>Actions</h4></div>
-  </div>
+
   <div class="song-list-container">
-    <div
-      *ngFor="let song of songs | async; let i = index; trackBy: trackBySongId"
-      class="song-item"
-    >
-      <div class="song-column">
-        <app-play
-          [customCover]="'cover-image'"
-          [customTitle]="'songs-title'"
-          [customColumn]="'songs-column'"
-          [songId]="song.id"
-          [title]="song.title"
-          [img]="song.album_cover_url"
-        ></app-play>
-      </div>
-
-      <div class="artist-column">
-        <p>{{ song.artist || "empty" }}</p>
-      </div>
-
-      <div class="album-column">
-        <p>{{ song.album || "empty" }}</p>
-      </div>
-      <div class="time-column">
-        <p>
-          {{ song.length || "empty" }}
-        </p>
-      </div>
-
-      <div class="actions-column">
-        <app-menu></app-menu>
-      </div>
-    </div>
+    <app-songs-list></app-songs-list>
   </div>
 </div>

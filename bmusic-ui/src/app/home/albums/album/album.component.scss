@@ -1,8 +1,9 @@
 .album-container {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  background-color: rgba(10, 10, 10, 0.507);
+  background: rgba(20, 20, 20, 0.8);
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .album-header {
@@ -33,46 +34,15 @@
   margin: 0;
 }
 
-.songs-header,
-.song-item {
+.parent-container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
+  background-color: rgba(10, 10, 10, 0.507);
 }
-
-.songs-header {
-  border-bottom: 2px solid #444;
-  font-weight: bold;
-}
-
-.song-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2px;
-  background-color: rgba(0, 0, 0, 0.7);
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-  padding: 3px;
-}
-
-.song-item:hover {
-  background-color: rgba(0, 0, 0, 0.904);
-}
-
-.song-title,
-.song-artist,
-.song-length,
-.song-actions {
-  flex: 1;
-  text-align: left;
-}
-
-.song-actions {
-  text-align: right;
-  color: #b3b3b3;
-}
-app-menu {
-  display: flex;
-  justify-content: end;
+.song-list-container {
+  overflow-y: auto;
+  position: relative;
 }
 
 @media (max-width: 768px) {

@@ -14,10 +14,10 @@ export class AudioService {
   constructor(
     private progressService: ProgressService,
     private stateService: SongsStateService,
-    private playerState: PlayerService,
+    private playerService: PlayerService,
     private apiService: ApiService
   ) {
-    this.player = this.playerState.player;
+    this.player = this.playerService.player;
   }
 
   private incrementPlayCount(songId: number): void {
@@ -43,8 +43,8 @@ export class AudioService {
     const audio = event.target;
     const { duration, formattedDuration } =
       this.progressService.updateDuration(audio);
-    this.playerState.updateAudioDuration(duration);
-    this.playerState.updateFormattedLength(formattedDuration);
+    this.playerService.updateAudioDuration(duration);
+    this.playerService.updateFormattedLength(formattedDuration);
   }
 
   // updates time left side of the progressbar
@@ -54,8 +54,8 @@ export class AudioService {
   ): void {
     const { currentTime, formattedCurrentTime } =
       this.progressService.updateCurrentTime(audio);
-    this.playerState.updateFormattedCurrentTime(formattedCurrentTime);
-    this.playerState.updateCurrentTime(currentTime);
+    this.playerService.updateFormattedCurrentTime(formattedCurrentTime);
+    this.playerService.updateCurrentTime(currentTime);
     this.progressService.updateProgress(progressSlider, audio);
   }
 
@@ -66,13 +66,12 @@ export class AudioService {
     progressSlider: HTMLInputElement
   ): void {
     const { currentTime } = this.progressService.seek(audio, seekTime);
-    this.playerState.updateCurrentTime(currentTime);
+    this.playerService.updateCurrentTime(currentTime);
     this.progressService.updateProgress(progressSlider, audio);
   }
 
   handleSongEnd(audioRef: ElementRef<HTMLAudioElement>) {
     if (this.player.isRepeat) {
-      audioRef.nativeElement.currentTime = 0;
       audioRef.nativeElement.play();
       if (this.player.currentSongId !== null) {
         this.incrementPlayCount(this.player.currentSongId);
@@ -92,22 +91,26 @@ export class AudioService {
     const currentSongId = this.player.currentSongId;
 
     if (currentSongId !== null) {
-      const songs = this.stateService.getSongs();
+      // Use playlist songs if available; otherwise use all songs.
+      let songs = this.stateService.getPlaylistSongs();
+      if (!songs || songs.length === 0) {
+        songs = this.stateService.getSongs();
+      }
       const currentSongIndex = songs.findIndex(
         (song) => song.id === currentSongId
       );
 
-      if (currentSongId !== -1) {
+      if (currentSongIndex !== -1) {
         const newIndex =
           (currentSongIndex + offset + songs.length) % songs.length;
         const newSong = songs[newIndex];
         this.stateService.setCurrentSongById(newSong.id);
         this.incrementPlayCount(newSong.id);
       } else {
-        console.error('current song not found in the list');
+        console.error('Current song not found in the list');
       }
     } else {
-      console.error('current song id is null');
+      console.error('Current song id is null');
     }
   }
 

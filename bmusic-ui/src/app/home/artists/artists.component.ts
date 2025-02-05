@@ -1,22 +1,30 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ArtistStateService } from '../../service/states/artist.state.service';
-import { ApiService } from '../../service/api.service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-artists',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, RouterLink],
   templateUrl: './artists.component.html',
-  styleUrl: './artists.component.scss',
+  styleUrls: ['./artists.component.scss'],
 })
 export class ArtistsComponent implements OnInit {
+  artists: any[] = [];
+
   constructor(
     private artistState: ArtistStateService,
-    private apiService: ApiService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.apiService.fetchArtists().subscribe();
-    console.log(this.artistState.getArtists());
+    this.artistState.artists$.subscribe((artists) => {
+      this.artists = artists;
+    });
+  }
+  setArtist(artistId: number) {
+    this.artistState.setCurrentArtist(artistId);
+    this.router.navigate(['/artist', artistId]);
   }
 }

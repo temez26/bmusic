@@ -1,0 +1,36 @@
+<div class="menu">
+  <button (click)="onToggleMenu($event)">
+    <img src="/menu.svg" alt="" class="button-svg" />
+  </button>
+  <div *ngIf="isMenuOpen" class="dropdown-menu">
+    <button (click)="toggleFavorites()">
+      Favorites
+      <span *ngIf="membership[1]">(Remove)</span>
+      <span *ngIf="!membership[1]">(Add)</span>
+    </button>
+    <button
+      (mouseenter)="showPlaylistDropdown()"
+      (mouseleave)="hidePlaylistDropdown()"
+    >
+      Add to Playlist
+    </button>
+    <!-- Playlist dropdown appears on hover -->
+    <div
+      *ngIf="isPlaylistDropdownOpen"
+      class="playlist-dropdown"
+      (mouseenter)="keepPlaylistDropdownOpen()"
+      (mouseleave)="hidePlaylistDropdown()"
+    >
+      <button
+        *ngFor="let playlist of playlists"
+        (click)="toggleSongInPlaylist(playlist.id)"
+      >
+        {{ playlist.name }}
+        <span *ngIf="membership[playlist.id]">(Remove)</span>
+        <span *ngIf="!membership[playlist.id]">(Add)</span>
+      </button>
+    </div>
+    <button (click)="onDeleteSong()">Delete</button>
+    <div *ngIf="">playlist content</div>
+  </div>
+</div>

@@ -37,7 +37,6 @@ export class AlbumStateService {
   }
   getAlbumCover(albumId: number): string {
     const currentAlbums = this.albumsSubject.getValue();
-    console.log(currentAlbums);
     const currentAlbum = currentAlbums.find((album) => album.id === albumId);
     return currentAlbum
       ? environment.apiBaseUrl + currentAlbum.cover_image_url

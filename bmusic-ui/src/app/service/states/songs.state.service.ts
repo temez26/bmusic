@@ -2,23 +2,21 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Song } from '../models/song.interface';
 import { PlayerService } from '../player/player.service';
-import { PlayerStorageService } from '../storage/player-storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 // Handles Song data that is fetched from the server
 export class SongsStateService {
-  constructor(
-    private playerService: PlayerService,
-    private playerStorage: PlayerStorageService
-  ) {}
+  constructor(private playerService: PlayerService) {}
   private songsSubject = new BehaviorSubject<Song[]>([]);
   public songs$: Observable<Song[]> = this.songsSubject.asObservable();
 
   private currentSongSubject = new BehaviorSubject<Song | null>(null);
   public currentSong$: Observable<Song | null> =
     this.currentSongSubject.asObservable();
+
+  private playlistSongs: Song[] = [];
 
   updateSong(updatedSong: Song): void {
     const currentSongs = this.songsSubject.getValue();
@@ -33,6 +31,7 @@ export class SongsStateService {
 
   sortSongs(criteria: 'play_count' | 'id'): Song[] {
     const songs = this.getSongs();
+
     if (criteria === 'play_count') {
       return songs.sort((a, b) => b.play_count - a.play_count).slice(0, 15);
     } else if (criteria === 'id') {
@@ -41,8 +40,24 @@ export class SongsStateService {
     return songs;
   }
 
+  // New function to get songs based on a list of playlist IDs and store them separately.
+  getSongsByPlaylistIds(specificIds: number[]): Song[] {
+    const songs = this.getSongs();
+    const foundSongs = specificIds
+      .map((id) => songs.find((song) => song.id === id))
+      .filter((song): song is Song => !!song);
+    this.playlistSongs = foundSongs;
+    console.log('Stored playlist songs:', this.playlistSongs);
+    return foundSongs;
+  }
+  getPlaylistSongs(): Song[] {
+    return this.playlistSongs;
+  }
   setSongs(songs: Song[]): void {
     this.songsSubject.next([...songs]);
+  }
+  clearPlaylistSongs(): void {
+    this.playlistSongs = [];
   }
 
   getSongs(): Song[] {
@@ -76,10 +91,6 @@ export class SongsStateService {
     this.playerService.updateCurrentTime(0);
     if (song) {
       this.updateSongDetails(song);
-      const audioElement = document.querySelector('audio');
-      if (audioElement) {
-        audioElement.currentTime = 0;
-      }
     } else {
       console.error('Song not found with id:', songId);
     }

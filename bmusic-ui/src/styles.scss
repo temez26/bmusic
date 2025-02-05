@@ -41,15 +41,16 @@ body {
 app-root {
   display: flex;
   flex-direction: column;
+
   height: 100vh;
 }
 
 // main content area
 main {
   flex-grow: 1;
-  padding: 0 5px;
   height: 100vh;
   overflow: auto;
+  margin: 0 10px;
   background-color: rgba(10, 10, 10, 0.507);
 }
 // child components
@@ -75,6 +76,7 @@ app-player {
   left: 50%;
   transform: translateX(-50%);
 }
+
 h1 {
   margin: 0.2rem 0.1rem;
   font-size: 3rem;
@@ -114,6 +116,9 @@ p {
     padding-right: 6%;
     padding-left: 6%;
   }
+  main {
+    margin: 0;
+  }
   h1 {
     font-size: 2.5rem;
   }
@@ -124,7 +129,7 @@ p {
     font-size: 1.75rem;
   }
   p {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 }
 
@@ -143,7 +148,7 @@ p {
     font-size: 1.5rem;
   }
   p {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
   }
 }
 
@@ -166,6 +171,6 @@ p {
     font-size: 1.25rem;
   }
   p {
-    font-size: 0.65rem;
+    font-size: 0.7rem;
   }
 }

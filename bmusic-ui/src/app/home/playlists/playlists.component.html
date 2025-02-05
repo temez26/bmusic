@@ -1,1 +1,47 @@
-<p>playlists works!</p>
+<h1>Playlists</h1>
+<div class="playlists-container">
+  <!-- Display list of playlists -->
+  <ul>
+    <li *ngFor="let playlist of playlists" class="card-background">
+      <a [routerLink]="['/playlist', playlist.id]" class="playlist-card">
+        <img
+          class="playlist-image"
+          [src]="
+            playlist.name === 'Favorites'
+              ? '/favorites.png'
+              : playlist.imgUrl || '/playlists.png'
+          "
+          alt="{{ playlist.name }}"
+        />
+        <div class="playlist-info">
+          <h3>{{ playlist.name }}</h3>
+          <p>{{ playlist.description }}</p>
+        </div>
+      </a>
+      <app-playlist-settings
+        [playlistId]="playlist.id"
+        (playlistDeleted)="onPlaylistDeleted()"
+      ></app-playlist-settings>
+    </li>
+  </ul>
+
+  <div class="form-container">
+    <h2>Create new Playlist</h2>
+    <form (submit)="createPlaylist(); $event.preventDefault()">
+      <input
+        type="text"
+        [(ngModel)]="newPlaylistName"
+        name="playlistName"
+        placeholder="Playlist Name"
+        required
+      />
+      <input
+        type="text"
+        [(ngModel)]="newPlaylistDescription"
+        name="playlistDescription"
+        placeholder="Playlist Description"
+      />
+      <button type="submit">Create Playlist</button>
+    </form>
+  </div>
+</div>

@@ -1,5 +1,3 @@
-<div class="menu">
-  <button (click)="('menu')">
     <svg
       class="button-svg"
       xmlns="http://www.w3.org/2000/svg"
@@ -165,5 +163,3 @@
         </g>
       </g>
     </svg>
-  </button>
-</div>

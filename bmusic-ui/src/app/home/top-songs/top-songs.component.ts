@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlayComponent } from '../shared/play/play.component';
+import { PlayComponent } from '../shared/songs-list/play/play.component';
 import { SongsStateService } from '../../service/states/songs.state.service';
 
 @Component({
@@ -17,6 +17,7 @@ export class TopSongsComponent implements OnInit {
 
   ngOnInit() {
     this.songsState.songs$.subscribe(() => {
+      this.songsState.clearPlaylistSongs();
       this.songs = this.songsState.sortSongs('play_count');
     });
   }

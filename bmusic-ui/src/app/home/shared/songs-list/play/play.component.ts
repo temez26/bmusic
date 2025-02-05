@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AudioService } from '../../../service/player/audio.service';
-import { environment } from '../../../../environments/environment';
+import { AudioService } from '../../../../service/player/audio.service';
+import { environment } from '../../../../../environments/environment';
 @Component({
   selector: 'app-play',
   standalone: true,
