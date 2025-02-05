@@ -6,11 +6,12 @@ import { Observable } from 'rxjs';
 import { Playlist } from '../../service/models/playlist.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PlaylistSettingsComponent } from './playlistsettings/playlistsettings.component';
 
 @Component({
   selector: 'app-playlists',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, PlaylistSettingsComponent],
   templateUrl: './playlists.component.html',
   styleUrls: ['./playlists.component.scss'],
 })
@@ -94,5 +95,8 @@ export class PlaylistsComponent implements OnInit {
       },
       error: (error) => console.error('Error deleting playlist:', error),
     });
+  }
+  onPlaylistDeleted() {
+    this.fetchPlaylists();
   }
 }

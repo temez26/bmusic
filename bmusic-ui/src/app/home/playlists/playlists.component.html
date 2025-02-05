@@ -2,7 +2,7 @@
 <div class="playlists-container">
   <!-- Display list of playlists -->
   <ul>
-    <li *ngFor="let playlist of playlists">
+    <li *ngFor="let playlist of playlists" class="card-background">
       <a [routerLink]="['/playlist', playlist.id]" class="playlist-card">
         <img
           class="playlist-image"
@@ -18,6 +18,10 @@
           <p>{{ playlist.description }}</p>
         </div>
       </a>
+      <app-playlist-settings
+        [playlistId]="playlist.id"
+        (playlistDeleted)="onPlaylistDeleted()"
+      ></app-playlist-settings>
     </li>
   </ul>
 
