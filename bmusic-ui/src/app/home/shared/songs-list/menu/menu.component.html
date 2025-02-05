@@ -4,7 +4,26 @@
   </button>
   <div *ngIf="isMenuOpen" class="dropdown-menu">
     <button (click)="onAddSongFavorites(songId)">Add to Favorites</button>
-    <button (click)="('')">Add to Playlist</button>
+    <button
+      (mouseenter)="showPlaylistDropdown()"
+      (mouseleave)="hidePlaylistDropdown()"
+    >
+      Add to Playlist
+    </button>
+    <!-- Playlist dropdown appears on hover -->
+    <div
+      *ngIf="isPlaylistDropdownOpen"
+      class="playlist-dropdown"
+      (mouseenter)="keepPlaylistDropdownOpen()"
+      (mouseleave)="hidePlaylistDropdown()"
+    >
+      <button
+        *ngFor="let playlist of playlists"
+        (click)="addSongToPlaylist(playlist.id)"
+      >
+        {{ playlist.name }}
+      </button>
+    </div>
     <button (click)="onDeleteSong()">Delete</button>
     <div *ngIf="">playlist content</div>
   </div>
