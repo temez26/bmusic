@@ -1,8 +1,12 @@
 <div class="playlist-container">
   <img
     class="playlist-image"
-    [src]="playlists.imgUrl || '/playlists.png'"
-    alt="{{ playlists.name }}"
+    [src]="
+      playlists.name === 'Favorites'
+        ? '/favorites.png'
+        : playlist.imgUrl || '/playlists.png'
+    "
+    alt="{{ playlist.name }}"
   />
   <h1>{{ playlists.name }}</h1>
   <p>{{ playlists.description }}</p>

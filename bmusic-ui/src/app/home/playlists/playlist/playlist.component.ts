@@ -42,6 +42,7 @@ export class PlaylistComponent implements OnInit {
         this.playlistId = +idParam;
         console.log(this.playlistId);
         this.fetchPlaylists();
+        console.log(this.playlist);
         this.apiService.fetchPlaylistSongs(this.playlistId).subscribe({
           next: (data: unknown) => {
             // If the API returns an array of songs rather than a Playlist object,
