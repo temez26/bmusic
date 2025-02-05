@@ -63,8 +63,13 @@ export class PlaylistComponent implements OnInit {
   fetchPlaylists(): void {
     (this.apiService.fetchPlaylists() as Observable<Playlist[]>).subscribe({
       next: (data: Playlist[]) => {
-        this.playlists = data[this.playlistId - 1];
-        console.log(this.playlists);
+        const found = data.find((p) => p.id === this.playlistId);
+        if (found) {
+          this.playlists = found;
+          console.log('Loaded playlist:', this.playlists);
+        } else {
+          console.error('Playlist not found for id:', this.playlistId);
+        }
       },
       error: (error) => {
         console.error('Error fetching playlists', error);
