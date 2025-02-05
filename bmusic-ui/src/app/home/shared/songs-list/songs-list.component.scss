@@ -10,9 +10,15 @@
   text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.3);
   transition: background-color 0.3s ease;
 }
+
+.song-item:nth-child(even) {
+  background: rgba(25, 25, 25, 0.7);
+}
+
 .song-item:hover {
   background-color: rgba(40, 40, 40, 0.9);
 }
+
 .song-column,
 .artist-column,
 .album-column,
@@ -28,30 +34,14 @@
   border-bottom: 2px solid #444;
   padding: 0.5rem 1rem;
 }
+
 .header-item {
   flex: 1;
   font-weight: bold;
   padding-left: 10px;
 }
+
 app-menu {
   display: flex;
   justify-content: end;
-}
-@media (max-width: 768px) {
-  .song-column {
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .artist-column {
-    display: flex;
-    justify-content: center;
-  }
-  .artist-column p {
-    font-size: 0.6rem;
-  }
-
-  .song-header {
-    display: none;
-  }
 }
