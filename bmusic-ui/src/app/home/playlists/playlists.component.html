@@ -1,5 +1,5 @@
+<h1>Playlists</h1>
 <div class="playlists-container">
-  <h1>Playlists</h1>
   <form (submit)="createPlaylist(); $event.preventDefault()">
     <input
       type="text"
@@ -20,16 +20,32 @@
   <!-- Display list of playlists -->
   <ul>
     <li *ngFor="let playlist of playlists">
-      {{ playlist.name }} - {{ playlist.description }}
-      <button [routerLink]="['/playlist', playlist.id]">Open</button>
-      <button (click)="selectPlaylist(playlist.id)">
-        Select for Adding Song
-      </button>
-      <button (click)="deletePlaylist(playlist.id)">delete</button>
+      <div class="playlist-card">
+        <img
+          class="playlist-image"
+          [src]="
+            playlist.name === 'Favorites'
+              ? '/favorites.png'
+              : playlist.imgUrl || '/playlists.png'
+          "
+          alt="{{ playlist.name }}"
+        />
+        <div class="playlist-info">
+          <h3>{{ playlist.name }}</h3>
+          <p>{{ playlist.description }}</p>
+          <div class="playlist-actions">
+            <button [routerLink]="['/playlist', playlist.id]">Open</button>
+            <button (click)="selectPlaylist(playlist.id)">
+              Select for Adding Song
+            </button>
+            <button (click)="deletePlaylist(playlist.id)">Delete</button>
+          </div>
+        </div>
+      </div>
     </li>
   </ul>
 
-  <div *ngIf="selectedPlaylistId">
+  <div *ngIf="selectedPlaylistId" class="add-song-container">
     <h2>Add Song to Playlist (ID: {{ selectedPlaylistId }})</h2>
     <form (submit)="addSongToPlaylist(); $event.preventDefault()">
       <input

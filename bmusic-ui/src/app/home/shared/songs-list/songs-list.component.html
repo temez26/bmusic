@@ -1,3 +1,10 @@
+<div class="song-header">
+  <div class="header-item"><h4>Song</h4></div>
+  <div class="header-item"><h4>Artist</h4></div>
+  <div class="header-item"><h4>Album</h4></div>
+  <div class="header-item"><h4>Time</h4></div>
+  <div class="header-last"><h4>Actions</h4></div>
+</div>
 <div
   *ngFor="let song of songs | async; let i = index; trackBy: trackBySongId"
   class="song-item"

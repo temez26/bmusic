@@ -1,12 +1,16 @@
 <div class="playlist-container">
+  <img
+    class="playlist-image"
+    [src]="playlists.imgUrl || '/playlists.png'"
+    alt="{{ playlists.name }}"
+  />
   <h1>{{ playlists.name }}</h1>
   <p>{{ playlists.description }}</p>
-
-  <!-- Display the filtered songs in the playlist -->
-  <app-songs-list
-    [playlist]="playlist"
-    [filterFn]="playlistFilter"
-    sortCriteria="id"
-  >
-  </app-songs-list>
 </div>
+
+<app-songs-list
+  [playlist]="playlist"
+  [filterFn]="playlistFilter"
+  sortCriteria="id"
+>
+</app-songs-list>

@@ -5,4 +5,5 @@ export interface Playlist {
   description: string;
   created_by: number;
   creation_date?: string;
+  imgUrl: string;
 }

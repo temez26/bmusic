@@ -8,21 +8,3 @@
   overflow-y: auto;
   position: relative;
 }
-
-.song-header {
-  display: flex;
-  justify-content: space-evenly;
-  background-color: rgba(10, 10, 10, 0.507);
-  border-bottom: 1px solid grey;
-}
-
-.header-item {
-  flex: 1;
-  font-weight: bold;
-}
-
-@media (max-width: 768px) {
-  .song-header {
-    display: none;
-  }
-}
