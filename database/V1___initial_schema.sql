@@ -37,7 +37,8 @@ CREATE TABLE playlists (
   description TEXT,
   created_by INT,
   creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  protected BOOLEAN DEFAULT FALSE
+  protected BOOLEAN DEFAULT FALSE,
+  UNIQUE (name)
 );
 
 -- Playlist Songs Table (Join Table)
@@ -47,9 +48,10 @@ CREATE TABLE playlist_songs (
   PRIMARY KEY (playlist_id, song_id)
 );
 
--- Insert Default "Favorites" Playlist marked as protected
+-- Insert Default "Favorites" Playlist marked as protected if it doesn't exist
 INSERT INTO playlists (name, description, created_by, protected)
-VALUES ('Favorites', 'Default favorites playlist', NULL, TRUE);
+VALUES ('Favorites', 'Default favorites playlist', NULL, TRUE)
+ON CONFLICT (name) DO NOTHING;
 
 -- Create trigger function to prevent deletion of protected playlists
 CREATE OR REPLACE FUNCTION prevent_delete_protected_playlist()
