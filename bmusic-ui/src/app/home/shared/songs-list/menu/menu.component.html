@@ -3,7 +3,11 @@
     <img src="/menu.svg" alt="" class="button-svg" />
   </button>
   <div *ngIf="isMenuOpen" class="dropdown-menu">
-    <button (click)="onAddSongFavorites(songId)">Add to Favorites</button>
+    <button (click)="toggleFavorites()">
+      Favorites
+      <span *ngIf="membership[1]">(Remove)</span>
+      <span *ngIf="!membership[1]">(Add)</span>
+    </button>
     <button
       (mouseenter)="showPlaylistDropdown()"
       (mouseleave)="hidePlaylistDropdown()"
@@ -19,9 +23,11 @@
     >
       <button
         *ngFor="let playlist of playlists"
-        (click)="addSongToPlaylist(playlist.id)"
+        (click)="toggleSongInPlaylist(playlist.id)"
       >
         {{ playlist.name }}
+        <span *ngIf="membership[playlist.id]">(Remove)</span>
+        <span *ngIf="!membership[playlist.id]">(Add)</span>
       </button>
     </div>
     <button (click)="onDeleteSong()">Delete</button>
