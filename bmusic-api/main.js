@@ -9,11 +9,11 @@ const { incrementPlayCount } = require("./database/db");
 const upload = require("./services/uploadConfig");
 const { handleFileDelete } = require("./services/deleteController");
 const {
-  handleFileUpload,
   handleAllSongs,
   handleAllArtists,
   handleAllAlbums,
-} = require("./services/uploadController");
+} = require("./services/fetchController");
+const { handleFileUpload } = require("./services/uploadController");
 
 const app = express();
 const port = 4000;

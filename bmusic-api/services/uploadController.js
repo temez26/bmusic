@@ -1,42 +1,11 @@
 const mm = require("music-metadata");
-const path = require("path");
+
 const {
   insertSong,
-  getAllSongs,
   getOrInsertArtist,
   getOrInsertAlbum,
-  getAllArtists,
-  getAllAlbums,
+  getAllSongs,
 } = require("../database/db");
-
-// Function to handle fetching all songs from the database
-const handleAllSongs = async (req, res) => {
-  try {
-    const songs = await getAllSongs();
-    res.status(200).json(songs);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error fetching data for Songs");
-  }
-};
-const handleAllArtists = async (req, res) => {
-  try {
-    const artists = await getAllArtists();
-    res.status(200).json(artists);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Error fetching data for Artists");
-  }
-};
-const handleAllAlbums = async (req, res) => {
-  try {
-    const artists = await getAllAlbums();
-    res.status(200).json(artists);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Error fetching data for Artists");
-  }
-};
 
 // Function to handle file uploads and metadata extraction
 const handleFileUpload = async (req, res) => {
@@ -69,7 +38,6 @@ const handleFileUpload = async (req, res) => {
           const seconds = Math.floor(duration % 60);
           const length = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 
-          // Use the album and artist from the first audio file for all subsequent files
           if (!albumName) albumName = album;
           if (!artistName) artistName = artist;
           if (!genre) genre = fileGenre;
@@ -120,7 +88,4 @@ const handleFileUpload = async (req, res) => {
 
 module.exports = {
   handleFileUpload,
-  handleAllSongs,
-  handleAllArtists,
-  handleAllAlbums,
 };
