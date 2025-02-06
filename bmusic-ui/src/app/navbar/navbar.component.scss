@@ -4,7 +4,8 @@
   align-items: center;
   position: relative;
   background-color: rgba(0, 0, 0, 0.829);
-  padding: 10px 20px;
+  padding: 20px 20px;
+  min-height: 60px;
   border-bottom: 2px solid rgba(255, 0, 0, 0.3);
   box-shadow: 0 2px 10px rgba(255, 0, 0, 0.2);
   backdrop-filter: blur(5px);
@@ -31,7 +32,7 @@
 }
 
 .navbar-title {
-  font-size: 2.5rem;
+  font-size: 2.9rem;
   background: linear-gradient(45deg, #ff4081, #3f51b5, #ff4081, #3f51b5);
   background-size: 200% 200%;
   -webkit-background-clip: text;
@@ -82,13 +83,13 @@ button[mat-icon-button]:hover .material-icons {
   }
 
   .example-icon {
-    width: 45px;
-    height: 45px;
+    width: 50px;
+    height: 50px;
   }
 
   button[mat-icon-button] .material-icons {
-    width: 24px;
-    height: 24px;
-    font-size: 22px;
+    width: 26px;
+    height: 26px;
+    font-size: 26px;
   }
 }
