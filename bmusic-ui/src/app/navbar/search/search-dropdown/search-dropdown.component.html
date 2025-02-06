@@ -1,0 +1,18 @@
+<div class="dropdown">
+  <div *ngIf="results.length; else noResults">
+    <div *ngFor="let item of results" class="dropdown-item">
+      <app-play
+        [customCover]="'cover-image'"
+        [customTitle]="'songs-title'"
+        [customColumn]="'songs-column'"
+        [songId]="item.id"
+        [title]="item.title"
+        [img]="item.album_cover_url"
+      ></app-play>
+      <h4>by {{ item.artist }}</h4>
+    </div>
+  </div>
+  <ng-template #noResults>
+    <div class="dropdown-item">No results found</div>
+  </ng-template>
+</div>
