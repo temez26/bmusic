@@ -70,7 +70,9 @@ export class PlayerComponent implements OnInit, OnDestroy {
             });
         }
       });
-
+    this.playerService.subscribeToIsplaying().subscribe((isPlaying) => {
+      this.player.isPlaying = isPlaying;
+    });
     this.progressSliderRef.nativeElement.addEventListener(
       'input',
       this.seek.bind(this)
