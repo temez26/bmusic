@@ -2,8 +2,8 @@
   position: absolute;
   top: 90%;
   left: 0;
-  min-width: 228px;
-  max-width: 300px;
+  min-width: 288px;
+  max-width: 290px;
 }
 
 .dropdown {
@@ -42,6 +42,7 @@
 }
 @media (max-width: 768px) {
   :host {
+    min-width: 225px;
     max-width: 230px;
   }
 }
