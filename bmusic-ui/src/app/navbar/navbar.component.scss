@@ -11,6 +11,7 @@
   border-radius: 15px;
   z-index: 1;
 }
+
 .example-spacer {
   flex: 1 1 auto;
 }
@@ -19,6 +20,14 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.example-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
 }
 
 .navbar-title {
@@ -49,6 +58,9 @@ mat-icon {
 }
 
 button[mat-icon-button] .material-icons {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
   color: #ffffffc7;
   transition: color 0.3s ease, background-color 0.3s ease;
   -webkit-background-clip: text;
@@ -61,9 +73,22 @@ button[mat-icon-button]:hover .material-icons {
   color: #e0e0e0;
   background-color: #ffffff;
 }
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .myapp {
     border-radius: 0;
     padding: 2px 5px;
+  }
+
+  .example-icon {
+    width: 45px;
+    height: 45px;
+  }
+
+  button[mat-icon-button] .material-icons {
+    width: 24px;
+    height: 24px;
+    font-size: 22px;
   }
 }
