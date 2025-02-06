@@ -70,9 +70,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
             });
         }
       });
-    this.playerService.subscribeToIsplaying().subscribe((isPlaying) => {
-      this.player.isPlaying = isPlaying;
-    });
+    this.playerService
+      .subscribeToIsplaying()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((isPlaying) => {
+        this.player.isPlaying = isPlaying;
+      });
     this.progressSliderRef.nativeElement.addEventListener(
       'input',
       this.seek.bind(this)
@@ -118,13 +121,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
   togglePlayPause() {
     const audio = this.audioRef.nativeElement;
     if (audio.paused) {
-      this.player.isPlaying = true;
-      this.playerService.updateIsPlaying(true);
       audio.play();
+      this.playerService.updateIsPlaying(true);
     } else {
-      this.player.isPlaying = false;
-      this.playerService.updateIsPlaying(false);
       audio.pause();
+      this.playerService.updateIsPlaying(false);
     }
   }
 
