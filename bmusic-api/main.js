@@ -1,12 +1,14 @@
+// --- Node.js and Third-Party Modules ---
 const fs = require("fs");
 const path = require("path");
 const http = require("http");
 const express = require("express");
-// Import playlist router
-const playlistRouter = require("./services/playlistController");
 const cors = require("cors");
-const { incrementPlayCount } = require("./database/db");
+
+// --- Local Modules and Controllers ---
+const playlistRouter = require("./services/playlistController");
 const upload = require("./services/uploadConfig");
+const { incrementPlayCount } = require("./database/db");
 const { handleFileDelete } = require("./services/deleteController");
 const {
   handleAllSongs,
@@ -14,96 +16,43 @@ const {
   handleAllAlbums,
 } = require("./services/fetchController");
 const { handleFileUpload } = require("./services/uploadController");
+const { streamMedia } = require("./services/streamController");
 
 const app = express();
 const port = 4000;
 
-// Middleware to parse JSON and enable CORS
+// --- Middleware Configuration ---
 app.use(express.json());
 app.use(cors());
 app.options("*", cors());
-// Route to handle the root endpoint
+
+// --- Routes ---
+// Root endpoint
 app.get("/", (req, res) => {
-  res.send(["Welcome", "to", "bmusic"].map((str) => str.toUpperCase()));
+  const welcomeMsg = ["Welcome", "to", "bmusic"].map((str) =>
+    str.toUpperCase()
+  );
+  res.send(welcomeMsg);
 });
 
-// Mount the playlist router
+// Playlist routes
 app.use("/playlists", playlistRouter);
 
-// Route to handle fetching all songs
+// Fetch routes
 app.get("/songs", handleAllSongs);
 app.get("/artists", handleAllArtists);
 app.get("/albums", handleAllAlbums);
 
-// Endpoint for music streaming
-app.get("/data/uploads/:filename", (req, res) => {
-  console.log("triggered music stream");
-  const filename = req.params.filename;
-  const filePath = path.join(__dirname, "data/uploads", filename);
+// Music streaming endpoint
+app.get("/data/uploads/:filename", streamMedia);
 
-  // Determine MIME type dynamically based on file extension
-  const ext = path.extname(filename).toLowerCase();
-  const mimeTypes = {
-    ".mp3": "audio/mpeg",
-    ".flac": "audio/flac",
-    ".wav": "audio/wav",
-    ".ogg": "audio/ogg",
-    ".aac": "audio/aac",
-  };
-
-  let mimeType = mimeTypes[ext] || "application/octet-stream";
-
-  fs.stat(filePath, (err, stats) => {
-    if (err) {
-      console.error(err);
-      return res.status(404).send("File not found");
-    }
-
-    const { range } = req.headers;
-    console.log("Range header:", range);
-    if (!range) {
-      const head = {
-        "Content-Length": stats.size,
-        "Content-Type": mimeType,
-      };
-      console.log(head);
-      res.writeHead(200, head);
-      console.log("No range header, sending entire file");
-      const stream = fs.createReadStream(filePath);
-      stream.pipe(res);
-      stream.on("error", (err) => res.status(500).send(err));
-      return;
-    }
-
-    const positions = range.replace(/bytes=/, "").split("-");
-    const start = parseInt(positions[0], 10);
-    const total = stats.size;
-    const end = positions[1] ? parseInt(positions[1], 10) : total - 1;
-    const chunksize = end - start + 1;
-
-    res.writeHead(206, {
-      "Content-Range": `bytes ${start}-${end}/${total}`,
-      "Accept-Ranges": "bytes",
-      "Content-Length": chunksize,
-      "Content-Type": mimeType,
-    });
-
-    const stream = fs.createReadStream(filePath, { start, end });
-    console.log("Streaming range:", start, "-", end);
-    stream.pipe(res);
-    stream.on("error", (err) => res.status(500).send(err));
-  });
-});
-
-// Route to handle file uploads
+// File upload endpoint
 app.post("/upload", upload, handleFileUpload);
 
+// Increment play count endpoint
 app.post("/increment", async (req, res) => {
   const { id } = req.body;
-
-  if (!id) {
-    return res.status(400).send("Song ID is required");
-  }
+  if (!id) return res.status(400).send("Song ID is required");
 
   try {
     const playCount = await incrementPlayCount(id);
@@ -113,7 +62,8 @@ app.post("/increment", async (req, res) => {
     res.status(500).send("Error incrementing play count");
   }
 });
-// Route to serve cover images
+
+// Serve cover images endpoint
 app.get("/data/covers/*", (req, res) => {
   const filePath = path.join(__dirname, req.path);
   fs.access(filePath, fs.constants.F_OK, (err) => {
@@ -125,10 +75,9 @@ app.get("/data/covers/*", (req, res) => {
   });
 });
 
-// Route to handle file deletion
+// Delete file endpoint
 app.delete("/delete", handleFileDelete);
 
-// Create HTTP server
+// --- Create and Start HTTP Server ---
 const server = http.createServer(app);
-// Start the server
 server.listen(port, () => console.log(`Listening on port ${port}`));
