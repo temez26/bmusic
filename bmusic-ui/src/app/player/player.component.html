@@ -29,16 +29,9 @@
       </button>
       <button class="player-button play" (click)="togglePlayPause()">
         <img
-          *ngIf="!player.isPlaying"
           class="icon"
-          src="/play.png"
-          alt="Play"
-        />
-        <img
-          *ngIf="player.isPlaying"
-          class="icon"
-          src="/pause.png"
-          alt="Pause"
+          [src]="player.isPlaying ? '/pause.png' : '/play.png'"
+          [alt]="player.isPlaying ? 'Pause' : 'Play'"
         />
       </button>
       <button class="player-button next" (click)="nextSong()">
