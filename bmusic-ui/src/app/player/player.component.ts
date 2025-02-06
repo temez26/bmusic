@@ -119,12 +119,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
     const audio = this.audioRef.nativeElement;
     if (audio.paused) {
       this.player.isPlaying = true;
-      audio.play();
       this.playerService.updateIsPlaying(true);
+      audio.play();
     } else {
       this.player.isPlaying = false;
-      audio.pause();
       this.playerService.updateIsPlaying(false);
+      audio.pause();
     }
   }
 
