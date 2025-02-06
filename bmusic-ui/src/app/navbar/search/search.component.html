@@ -1,6 +1,18 @@
-<div class="search-container">
+<div class="search-container" #searchContainer>
   <button class="search-button">
     <i class="material-icons">search</i>
   </button>
-  <input type="text" class="search-input" placeholder="Search" />
+  <input
+    type="text"
+    #searchInput
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+    class="search-input"
+    placeholder="Search Songs"
+  />
+  <app-search-dropdown
+    *ngIf="dropdownVisible"
+    (mousedown)="onDropdownMouseDown($event)"
+    [results]="(searchResults$ | async) || []"
+  ></app-search-dropdown>
 </div>

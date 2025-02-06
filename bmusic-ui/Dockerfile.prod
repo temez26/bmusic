@@ -1,0 +1,27 @@
+# Build Stage
+FROM node:22-alpine AS builder
+WORKDIR /app
+
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm ci
+
+# Copy source code and build for production using the production build script
+COPY . .
+RUN npm run build:prod
+
+# Production Stage: serve the static files with a Node server (serve)
+FROM node:22-alpine
+WORKDIR /app
+
+# Copy build artifacts from the builder stage (update "bmusic-ui" to match your outputPath)
+COPY --from=builder /app/dist/bmusic-ui/browser/ ./dist
+
+# Install serve globally
+RUN npm install -g serve
+
+# Expose port 4200 for production 
+EXPOSE 4200
+
+# Start the static file server, serving the production build
+CMD ["serve", "-s", "./dist", "-l", "4200"]

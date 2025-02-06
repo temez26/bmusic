@@ -15,19 +15,18 @@
     <span class="navbar-title">Bmusic</span>
   </div>
   <span class="example-spacer"></span>
+
   <button
+    #uploadButton
     mat-icon-button
     class="example-icon"
     aria-label="Example icon-button with upload icon"
-    (click)="toggleUploadDialog()"
+    (click)="toggleUpload()"
   >
     <mat-icon>upload</mat-icon>
   </button>
-  <button
-    mat-icon-button
-    class="example-icon"
-    aria-label="Example icon-button with menu icon"
-  >
-    <mat-icon>menu</mat-icon>
-  </button>
+  <!-- Pass showUpload flag -->
+  <div *ngIf="showUpload" #uploadContainer>
+    <app-upload></app-upload>
+  </div>
 </div>

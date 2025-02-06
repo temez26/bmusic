@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Song } from '../models/song.interface';
 import { PlayerService } from '../player/player.service';
 
@@ -63,7 +63,46 @@ export class SongsStateService {
   getSongs(): Song[] {
     return this.songsSubject.getValue();
   }
+  // for search bar filtering
+  searchSongs(query: string): Observable<Song[]> {
+    // Return all songs if query is empty (optional behavior)
+    if (!query.trim()) {
+      return of(this.getSongs());
+    }
 
+    const lowerQuery = query
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+    // Split the query into tokens for multi-word searches
+    const tokens = lowerQuery.split(/\s+/).filter((token) => token.length);
+
+    const filtered = this.getSongs().filter((song) => {
+      // Normalize song fields to support diacritics insensitive search
+      const title = song.title
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+      const artist = song.artist
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+      const album = song.album
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
+      // All tokens must appear in at least one of the fields for a match
+      return tokens.every(
+        (token) =>
+          title.includes(token) ||
+          artist.includes(token) ||
+          album.includes(token)
+      );
+    });
+    console.log(filtered);
+    return of(filtered);
+  }
   setCurrentSong(song: Song): void {
     this.currentSongSubject.next({ ...song });
   }

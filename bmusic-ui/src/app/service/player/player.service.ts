@@ -69,7 +69,12 @@ export class PlayerService {
     this.updateState('audioDuration', audioDuration);
   }
 
+  // subscribe functions
+
   subscribeToFilePath(): Observable<string | null> {
     return this.playerStateService.filePath$;
+  }
+  subscribeToIsplaying(): Observable<boolean> {
+    return this.playerStateService.isPlaying$;
   }
 }

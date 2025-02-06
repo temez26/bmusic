@@ -67,4 +67,7 @@ export class PlayerStateService {
   get filePath$(): Observable<string | null> {
     return this.states$['filePath'];
   }
+  get isPlaying$(): Observable<boolean> {
+    return this.states$['isPlaying'];
+  }
 }
