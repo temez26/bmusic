@@ -7,7 +7,8 @@
   border-radius: 20px;
   padding: 3px 3px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease,
+    padding 0.3s ease;
 }
 
 .search-container:hover,
@@ -23,12 +24,13 @@
   padding: 5px;
   border-radius: 20px;
   width: 0;
-  opacity: 0;
+  opacity: 0.4;
   background-color: #333;
   color: #e0e0e0;
   transition: width 0.3s ease, opacity 0.3s ease, background-color 0.3s ease,
     color 0.3s ease;
   overflow: hidden;
+  width: 230px;
 }
 
 .search-container:hover .search-input,
@@ -68,7 +70,10 @@
   background-position: 100% 50%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 906px) {
+  .search-input {
+    width: 0px;
+  }
   .search-container:hover .search-input,
   .search-container:focus-within .search-input {
     width: 200px;
