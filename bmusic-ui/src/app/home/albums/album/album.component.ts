@@ -40,9 +40,12 @@ export class AlbumComponent implements OnInit {
     });
 
     this.songsState.songs$.subscribe(() => {
-      this.songs = this.songsState
+      const albumSongs = this.songsState
         .sortSongs('id')
         .filter((song) => song.album_id === this.albumId);
+      this.songs = albumSongs;
+      // Store the current album's song list for the player
+      this.songsState.setCurrentPlaylistSongs(albumSongs);
     });
   }
 }

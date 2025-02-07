@@ -12,6 +12,9 @@ export class SongsStateService {
   private songsSubject = new BehaviorSubject<Song[]>([]);
   public songs$: Observable<Song[]> = this.songsSubject.asObservable();
 
+  private currentPlaylistSubject = new BehaviorSubject<Song[]>([]);
+  public currentPlaylist$ = this.currentPlaylistSubject.asObservable();
+
   private currentSongSubject = new BehaviorSubject<Song | null>(null);
   public currentSong$: Observable<Song | null> =
     this.currentSongSubject.asObservable();
@@ -46,8 +49,8 @@ export class SongsStateService {
     const foundSongs = specificIds
       .map((id) => songs.find((song) => song.id === id))
       .filter((song): song is Song => !!song);
-    this.playlistSongs = foundSongs;
-    console.log('Stored playlist songs:', this.playlistSongs);
+    this.currentPlaylistSubject.next(foundSongs);
+    console.log('Stored playlist songs in currentPlaylistSubject:', foundSongs);
     return foundSongs;
   }
   getPlaylistSongs(): Song[] {
@@ -59,7 +62,13 @@ export class SongsStateService {
   clearPlaylistSongs(): void {
     this.playlistSongs = [];
   }
+  setCurrentPlaylistSongs(songs: Song[]): void {
+    this.currentPlaylistSubject.next([...songs]);
+  }
 
+  getCurrentPlaylistSongs(): Song[] {
+    return this.currentPlaylistSubject.getValue();
+  }
   getSongs(): Song[] {
     return this.songsSubject.getValue();
   }
@@ -125,13 +134,14 @@ export class SongsStateService {
     this.playerService.updateIsPlaying(true);
   }
   setCurrentSongById(songId: number): void {
-    const song = this.getSongs().find((s) => s.id === songId);
+    const currentPlaylist = this.getCurrentPlaylistSongs();
+    const song = currentPlaylist.find((s) => s.id === songId);
     this.playerService.updateAudioDuration(0);
     this.playerService.updateCurrentTime(0);
     if (song) {
       this.updateSongDetails(song);
     } else {
-      console.error('Song not found with id:', songId);
+      console.error('Song not found with id in the current playlist:', songId);
     }
   }
 }
