@@ -19,6 +19,7 @@ export class AlbumComponent implements OnInit {
   public coverSrc: string = '';
   public songs: Song[] = [];
   albumFilter = (song: any): boolean => song.album_id === this.albumId;
+
   constructor(
     private songsState: SongsStateService,
     private albumState: AlbumStateService,
@@ -27,7 +28,7 @@ export class AlbumComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //get the albumid from the url
+    // Get the albumId from the URL
     this.route.paramMap.subscribe((params) => {
       const albumIdParam = params.get('albumId');
       if (albumIdParam !== null) {
@@ -44,8 +45,8 @@ export class AlbumComponent implements OnInit {
         .sortSongs('id')
         .filter((song) => song.album_id === this.albumId);
       this.songs = albumSongs;
-      // Store the current album's song list for the player
-      this.songsState.setCurrentPlaylistSongs(albumSongs);
+      // Removed setting the current playlist here.
+      // The songs list will be passed down via the albumSongs Input to the child components.
     });
   }
 }

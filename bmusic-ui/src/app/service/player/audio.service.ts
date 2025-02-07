@@ -92,8 +92,9 @@ export class AudioService {
 
     if (currentSongId !== null) {
       // Use playlist songs if available; otherwise use all songs.
-      let songs = this.stateService.getPlaylistSongs();
+      let songs = this.stateService.getCurrentPlaylistSongs();
       if (!songs || songs.length === 0) {
+        console.log('boi');
         songs = this.stateService.getSongs();
       }
       const currentSongIndex = songs.findIndex(

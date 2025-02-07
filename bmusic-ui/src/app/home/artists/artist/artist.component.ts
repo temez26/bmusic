@@ -58,8 +58,8 @@ export class ArtistComponent implements OnInit {
       });
 
       this.songs = artistSongs;
-      // Store the current artist's song list for the player
-      this.songsState.setCurrentPlaylistSongs(artistSongs);
+      // Removed setting the current playlist; data is passed down as input.
+      // this.songsState.setCurrentPlaylistSongs(artistSongs);
     });
   }
 }

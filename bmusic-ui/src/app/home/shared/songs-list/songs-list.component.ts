@@ -25,16 +25,19 @@ export class SongsListComponent implements OnInit, OnChanges {
   @Input() playlist?: Playlist;
   @Input() sortCriteria: 'id' | 'play_count' = 'id';
   @Input() filterFn: (song: Song) => boolean = () => true;
+  // New input property to receive album songs from the parent component.
+  @Input() albumSongs: Song[] = [];
+
   songs!: Observable<Song[]>;
   openMenuSongId: number | null = null;
 
   constructor(private songsState: SongsStateService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.updateSongs();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     this.updateSongs();
   }
 
@@ -49,6 +52,13 @@ export class SongsListComponent implements OnInit, OnChanges {
           return filtered;
         })
       );
+    } else if (this.albumSongs && this.albumSongs.length > 0) {
+      // Use albumSongs provided from the album component.
+      this.songs = this.songsState.songs$.pipe(
+        map(() => {
+          return this.albumSongs.filter(this.filterFn);
+        })
+      );
     } else {
       // Clear any stored playlist songs so full songs list is used.
       this.songsState.clearPlaylistSongs();
@@ -61,7 +71,7 @@ export class SongsListComponent implements OnInit, OnChanges {
     }
   }
 
-  toggleMenu(songId: number) {
+  toggleMenu(songId: number): void {
     this.openMenuSongId = this.openMenuSongId === songId ? null : songId;
   }
 
