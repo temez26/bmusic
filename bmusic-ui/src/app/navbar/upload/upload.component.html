@@ -8,9 +8,22 @@
   </div>
   <div class="file-input-container">
     <label for="fileInput">Choose files</label>
-    <input type="file" id="fileInput" multiple accept="audio/*,image/*" />
+    <input
+      type="file"
+      id="fileInput"
+      multiple
+      accept="audio/*,image/*"
+      (change)="handleFileInputChange($event)"
+    />
     <label for="directoryInput">Choose folders</label>
-    <input type="file" id="directoryInput" webkitdirectory directory multiple />
+    <input
+      type="file"
+      id="directoryInput"
+      webkitdirectory
+      directory
+      multiple
+      (change)="handleFileInputChange($event)"
+    />
   </div>
   <button (click)="uploadFiles()">Upload</button>
 
