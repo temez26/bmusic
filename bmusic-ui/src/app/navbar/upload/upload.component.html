@@ -1,37 +1,48 @@
 <div class="upload">
-  <div>
-    <h1>Upload songs</h1>
-    <p>
-      Please upload only audio files and album covers. Ensure that each song has
-      the correct album cover by uploading one album at a time.
+  <div class="upload-header">
+    <h1>Upload Songs</h1>
+    <p class="upload-description">
+      Add your favorite music! Please upload audio files and album covers. For
+      the best experience, upload one album at a time with its cover.
     </p>
   </div>
-  <div class="file-input-container">
-    <label for="fileInput">Choose files</label>
-    <input
-      type="file"
-      id="fileInput"
-      multiple
-      accept="audio/*,image/*"
-      (change)="handleFileInputChange($event)"
-    />
-    <label for="directoryInput">Choose folders</label>
-    <input
-      type="file"
-      id="directoryInput"
-      webkitdirectory
-      directory
-      multiple
-      (change)="handleFileInputChange($event)"
-    />
-  </div>
-  <button (click)="uploadFiles()">Upload</button>
 
-  <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
-  <p *ngIf="fileCount > 0" class="file-count">
+  <div class="file-input-container">
+    <div class="upload-option">
+      <label for="fileInput" class="upload-label">Choose Files</label>
+      <input
+        type="file"
+        id="fileInput"
+        multiple
+        accept="audio/*,image/*"
+        (change)="handleFileInputChange($event)"
+        class="upload-input"
+      />
+    </div>
+
+    <div class="upload-option">
+      <label for="directoryInput" class="upload-label">Choose Folder</label>
+      <input
+        type="file"
+        id="directoryInput"
+        webkitdirectory
+        directory
+        multiple
+        (change)="handleFileInputChange($event)"
+        class="upload-input"
+      />
+    </div>
+  </div>
+
+  <button (click)="uploadFiles()" class="upload-button">Upload</button>
+
+  <div *ngIf="successMessage" class="upload-message success-message">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="fileCount > 0" class="upload-message file-count">
     {{ fileCount }} file(s) selected
-  </p>
-  <p *ngIf="uploadProgress > 0" class="upload-progress">
+  </div>
+  <div *ngIf="uploadProgress > 0" class="upload-message upload-progress">
     Upload Progress: {{ uploadProgress }}%
-  </p>
+  </div>
 </div>

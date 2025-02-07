@@ -35,7 +35,6 @@ export class NavbarComponent {
   uploadContainer!: ElementRef;
 
   toggleUpload() {
-    console.log('clicked');
     this.showUpload = !this.showUpload;
   }
 
