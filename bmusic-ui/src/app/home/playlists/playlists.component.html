@@ -2,10 +2,18 @@
 <div class="playlists-container">
   <!-- Display list of playlists -->
   <ul>
-    <li *ngFor="let playlist of playlists" class="card-background">
+    <li
+      *ngFor="let playlist of playlists; let i = index"
+      class="card-background"
+      [ngClass]="['playlist-' + (i % 4)]"
+    >
       <a [routerLink]="['/playlist', playlist.id]" class="playlist-card">
         <img
           class="playlist-image"
+          [ngClass]="{
+            'colored-playlists':
+              !playlist.imgUrl && playlist.name !== 'Favorites'
+          }"
           [src]="
             playlist.name === 'Favorites'
               ? '/favorites.png'

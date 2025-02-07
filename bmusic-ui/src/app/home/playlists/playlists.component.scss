@@ -21,7 +21,30 @@ form {
   gap: 10px;
   margin-bottom: 20px;
 }
-
+.playlist-0 .playlist-image {
+  filter: hue-rotate(0deg);
+}
+.playlist-1 .playlist-image {
+  filter: brightness(1.1) saturate(1.2) hue-rotate(15deg);
+}
+.playlist-2 .playlist-image {
+  filter: brightness(1.1) saturate(1.2) hue-rotate(60deg);
+}
+.playlist-3 .playlist-image {
+  filter: brightness(1.1) saturate(1.2) hue-rotate(120deg);
+}
+.playlist-4 .playlist-image {
+  filter: brightness(1.1) saturate(1.2) hue-rotate(180deg);
+}
+.playlist-5 .playlist-image {
+  filter: brightness(1.1) saturate(1.2) hue-rotate(240deg);
+}
+.playlist-6 .playlist-image {
+  filter: brightness(1.1) saturate(1.2) hue-rotate(300deg);
+}
+.playlist-7 .playlist-image {
+  filter: brightness(1.1) saturate(1.2) hue-rotate(360deg);
+}
 input[type="text"] {
   padding: 10px;
   font-size: 1rem;
