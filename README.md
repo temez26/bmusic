@@ -37,14 +37,12 @@ This is a web app for local music streaming.
    - Copy `project.env` to `.env` and configure as needed.
 
 4. **Start Docker containers**
-   ```sh
-   docker-compose up
-   ```
 
-## 💻 Usage
-
-Use the following command to run the application:
-
-```sh
-docker-compose up
-```
+- dev
+  ```sh
+  docker-compose up
+  ```
+- prod
+  ```sh
+   docker compose -f docker-compose.prod.yml up --build -d
+  ```
