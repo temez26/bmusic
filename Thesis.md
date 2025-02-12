@@ -4,7 +4,7 @@ This is a web app for local music streaming.
 
 ## 🎶 Possible Name
 
-- **BMusic**: Paikallinen musiikin striimaussovellus kotiverkkoon
+- **BMusic**: Paikallinen musiikin striimauspalvelu
 
 ## 🚀 Technologies Used
 
