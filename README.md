@@ -34,7 +34,7 @@ This is a web app for local music streaming.
    ```
 3. **Set up environment variables**
 
-   - Copy `project.env` to `.env` and configure as needed.
+   - the psql connection and environment variables can be found in the bmusic-api/database/db.js
 
 4. **Start Docker containers**
 
@@ -44,5 +44,18 @@ This is a web app for local music streaming.
   ```
 - prod
   ```sh
-   docker compose -f docker-compose.prod.yml up --build -d
+  docker compose -f docker-compose.prod.yml up --build -d
   ```
+
+## 📸 Main Screen
+
+Here is the main screen of the app:
+
+- **Main Screen:**
+  ![Main Screen](![alt text](/images/image.png))
+
+## ▶️ Video Link
+
+Watch the full app demonstration video here:
+
+[Full App Demo](https://youtu.be/EFCkw3S3fM4)
