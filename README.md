@@ -52,7 +52,7 @@ This is a web app for local music streaming.
 Here is the main screen of the app:
 
 - **Main Screen:**
-  ![Main Screen](![alt text](/images/image.png))
+  ![Main Screen](/images/image.png)
 
 ## ▶️ Video Link
 
