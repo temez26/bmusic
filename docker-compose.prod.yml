@@ -8,8 +8,6 @@ services:
     restart: always
     ports:
       - "4000:4000"
-    env_file:
-      - project.env
     volumes:
       - uploads_data:/app/data/uploads
       - covers_data:/app/data/covers
@@ -21,8 +19,6 @@ services:
     restart: always
     ports:
       - "4200:4200"
-    env_file:
-      - project.env
 
   database:
     container_name: db-bmusic
@@ -31,8 +27,6 @@ services:
     volumes:
       - database_data:/var/lib/postgresql/data
       - ./database/V1___initial_schema.sql:/docker-entrypoint-initdb.d/create_database.sql
-    env_file:
-      - project.env
 
 volumes:
   database_data:

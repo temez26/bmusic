@@ -8,9 +8,11 @@ import { PlayerService } from '../player/player.service';
 })
 // Handles Song data that is fetched from the server
 export class SongsStateService {
-  constructor(private playerService: PlayerService) {}
   private songsSubject = new BehaviorSubject<Song[]>([]);
   public songs$: Observable<Song[]> = this.songsSubject.asObservable();
+
+  private currentPlaylistSubject: BehaviorSubject<Song[]>;
+  public currentPlaylist$: Observable<Song[]>;
 
   private currentSongSubject = new BehaviorSubject<Song | null>(null);
   public currentSong$: Observable<Song | null> =
@@ -18,9 +20,18 @@ export class SongsStateService {
 
   private playlistSongs: Song[] = [];
 
+  constructor(private playerService: PlayerService) {
+    const savedPlaylist = sessionStorage.getItem('currentPlaylist');
+    const initialPlaylist = savedPlaylist ? JSON.parse(savedPlaylist) : [];
+    this.currentPlaylistSubject = new BehaviorSubject<Song[]>(initialPlaylist);
+    this.currentPlaylist$ = this.currentPlaylistSubject.asObservable();
+    this.currentPlaylistSubject.subscribe((songs) => {
+      sessionStorage.setItem('currentPlaylist', JSON.stringify(songs));
+    });
+  }
+
   updateSong(updatedSong: Song): void {
     const currentSongs = this.songsSubject.getValue();
-
     const updatedSongs = currentSongs.map((song) =>
       song.id === updatedSong.id
         ? { ...song, play_count: updatedSong.play_count }
@@ -31,7 +42,6 @@ export class SongsStateService {
 
   sortSongs(criteria: 'play_count' | 'id'): Song[] {
     const songs = this.getSongs();
-
     if (criteria === 'play_count') {
       return songs.sort((a, b) => b.play_count - a.play_count).slice(0, 15);
     } else if (criteria === 'id') {
@@ -40,45 +50,52 @@ export class SongsStateService {
     return songs;
   }
 
-  // New function to get songs based on a list of playlist IDs and store them separately.
   getSongsByPlaylistIds(specificIds: number[]): Song[] {
     const songs = this.getSongs();
     const foundSongs = specificIds
       .map((id) => songs.find((song) => song.id === id))
       .filter((song): song is Song => !!song);
-    this.playlistSongs = foundSongs;
-    console.log('Stored playlist songs:', this.playlistSongs);
+    this.currentPlaylistSubject.next(foundSongs);
+    console.log('Stored playlist songs in currentPlaylistSubject:', foundSongs);
     return foundSongs;
   }
+
   getPlaylistSongs(): Song[] {
     return this.playlistSongs;
   }
+
   setSongs(songs: Song[]): void {
     this.songsSubject.next([...songs]);
   }
+
   clearPlaylistSongs(): void {
     this.playlistSongs = [];
+  }
+
+  setCurrentPlaylistSongs(songs: Song[]): void {
+    console.log(songs);
+    this.currentPlaylistSubject.next([...songs]);
+  }
+
+  getCurrentPlaylistSongs(): Song[] {
+    return this.currentPlaylistSubject.getValue();
   }
 
   getSongs(): Song[] {
     return this.songsSubject.getValue();
   }
-  // for search bar filtering
+
   searchSongs(query: string): Observable<Song[]> {
-    // Return all songs if query is empty (optional behavior)
     if (!query.trim()) {
       return of(this.getSongs());
     }
-
     const lowerQuery = query
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
-    // Split the query into tokens for multi-word searches
     const tokens = lowerQuery.split(/\s+/).filter((token) => token.length);
 
     const filtered = this.getSongs().filter((song) => {
-      // Normalize song fields to support diacritics insensitive search
       const title = song.title
         .toLowerCase()
         .normalize('NFD')
@@ -91,8 +108,6 @@ export class SongsStateService {
         .toLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '');
-
-      // All tokens must appear in at least one of the fields for a match
       return tokens.every(
         (token) =>
           title.includes(token) ||
@@ -103,6 +118,7 @@ export class SongsStateService {
     console.log(filtered);
     return of(filtered);
   }
+
   setCurrentSong(song: Song): void {
     this.currentSongSubject.next({ ...song });
   }
@@ -124,14 +140,20 @@ export class SongsStateService {
     this.playerService.updateSongId(song.id);
     this.playerService.updateIsPlaying(true);
   }
+
   setCurrentSongById(songId: number): void {
-    const song = this.getSongs().find((s) => s.id === songId);
+    let currentPlaylist = this.getCurrentPlaylistSongs();
+    let song = currentPlaylist.find((s) => s.id === songId);
+    if (!song) {
+      currentPlaylist = this.getSongs();
+      song = currentPlaylist.find((s) => s.id === songId);
+    }
     this.playerService.updateAudioDuration(0);
     this.playerService.updateCurrentTime(0);
     if (song) {
       this.updateSongDetails(song);
     } else {
-      console.error('Song not found with id:', songId);
+      console.error('Song not found with id in the current playlist:', songId);
     }
   }
 }

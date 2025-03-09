@@ -17,7 +17,6 @@ export class TopSongsComponent implements OnInit {
 
   ngOnInit() {
     this.songsState.songs$.subscribe(() => {
-      this.songsState.clearPlaylistSongs();
       this.songs = this.songsState.sortSongs('play_count');
     });
   }

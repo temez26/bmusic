@@ -7,12 +7,10 @@ This is a web app for local music streaming.
 ### **Frontend**
 
 - [Angular](bmusic-ui/)
-- [Material Design Components](bmusic-ui/src/app/navbar/navbar.component.ts)
 
 ### **Backend**
 
-- [Node.js](bmusic-api/main.js)
-- [Express.js Controllers](bmusic-api/services/uploadController.js)
+- [Node & Express.js](bmusic-api/)
 
 ### **Database**
 
@@ -20,7 +18,7 @@ This is a web app for local music streaming.
 
 ### **Storage**
 
-- Local machine storage for music files ([bmusic-api/data/uploads/](bmusic-api/data/uploads/))
+- Local machine storage for music files ([bmusic-api/data/uploads/])
 
 ## 🛠️ Installation
 
@@ -34,17 +32,28 @@ This is a web app for local music streaming.
    ```
 3. **Set up environment variables**
 
-   - Copy `project.env` to `.env` and configure as needed.
+   - the psql connection and environment variables can be found in the bmusic-api/database/db.js
 
 4. **Start Docker containers**
-   ```sh
-   docker-compose up
-   ```
 
-## 💻 Usage
+- dev
+  ```sh
+  docker-compose up
+  ```
+- prod
+  ```sh
+  docker compose -f docker-compose.prod.yml up --build -d
+  ```
 
-Use the following command to run the application:
+## 📸 Main Screen
 
-```sh
-docker-compose up
-```
+Here is the main screen of the app:
+
+- **Main Screen:**
+  ![Main Screen](/images/image.png)
+
+## ▶️ Video Link
+
+Watch the full app demonstration video here:
+
+[Full App Demo](https://youtu.be/EFCkw3S3fM4)

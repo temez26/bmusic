@@ -21,7 +21,6 @@ export class ArtistComponent implements OnInit {
   public artist: any = {};
   public coverSrc: string = '';
 
-  // Define the filter function as a public property
   public artistFilter = (song: Song): boolean =>
     song.artist_id === this.artistId;
 
@@ -41,18 +40,26 @@ export class ArtistComponent implements OnInit {
         this.artist = this.artistState.getCurrentArtist();
       }
     });
+
     this.apiService.fetchAlbums().subscribe(() => {
       this.coverSrc = this.albumState.getAlbumCover(this.artistId);
     });
+
     this.songsState.songs$.subscribe(() => {
-      this.songs = this.songsState
+      const artistSongs = this.songsState
         .sortSongs('id')
         .filter((song) => song.artist_id === this.artistId);
-      this.songs.forEach((song) => {
+
+      // Clean up the genre field if applicable
+      artistSongs.forEach((song) => {
         if (song.genre) {
           song.genre = song.genre.replace(/[{}"]/g, '');
         }
       });
+
+      this.songs = artistSongs;
+      // Removed setting the current playlist; data is passed down as input.
+      // this.songsState.setCurrentPlaylistSongs(artistSongs);
     });
   }
 }

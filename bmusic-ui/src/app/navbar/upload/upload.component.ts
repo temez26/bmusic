@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../service/api.service';
 import { HttpEventType } from '@angular/common/http';
@@ -23,23 +23,12 @@ export class UploadComponent implements OnInit {
     private api: ApiService,
     private albumState: AlbumStateService,
     private songsState: SongsStateService,
-    private artistState: ArtistStateService
+    private artistState: ArtistStateService,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    this.initializeFileInput();
-  }
-
-  initializeFileInput() {
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-    const directoryInput = document.getElementById(
-      'directoryInput'
-    ) as HTMLInputElement;
-    fileInput.addEventListener('change', this.handleFileInputChange.bind(this));
-    directoryInput.addEventListener(
-      'change',
-      this.handleFileInputChange.bind(this)
-    );
+    // No need to manually attach listeners; Angular handles (change) events.
   }
 
   handleFileInputChange(event: Event) {
@@ -60,13 +49,15 @@ export class UploadComponent implements OnInit {
             this.uploadProgress = Math.round(
               (100 * event.loaded) / event.total
             );
+            this.cd.markForCheck();
           } else if (event.type === HttpEventType.Response) {
             this.selectedFiles = [];
             this.fileCount = 0;
             this.successMessage = 'Files uploaded successfully!';
             this.uploadProgress = 0;
+            this.cd.markForCheck();
 
-            // Fetch updated albums and songs
+            // Fetch updated albums, songs, and artists
             this.api.fetchAlbums().subscribe((albums) => {
               this.albumState.setAlbums(albums);
             });
