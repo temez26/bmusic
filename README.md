@@ -7,12 +7,10 @@ This is a web app for local music streaming.
 ### **Frontend**
 
 - [Angular](bmusic-ui/)
-- [Material Design Components](bmusic-ui/src/app/navbar/navbar.component.ts)
 
 ### **Backend**
 
-- [Node.js](bmusic-api/main.js)
-- [Express.js Controllers](bmusic-api/services/uploadController.js)
+- [Node & Express.js](bmusic-api/)
 
 ### **Database**
 
@@ -20,7 +18,7 @@ This is a web app for local music streaming.
 
 ### **Storage**
 
-- Local machine storage for music files ([bmusic-api/data/uploads/](bmusic-api/data/uploads/))
+- Local machine storage for music files ([bmusic-api/data/uploads/])
 
 ## 🛠️ Installation
 
