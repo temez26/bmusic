@@ -25,6 +25,9 @@ services:
     container_name: db-bmusic
     image: postgres:latest
     restart: "unless-stopped"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=db-bmusic
     volumes:
       - database_data:/var/lib/postgresql/data
       - ./database/V1___initial_schema.sql:/docker-entrypoint-initdb.d/create_database.sql
