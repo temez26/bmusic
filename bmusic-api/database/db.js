@@ -1,12 +1,13 @@
+require("dotenv").config();
 const { Pool } = require("pg");
 
 // Create a new pool instance to manage PostgreSQL connections
 const pool = new Pool({
-  user: "postgres",
-  host: "db-bmusic",
-  database: "db-bmusic",
-  password: "postgres",
-  port: 5432,
+  user: process.env.POSTGRES_USER,
+  host: process.env.POSTGRES_HOST,
+  database: process.env.POSTGRES_DB,
+  password: process.env.POSTGRES_PASSWORD,
+  port: process.env.POSTGRES_PORT,
 });
 
 // Function to insert a new song into the database
