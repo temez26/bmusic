@@ -62,7 +62,11 @@ function sendPartialFile(req, res, stats, mimeType, filePath, range) {
   const positions = range.replace(/bytes=/, "").split("-");
   const start = parseInt(positions[0], 10);
   const total = stats.size;
-  const end = positions[1] ? parseInt(positions[1], 10) : total - 1;
+  const maxChunkSize = 5 * 1024 * 1024; // 5 MB in bytes
+  // Determine the requested end byte, or default to the end of file
+  let requestedEnd = positions[1] ? parseInt(positions[1], 10) : total - 1;
+  // Limit the end position to ensure the chunk is at most 5MB
+  const end = Math.min(requestedEnd, start + maxChunkSize - 1, total - 1);
   const chunksize = end - start + 1;
 
   const headers = {
@@ -78,5 +82,4 @@ function sendPartialFile(req, res, stats, mimeType, filePath, range) {
   stream.pipe(res);
   stream.on("error", (err) => res.status(500).send(err));
 }
-
 module.exports = { streamMedia };

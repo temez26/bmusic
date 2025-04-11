@@ -43,14 +43,6 @@ const getAllSongs = async () => {
   const result = await pool.query("SELECT * FROM songs");
   return result.rows;
 };
-const getAllArtists = async () => {
-  const result = await pool.query("SELECT * FROM artists");
-  return result.rows;
-};
-const getAllAlbums = async () => {
-  const result = await pool.query("SELECT * FROM albums");
-  return result.rows;
-};
 
 // Function to fetch a song by its ID from the database
 const getSongById = async (id) => {
@@ -92,6 +84,16 @@ const getOrInsertArtist = async (artistName) => {
     );
     return insertResult.rows[0].id;
   }
+};
+// function to get all artists
+const getAllArtists = async () => {
+  const result = await pool.query("SELECT * FROM artists");
+  return result.rows;
+};
+// function to get all albums
+const getAllAlbums = async () => {
+  const result = await pool.query("SELECT * FROM albums");
+  return result.rows;
 };
 
 // Function to get or insert an album
