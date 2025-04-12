@@ -8,8 +8,6 @@ const path = require("path");
 function streamMedia(req, res) {
   console.log("Triggered music stream");
   const { filename } = req.params;
-  console.log(filename);
-  console.log(__dirname);
   const filePath = path.join("/app/data/uploads", filename);
 
   // Determine MIME type based on file extension
@@ -30,7 +28,6 @@ function streamMedia(req, res) {
     }
 
     const { range } = req.headers;
-    console.log("Range header:", range);
 
     if (!range) {
       sendFullFile(res, stats, mimeType, filePath);
@@ -75,8 +72,6 @@ function sendPartialFile(req, res, stats, mimeType, filePath, range) {
     "Content-Length": chunksize,
     "Content-Type": mimeType,
   };
-
-  console.log("Streaming range:", start, "-", end);
   res.writeHead(206, headers);
   const stream = fs.createReadStream(filePath, { start, end });
   stream.pipe(res);
