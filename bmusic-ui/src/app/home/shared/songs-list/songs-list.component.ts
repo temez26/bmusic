@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { SongsStateService } from '../../../service/states/songs.state.service';
 import { Song } from '../../../service/models/song.interface';
 import { Playlist } from '../../../service/models/playlist.interface';
+import { PlayerStateService } from '../../../service/states/player.state.service';
 
 @Component({
   selector: 'app-songs-list',
@@ -27,14 +28,20 @@ export class SongsListComponent implements OnInit, OnChanges {
   @Input() filterFn: (song: Song) => boolean = () => true;
   // New input property to receive album songs from the parent component.
   @Input() albumSongs: Song[] = [];
-
+  songId!: number;
   songs!: Observable<Song[]>;
   openMenuSongId: number | null = null;
 
-  constructor(private songsState: SongsStateService) {}
+  constructor(
+    private songsState: SongsStateService,
+    private songData: PlayerStateService
+  ) {}
 
   ngOnInit(): void {
     this.updateSongs();
+    this.songData.songId$.subscribe((songId) => {
+      this.songId = songId;
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {

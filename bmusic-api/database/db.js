@@ -1,12 +1,13 @@
+require("dotenv").config();
 const { Pool } = require("pg");
 
 // Create a new pool instance to manage PostgreSQL connections
 const pool = new Pool({
-  user: "postgres",
-  host: "db-bmusic",
-  database: "db-bmusic",
-  password: "postgres",
-  port: 5432,
+  user: process.env.POSTGRES_USER,
+  host: process.env.POSTGRES_HOST,
+  database: process.env.POSTGRES_DB,
+  password: process.env.POSTGRES_PASSWORD,
+  port: process.env.POSTGRES_PORT,
 });
 
 // Function to insert a new song into the database
@@ -41,14 +42,6 @@ const insertSong = async (
 // Function to fetch all songs from the database
 const getAllSongs = async () => {
   const result = await pool.query("SELECT * FROM songs");
-  return result.rows;
-};
-const getAllArtists = async () => {
-  const result = await pool.query("SELECT * FROM artists");
-  return result.rows;
-};
-const getAllAlbums = async () => {
-  const result = await pool.query("SELECT * FROM albums");
   return result.rows;
 };
 
@@ -92,6 +85,16 @@ const getOrInsertArtist = async (artistName) => {
     );
     return insertResult.rows[0].id;
   }
+};
+// function to get all artists
+const getAllArtists = async () => {
+  const result = await pool.query("SELECT * FROM artists");
+  return result.rows;
+};
+// function to get all albums
+const getAllAlbums = async () => {
+  const result = await pool.query("SELECT * FROM albums");
+  return result.rows;
 };
 
 // Function to get or insert an album

@@ -35,13 +35,11 @@ app.get("/", (req, res) => {
   res.send(welcomeMsg);
 });
 
-// Playlist routes
-app.use("/playlists", playlistRouter);
-
 // Fetch routes
 app.get("/songs", handleAllSongs);
 app.get("/artists", handleAllArtists);
 app.get("/albums", handleAllAlbums);
+app.use("/playlists", playlistRouter);
 
 // Music streaming endpoint
 app.get("/data/uploads/:filename", streamMedia);
