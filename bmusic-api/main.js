@@ -78,4 +78,24 @@ app.delete("/delete", handleFileDelete);
 
 // --- Create and Start HTTP Server ---
 const server = http.createServer(app);
+
+// Set up Socket.IO server
+const { Server } = require("socket.io");
+const io = new Server(server, {
+  cors: { origin: "*" }, // configure your allowed origins
+});
+
+io.on("connection", (socket) => {
+  console.log("New client connected:", socket.id);
+
+  socket.on("updatePlayerState", (state) => {
+    // Broadcast the updated state to all other clients
+    socket.broadcast.emit("playerState", state);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected:", socket.id);
+  });
+});
+
 server.listen(port, () => console.log(`Listening on port ${port}`));
