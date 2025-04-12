@@ -5,6 +5,8 @@ import {
   EventEmitter,
   HostListener,
   ElementRef,
+  ChangeDetectorRef,
+  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../../service/api.service';
@@ -23,17 +25,19 @@ export class MenuComponent {
   @Input() songId!: number;
   @Input() isMenuOpen: boolean = false;
   @Output() toggleMenu = new EventEmitter<void>();
-
+  @ViewChild('notificationRef', { static: false })
+  notificationElement!: ElementRef;
   // Properties for playlist dropdown and membership flags.
   isPlaylistDropdownOpen = false;
   playlists: Playlist[] = [];
   // Maps playlist ID to a flag indicating whether the song is already in that playlist.
   membership: { [playlistId: number]: boolean } = {};
-
+  notificationMessage: string = '';
   constructor(
     private elementRef: ElementRef,
     private apiService: ApiService,
-    private apiPlaylistService: ApiPlaylistService
+    private apiPlaylistService: ApiPlaylistService,
+    private cd: ChangeDetectorRef
   ) {}
 
   onToggleMenu(event: MouseEvent) {
@@ -54,6 +58,27 @@ export class MenuComponent {
     }
   }
 
+  showNotification(message: string): void {
+    this.notificationMessage = message;
+    this.cd.detectChanges();
+
+    // Wait for 2 seconds then trigger fade out by adding a "fade-out" class to the notification element.
+    setTimeout(() => {
+      if (this.notificationElement) {
+        this.notificationElement.nativeElement.classList.add('fade-out');
+      }
+      // After your fade-out transition (0.5s), clear the notification.
+      setTimeout(() => {
+        this.notificationMessage = '';
+        // Reset the fade-out class if needed for next time.
+        if (this.notificationElement) {
+          this.notificationElement.nativeElement.classList.remove('fade-out');
+        }
+        this.cd.detectChanges();
+      }, 500);
+    }, 2000);
+  }
+
   // Remove previous onAddSongFavorites method if no longer needed.
   // New toggleFavorites method for playlist id = 1
   toggleFavorites() {
@@ -69,6 +94,7 @@ export class MenuComponent {
                 this.membership[1] = false;
                 this.isMenuOpen = false;
                 this.isPlaylistDropdownOpen = false;
+                this.showNotification('Song removed from Favorites');
                 this.toggleMenu.emit();
               },
               error: (error) =>
@@ -81,6 +107,7 @@ export class MenuComponent {
               this.membership[1] = true;
               this.isMenuOpen = false;
               this.isPlaylistDropdownOpen = false;
+              this.showNotification('Song added to Favorites');
               this.toggleMenu.emit();
             },
             error: (error) =>
@@ -134,6 +161,10 @@ export class MenuComponent {
   }
 
   toggleSongInPlaylist(playlistId: number) {
+    // Look up the playlist name from the loaded playlists array.
+    const playlist = this.playlists.find((p) => p.id === playlistId);
+    const playlistName = playlist ? playlist.name : `#${playlistId}`;
+
     this.apiPlaylistService.fetchPlaylistSongs(playlistId).subscribe({
       next: (songs: Song[]) => {
         const exists = songs.some((song) => song.id === this.songId);
@@ -142,9 +173,13 @@ export class MenuComponent {
             .removeSongFromPlaylist(playlistId, this.songId)
             .subscribe({
               next: () => {
-                console.log(`Song removed from playlist ${playlistId}`);
+                console.log(`Song removed from playlist ${playlistName}`);
                 this.membership[playlistId] = false;
                 this.isPlaylistDropdownOpen = false;
+                // Show notification for removal using the playlist name.
+                this.showNotification(
+                  `Song removed from playlist ${playlistName}`
+                );
                 this.toggleMenu.emit();
               },
               error: (error) =>
@@ -155,9 +190,11 @@ export class MenuComponent {
             .addSongToPlaylist(playlistId, this.songId)
             .subscribe({
               next: () => {
-                console.log(`Song added to playlist ${playlistId}`);
+                console.log(`Song added to playlist ${playlistName}`);
                 this.membership[playlistId] = true;
                 this.isPlaylistDropdownOpen = false;
+                // Show notification for addition using the playlist name.
+                this.showNotification(`Song added to playlist ${playlistName}`);
                 this.toggleMenu.emit();
               },
               error: (error) =>
