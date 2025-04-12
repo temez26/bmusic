@@ -70,4 +70,8 @@ export class PlayerStateService {
   get isPlaying$(): Observable<boolean> {
     return this.states$['isPlaying'];
   }
+  get songId$(): Observable<number> {
+    console.log('triggerd');
+    return this.states$['songId'];
+  }
 }

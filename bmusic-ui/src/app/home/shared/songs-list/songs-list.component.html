@@ -8,6 +8,7 @@
 <div
   *ngFor="let song of songs | async; let i = index; trackBy: trackBySongId"
   class="song-item"
+  [ngClass]="{ 'currently-playing': song.id === songId }"
 >
   <div class="song-column">
     <app-play
