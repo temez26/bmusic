@@ -41,7 +41,24 @@ button {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
   animation: fadeInDown 0.3s ease forwards;
 }
+.notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #323232;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
 
+.notification.fade-out {
+  opacity: 0;
+}
 @keyframes fadeInDown {
   from {
     opacity: 0;
@@ -75,7 +92,8 @@ button {
 }
 .playlist-dropdown {
   position: absolute;
-  top: 50px;
+  padding: 5px;
+  top: 35px;
   right: 98%;
   margin-left: 5px;
   display: flex;
@@ -88,7 +106,7 @@ button {
 }
 
 .dropdown-menu div {
-  padding: 10px 20px;
+  padding: 5px 5px;
   color: #ccc;
   background-color: #2a2a2a;
   font-size: 0.9rem;
