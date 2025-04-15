@@ -36,5 +36,4 @@ export class ArtistStateService {
   getCurrentArtist() {
     return this.currentArtistSubject.getValue();
   }
-  // Now accepts the original artist object (with id and name from your server)
 }

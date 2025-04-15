@@ -38,38 +38,6 @@ export class AudioService {
     this.progressService.initializeSlider(event.target);
   }
 
-  // updates timer right side of the progressbar
-  updateDuration(event: any) {
-    const audio = event.target;
-    const { duration, formattedDuration } =
-      this.progressService.updateDuration(audio);
-    this.playerService.updateAudioDuration(duration);
-    this.playerService.updateFormattedLength(formattedDuration);
-  }
-
-  // updates time left side of the progressbar
-  updateCurrentTime(
-    audio: HTMLAudioElement,
-    progressSlider: HTMLInputElement
-  ): void {
-    const { currentTime, formattedCurrentTime } =
-      this.progressService.updateCurrentTime(audio);
-    this.playerService.updateFormattedCurrentTime(formattedCurrentTime);
-    this.playerService.updateCurrentTime(currentTime);
-    this.progressService.updateProgress(progressSlider, audio);
-  }
-
-  //progress bar status
-  seek(
-    seekTime: number,
-    audio: HTMLAudioElement,
-    progressSlider: HTMLInputElement
-  ): void {
-    const { currentTime } = this.progressService.seek(audio, seekTime);
-    this.playerService.updateCurrentTime(currentTime);
-    this.progressService.updateProgress(progressSlider, audio);
-  }
-
   handleSongEnd(audioRef: ElementRef<HTMLAudioElement>) {
     if (this.player.isRepeat) {
       audioRef.nativeElement.play();
@@ -94,7 +62,6 @@ export class AudioService {
       // Use playlist songs if available; otherwise use all songs.
       let songs = this.stateService.getCurrentPlaylistSongs();
       if (!songs || songs.length === 0) {
-        console.log('boi');
         songs = this.stateService.getSongs();
       }
       const currentSongIndex = songs.findIndex(
