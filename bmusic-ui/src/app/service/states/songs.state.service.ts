@@ -85,40 +85,6 @@ export class SongsStateService {
     return this.songsSubject.getValue();
   }
 
-  searchSongs(query: string): Observable<Song[]> {
-    if (!query.trim()) {
-      return of(this.getSongs());
-    }
-    const lowerQuery = query
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
-    const tokens = lowerQuery.split(/\s+/).filter((token) => token.length);
-
-    const filtered = this.getSongs().filter((song) => {
-      const title = song.title
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
-      const artist = song.artist
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
-      const album = song.album
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '');
-      return tokens.every(
-        (token) =>
-          title.includes(token) ||
-          artist.includes(token) ||
-          album.includes(token)
-      );
-    });
-    console.log(filtered);
-    return of(filtered);
-  }
-
   setCurrentSong(song: Song): void {
     this.currentSongSubject.next({ ...song });
   }
