@@ -7,10 +7,14 @@ import { SongsStateService } from '../songs.state.service';
   providedIn: 'root',
 })
 export class SongSearchService {
+  songs!: Song[];
   constructor(private songsStateService: SongsStateService) {}
 
   searchSongs(query: string): Observable<Song[]> {
-    const songs = this.songsStateService.getSongs();
+    this.songsStateService.songs$.subscribe((songs) => {
+      this.songs = songs;
+    });
+    const songs = this.songs;
     if (!query.trim()) {
       return of(songs);
     }

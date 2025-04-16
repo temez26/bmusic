@@ -5,6 +5,7 @@ import { PlayerService } from './player.service';
 import { SongsStateService } from '../states/songs.state.service';
 import { ApiService } from '../api.service';
 import { PlaylistStateService } from '../states/playlist.state.service';
+import { Song } from '../models/song.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,7 @@ import { PlaylistStateService } from '../states/playlist.state.service';
 // Service for managing audio playback and volume control
 export class AudioService {
   player: PlayerModel;
+  songs!: Song[];
   constructor(
     private progressService: ProgressService,
     private stateService: SongsStateService,
@@ -20,6 +22,9 @@ export class AudioService {
     private playlistService: PlaylistStateService
   ) {
     this.player = this.playerService.player;
+    this.stateService.songs$.subscribe((songs) => {
+      this.songs = songs;
+    });
   }
 
   private incrementPlayCount(songId: number): void {
@@ -64,7 +69,7 @@ export class AudioService {
       // Use playlist songs if available; otherwise use all songs.
       let songs = this.playlistService.getCurrentPlaylistSongs();
       if (!songs || songs.length === 0) {
-        songs = this.stateService.getSongs();
+        songs = this.songs;
       }
       const currentSongIndex = songs.findIndex(
         (song) => song.id === currentSongId
@@ -85,7 +90,7 @@ export class AudioService {
   }
 
   playRandomSong(): void {
-    const songs = this.stateService.getSongs();
+    const songs = this.songs;
     const randomIndex = Math.floor(Math.random() * songs.length);
     const randomSong = songs[randomIndex];
     this.stateService.setCurrentSongById(randomSong.id);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Song } from '../models/song.interface';
 import { PlayerService } from '../player/player.service';
 import { PlaylistStateService } from './playlist.state.service';
@@ -27,14 +27,6 @@ export class SongsStateService {
     this.currentSongSubject.next({ ...song });
   }
 
-  getSongs(): Song[] {
-    return this.songsSubject.getValue();
-  }
-
-  getCurrentSong(): Song | null {
-    return this.currentSongSubject.getValue();
-  }
-
   private updateSongDetails(song: Song): void {
     this.setCurrentSong(song);
     this.playerService.updateTitle(song.title);
@@ -50,7 +42,7 @@ export class SongsStateService {
     let currentPlaylist = this.playlistService.getCurrentPlaylistSongs();
     let song = currentPlaylist.find((s) => s.id === songId);
     if (!song) {
-      currentPlaylist = this.getSongs();
+      currentPlaylist = this.songsSubject.getValue();
       song = currentPlaylist.find((s) => s.id === songId);
     }
     this.playerService.updateAudioDuration(0);
