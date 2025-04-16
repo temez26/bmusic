@@ -14,6 +14,7 @@ import { SongsStateService } from '../../../service/states/songs.state.service';
 import { Song } from '../../../service/models/song.interface';
 import { Playlist } from '../../../service/models/playlist.interface';
 import { PlayerStateService } from '../../../service/states/player.state.service';
+import { HelperService } from '../../../service/states/helper.service';
 
 @Component({
   selector: 'app-songs-list',
@@ -34,7 +35,8 @@ export class SongsListComponent implements OnInit, OnChanges {
 
   constructor(
     private songsState: SongsStateService,
-    private songData: PlayerStateService
+    private songData: PlayerStateService,
+    private helper: HelperService
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +73,7 @@ export class SongsListComponent implements OnInit, OnChanges {
       this.songsState.clearPlaylistSongs();
       this.songs = this.songsState.songs$.pipe(
         map(() => {
-          const sortedSongs = this.songsState.sortSongs(this.sortCriteria);
+          const sortedSongs = this.helper.sortSongs(this.sortCriteria);
           return sortedSongs.filter(this.filterFn);
         })
       );

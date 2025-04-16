@@ -40,16 +40,6 @@ export class SongsStateService {
     this.songsSubject.next(updatedSongs);
   }
 
-  sortSongs(criteria: 'play_count' | 'id'): Song[] {
-    const songs = this.getSongs();
-    if (criteria === 'play_count') {
-      return songs.sort((a, b) => b.play_count - a.play_count).slice(0, 15);
-    } else if (criteria === 'id') {
-      return songs.sort((a, b) => a.id - b.id);
-    }
-    return songs;
-  }
-
   getSongsByPlaylistIds(specificIds: number[]): Song[] {
     const songs = this.getSongs();
     const foundSongs = specificIds

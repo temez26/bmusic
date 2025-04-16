@@ -6,6 +6,7 @@ import { AlbumStateService } from '../../../service/states/album.state.service';
 import { ApiService } from '../../../service/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
+import { HelperService } from '../../../service/states/helper.service';
 
 @Component({
   selector: 'app-album',
@@ -24,7 +25,8 @@ export class AlbumComponent implements OnInit {
     private songsState: SongsStateService,
     private albumState: AlbumStateService,
     private apiService: ApiService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private helper: HelperService
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +43,7 @@ export class AlbumComponent implements OnInit {
     });
 
     this.songsState.songs$.subscribe(() => {
-      const albumSongs = this.songsState
+      const albumSongs = this.helper
         .sortSongs('id')
         .filter((song) => song.album_id === this.albumId);
       this.songs = albumSongs;
