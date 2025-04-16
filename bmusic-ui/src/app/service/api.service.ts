@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map, take } from 'rxjs/operators';
 import { Song } from './models/song.interface';
 import { Albums } from './models/album.interface';
 import { Artists } from './models/artist.interface';
@@ -27,15 +27,22 @@ export class ApiService {
     const url = `${this.baseUrl}increment`;
     return this.http.post<{ playCount: number }>(url, { id: songId }).pipe(
       tap((response) => {
-        const updatedPlayCount = response.playCount;
-        const song = this.songService.getSongs().find((s) => s.id === songId);
-
-        if (song) {
-          this.songService.updateSong({
-            ...song,
-            play_count: updatedPlayCount,
+        // Use the reactive stream to get the current songs
+        this.songService.songs$
+          .pipe(
+            take(1),
+            map((songs) =>
+              songs.map((song) =>
+                song.id === songId
+                  ? { ...song, play_count: response.playCount }
+                  : song
+              )
+            )
+          )
+          .subscribe((updatedSongs) => {
+            // Update the entire songs list with the updated data
+            this.songService.setSongs(updatedSongs);
           });
-        }
       }),
       catchError((error) => {
         console.error('Error incrementing play count:', error);

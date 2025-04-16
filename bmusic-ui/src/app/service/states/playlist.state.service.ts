@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Song } from '../models/song.interface';
-import { SongsStateService } from './songs.state.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PlaylistService {
+export class PlaylistStateService {
   private currentPlaylistSubject: BehaviorSubject<Song[]>;
   public currentPlaylist$: Observable<Song[]>;
 
-  private playlistSongs: Song[] = [];
-
+  // Constructor: Initializes the BehaviorSubject with any stored playlist from sessionStorage.
   constructor() {
     const savedPlaylist = sessionStorage.getItem('currentPlaylist');
     const initialPlaylist: Song[] = savedPlaylist
@@ -25,6 +23,8 @@ export class PlaylistService {
     });
   }
 
+  // getSongsByPlaylistIds: Filters the given songs by the provided specificIds,
+  // updates the current playlist, and returns the filtered songs.
   getSongsByPlaylistIds(specificIds: number[], songs: Song[]): Song[] {
     const foundSongs = specificIds
       .map((id) => songs.find((song) => song.id === id))
@@ -34,19 +34,13 @@ export class PlaylistService {
     return foundSongs;
   }
 
-  getPlaylistSongs(): Song[] {
-    return this.playlistSongs;
-  }
-
-  clearPlaylistSongs(): void {
-    this.playlistSongs = [];
-  }
-
-  setCurrentPlaylistSongs(songs: Song[]): void {
-    this.currentPlaylistSubject.next([...songs]);
-  }
-
+  // getCurrentPlaylistSongs: Returns the current playlist value from the BehaviorSubject.
   getCurrentPlaylistSongs(): Song[] {
     return this.currentPlaylistSubject.getValue();
+  }
+
+  // setCurrentPlaylistSongs: Replaces the current playlist with a new list of songs.
+  setCurrentPlaylistSongs(songs: Song[]): void {
+    this.currentPlaylistSubject.next([...songs]);
   }
 }

@@ -7,20 +7,17 @@ import { Artists, CurrentArtist } from '../models/artist.interface';
 })
 export class ArtistStateService {
   private artistSubject = new BehaviorSubject<Artists[]>([]);
-  public artists$: Observable<Artists[]> = this.artistSubject.asObservable();
+  public artists$ = this.artistSubject.asObservable();
 
   private currentArtistSubject = new BehaviorSubject<CurrentArtist | null>(
     null
   );
-  public artist$: Observable<CurrentArtist | null> =
-    this.currentArtistSubject.asObservable();
+  public artist$ = this.currentArtistSubject.asObservable();
 
   setArtists(artists: Artists[]) {
     this.artistSubject.next([...artists]);
   }
-  getArtists(): Artists[] {
-    return this.artistSubject.getValue();
-  }
+
   setCurrentArtist(artistId: number) {
     const currentArtists = this.artistSubject.getValue();
     const currentArtist = currentArtists.find(

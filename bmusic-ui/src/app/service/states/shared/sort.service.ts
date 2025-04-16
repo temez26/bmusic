@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { SongsStateService } from './songs.state.service';
-import { Song } from '../models/song.interface';
+import { SongsStateService } from '../songs.state.service';
+import { Song } from '../../models/song.interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class HelperService {
+export class SortService {
   songs!: Song[];
   constructor(private songsService: SongsStateService) {
     this.songsService.songs$.subscribe((songs) => {

@@ -4,7 +4,7 @@ import { PlayerModel } from '../models/player.class';
 import { PlayerService } from './player.service';
 import { SongsStateService } from '../states/songs.state.service';
 import { ApiService } from '../api.service';
-import { PlaylistService } from '../states/playlist.service';
+import { PlaylistStateService } from '../states/playlist.state.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +17,7 @@ export class AudioService {
     private stateService: SongsStateService,
     private playerService: PlayerService,
     private apiService: ApiService,
-    private playlistService: PlaylistService
+    private playlistService: PlaylistStateService
   ) {
     this.player = this.playerService.player;
   }

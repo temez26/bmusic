@@ -14,8 +14,8 @@ import { SongsStateService } from '../../../service/states/songs.state.service';
 import { Song } from '../../../service/models/song.interface';
 import { Playlist } from '../../../service/models/playlist.interface';
 import { PlayerStateService } from '../../../service/states/player.state.service';
-import { HelperService } from '../../../service/states/helper.service';
-import { PlaylistService } from '../../../service/states/playlist.service';
+import { SortService } from '../../../service/states/shared/sort.service';
+import { PlaylistStateService } from '../../../service/states/playlist.state.service';
 
 @Component({
   selector: 'app-songs-list',
@@ -37,8 +37,8 @@ export class SongsListComponent implements OnInit, OnChanges {
   constructor(
     private songsState: SongsStateService,
     private songData: PlayerStateService,
-    private helper: HelperService,
-    private playlistService: PlaylistService
+    private helper: SortService,
+    private playlistService: PlaylistStateService
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +72,6 @@ export class SongsListComponent implements OnInit, OnChanges {
       );
     } else {
       // Clear any stored playlist songs so full songs list is used.
-      this.playlistService.clearPlaylistSongs();
       this.songs = this.songsState.songs$.pipe(
         map(() => {
           const sortedSongs = this.helper.sortSongs(this.sortCriteria);

@@ -11,7 +11,7 @@ import { debounceTime, switchMap } from 'rxjs/operators';
 import { SearchDropdownComponent } from './search-dropdown/search-dropdown.component';
 import { SongsStateService } from '../../service/states/songs.state.service';
 import { PlayComponent } from '../../home/shared/songs-list/play/play.component';
-import { SongSearchService } from '../../service/states/search.service';
+import { SongSearchService } from '../../service/states/shared/search.service';
 
 @Component({
   selector: 'app-search',

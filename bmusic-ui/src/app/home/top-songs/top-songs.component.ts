@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayComponent } from '../shared/songs-list/play/play.component';
 import { SongsStateService } from '../../service/states/songs.state.service';
-import { HelperService } from '../../service/states/helper.service';
+import { SortService } from '../../service/states/shared/sort.service';
 
 @Component({
   selector: 'app-top-songs',
@@ -15,7 +15,7 @@ export class TopSongsComponent implements OnInit {
   songs: any[] = [];
 
   constructor(
-    private helper: HelperService,
+    private helper: SortService,
     private songsState: SongsStateService
   ) {}
 

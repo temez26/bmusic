@@ -2,52 +2,37 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Song } from '../models/song.interface';
 import { PlayerService } from '../player/player.service';
-import { PlaylistService } from './playlist.service';
+import { PlaylistStateService } from './playlist.state.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SongsStateService {
   private songsSubject = new BehaviorSubject<Song[]>([]);
-  public songs$: Observable<Song[]> = this.songsSubject.asObservable();
+  public songs$ = this.songsSubject.asObservable();
 
   private currentSongSubject = new BehaviorSubject<Song | null>(null);
-  public currentSong$: Observable<Song | null> =
-    this.currentSongSubject.asObservable();
+  public currentSong$ = this.currentSongSubject.asObservable();
 
   constructor(
     private playerService: PlayerService,
-    private playlistService: PlaylistService
+    private playlistService: PlaylistStateService
   ) {}
-
-  updateSong(updatedSong: Song): void {
-    const currentSongs = this.songsSubject.getValue();
-    const updatedSongs = currentSongs.map((song) =>
-      song.id === updatedSong.id
-        ? { ...song, play_count: updatedSong.play_count }
-        : song
-    );
-    this.songsSubject.next(updatedSongs);
-  }
 
   setSongs(songs: Song[]): void {
     this.songsSubject.next([...songs]);
-  }
-
-  getSongs(): Song[] {
-    return this.songsSubject.getValue();
   }
 
   setCurrentSong(song: Song): void {
     this.currentSongSubject.next({ ...song });
   }
 
-  getCurrentSong(): Song | null {
-    return this.currentSongSubject.getValue();
+  getSongs(): Song[] {
+    return this.songsSubject.getValue();
   }
 
-  getSongsByAlbumId(albumId: number): Song[] {
-    return this.getSongs().filter((song) => song.album_id === albumId);
+  getCurrentSong(): Song | null {
+    return this.currentSongSubject.getValue();
   }
 
   private updateSongDetails(song: Song): void {

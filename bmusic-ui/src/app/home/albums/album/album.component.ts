@@ -6,7 +6,8 @@ import { AlbumStateService } from '../../../service/states/album.state.service';
 import { ApiService } from '../../../service/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
-import { HelperService } from '../../../service/states/helper.service';
+import { SortService } from '../../../service/states/shared/sort.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-album',
@@ -26,7 +27,7 @@ export class AlbumComponent implements OnInit {
     private albumState: AlbumStateService,
     private apiService: ApiService,
     private route: ActivatedRoute,
-    private helper: HelperService
+    private helper: SortService
   ) {}
 
   ngOnInit(): void {
