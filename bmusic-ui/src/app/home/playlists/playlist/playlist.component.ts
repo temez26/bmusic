@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
 import { SongsStateService } from '../../../service/states/songs.state.service';
-import { ApiPlaylistService } from '../../../service/api-playlist.service';
+import { ApiPlaylistService } from '../../../service/apiCalls/api-playlist.service';
 import { Playlist } from '../../../service/models/playlist.interface';
 import { Song } from '../../../service/models/song.interface';
 import { Observable } from 'rxjs';

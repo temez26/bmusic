@@ -3,9 +3,10 @@ import { ProgressService } from './progress.service';
 import { PlayerModel } from '../models/player.class';
 import { PlayerService } from './player.service';
 import { SongsStateService } from '../states/songs.state.service';
-import { ApiService } from '../api.service';
+import { ApiService } from '../apiCalls/api.service';
 import { PlaylistStateService } from '../states/playlist.state.service';
 import { Song } from '../models/song.interface';
+import { StreamService } from '../apiCalls/stream.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +19,8 @@ export class AudioService {
     private progressService: ProgressService,
     private stateService: SongsStateService,
     private playerService: PlayerService,
-    private apiService: ApiService,
-    private playlistService: PlaylistStateService
+    private playlistService: PlaylistStateService,
+    private streamService: StreamService
   ) {
     this.player = this.playerService.player;
     this.stateService.songs$.subscribe((songs) => {
@@ -28,7 +29,7 @@ export class AudioService {
   }
 
   private incrementPlayCount(songId: number): void {
-    this.apiService.incrementPlayCount(songId).subscribe();
+    this.streamService.incrementPlayCount(songId).subscribe();
   }
 
   changeVolume(
@@ -67,18 +68,18 @@ export class AudioService {
 
     if (currentSongId !== null) {
       // Use playlist songs if available; otherwise use all songs.
-      let songs = this.playlistService.getCurrentPlaylistSongs();
-      if (!songs || songs.length === 0) {
-        songs = this.songs;
-      }
-      const currentSongIndex = songs.findIndex(
+      this.playlistService.currentPlaylist$.subscribe((playlist) => {
+        this.songs = playlist;
+      });
+
+      const currentSongIndex = this.songs.findIndex(
         (song) => song.id === currentSongId
       );
 
       if (currentSongIndex !== -1) {
         const newIndex =
-          (currentSongIndex + offset + songs.length) % songs.length;
-        const newSong = songs[newIndex];
+          (currentSongIndex + offset + this.songs.length) % this.songs.length;
+        const newSong = this.songs[newIndex];
         this.stateService.setCurrentSongById(newSong.id);
         this.incrementPlayCount(newSong.id);
       } else {

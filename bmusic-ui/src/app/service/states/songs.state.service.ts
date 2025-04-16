@@ -39,8 +39,11 @@ export class SongsStateService {
 
   setCurrentSongById(songId: number): void {
     // Now, if a playlist song is needed, you can delegate to PlaylistService methods
-    let currentPlaylist = this.playlistService.getCurrentPlaylistSongs();
-    let song = currentPlaylist.find((s) => s.id === songId);
+    let song;
+    let currentPlaylist;
+    this.playlistService.currentPlaylist$.subscribe((playlist) => {
+      song = playlist.find((s) => s.id === songId);
+    });
     if (!song) {
       currentPlaylist = this.songsSubject.getValue();
       song = currentPlaylist.find((s) => s.id === songId);

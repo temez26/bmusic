@@ -1,7 +1,7 @@
 // Language: TypeScript
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ApiPlaylistService } from '../../service/api-playlist.service';
+import { ApiPlaylistService } from '../../service/apiCalls/api-playlist.service';
 import { Observable } from 'rxjs';
 import { Playlist } from '../../service/models/playlist.interface';
 import { CommonModule } from '@angular/common';

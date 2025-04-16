@@ -9,8 +9,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../../../service/api.service';
-import { ApiPlaylistService } from '../../../../service/api-playlist.service';
+import { ApiService } from '../../../../service/apiCalls/api.service';
+import { ApiPlaylistService } from '../../../../service/apiCalls/api-playlist.service';
 import { Playlist } from '../../../../service/models/playlist.interface';
 import { Song } from '../../../../service/models/song.interface';
 

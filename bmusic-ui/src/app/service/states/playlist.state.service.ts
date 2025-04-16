@@ -26,17 +26,15 @@ export class PlaylistStateService {
   // getSongsByPlaylistIds: Filters the given songs by the provided specificIds,
   // updates the current playlist, and returns the filtered songs.
   getSongsByPlaylistIds(specificIds: number[], songs: Song[]): Song[] {
-    const foundSongs = specificIds
+    const playlistSongs = specificIds
       .map((id) => songs.find((song) => song.id === id))
       .filter((song): song is Song => !!song);
-    this.currentPlaylistSubject.next(foundSongs);
-    console.log('Stored playlist songs in currentPlaylistSubject:', foundSongs);
-    return foundSongs;
-  }
-
-  // getCurrentPlaylistSongs: Returns the current playlist value from the BehaviorSubject.
-  getCurrentPlaylistSongs(): Song[] {
-    return this.currentPlaylistSubject.getValue();
+    this.currentPlaylistSubject.next(playlistSongs);
+    console.log(
+      'Stored playlist songs in currentPlaylistSubject:',
+      playlistSongs
+    );
+    return playlistSongs;
   }
 
   // setCurrentPlaylistSongs: Replaces the current playlist with a new list of songs.

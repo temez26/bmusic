@@ -3,7 +3,7 @@ import { SongsStateService } from '../../../service/states/songs.state.service';
 import { Song } from '../../../service/models/song.interface';
 import { CommonModule } from '@angular/common';
 import { AlbumStateService } from '../../../service/states/album.state.service';
-import { ApiService } from '../../../service/api.service';
+import { ApiService } from '../../../service/apiCalls/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
 import { SortService } from '../../../service/states/shared/sort.service';

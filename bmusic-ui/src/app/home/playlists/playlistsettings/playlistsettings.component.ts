@@ -5,7 +5,7 @@ import {
   EventEmitter,
   HostListener,
 } from '@angular/core';
-import { ApiPlaylistService } from '../../../service/api-playlist.service';
+import { ApiPlaylistService } from '../../../service/apiCalls/api-playlist.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

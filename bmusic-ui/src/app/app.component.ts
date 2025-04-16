@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PlayerComponent } from './player/player.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RouterModule } from '@angular/router';
-import { ApiService } from './service/api.service';
+import { ApiService } from './service/apiCalls/api.service';
 
 @Component({
   selector: 'app-root',

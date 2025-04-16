@@ -14,8 +14,9 @@ import { AlbumCoverComponent } from './album-cover/album-cover.component';
 import { PlayerService } from '../service/player/player.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { ApiService } from '../service/api.service';
+import { ApiService } from '../service/apiCalls/api.service';
 import { progressBarService } from '../service/player/progressBar.service';
+import { StreamService } from '../service/apiCalls/stream.service';
 
 @Component({
   selector: 'app-player',
@@ -43,7 +44,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
     private audioService: AudioService,
     private playerService: PlayerService,
     private apiService: ApiService,
-    private progressBar: progressBarService
+    private progressBar: progressBarService,
+    private streamService: StreamService
   ) {
     this.player = this.playerService.player;
   }
@@ -59,7 +61,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
         this.audioRef.nativeElement.pause();
 
         if (filePath) {
-          this.apiService
+          this.streamService
             .initializeAudio(
               this.audioRef.nativeElement,
               filePath,

@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { throwError, Observable, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Song } from './models/song.interface';
-import { environment } from '../../environments/environment';
-import { Playlist } from './models/playlist.interface';
+import { Song } from '../models/song.interface';
+import { environment } from '../../../environments/environment';
+import { Playlist } from '../models/playlist.interface';
 
 @Injectable({
   providedIn: 'root',

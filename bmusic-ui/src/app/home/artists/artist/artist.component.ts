@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { SongsStateService } from '../../../service/states/songs.state.service';
 import { ArtistStateService } from '../../../service/states/artist.state.service';
 import { Song } from '../../../service/models/song.interface';
-import { ApiService } from '../../../service/api.service';
+import { ApiService } from '../../../service/apiCalls/api.service';
 import { AlbumStateService } from '../../../service/states/album.state.service';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
 import { SortService } from '../../../service/states/shared/sort.service';
