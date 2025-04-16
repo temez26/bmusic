@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { BehaviorSubject } from 'rxjs';
-import { ApiService } from './api.service';
+import { ApiService } from '../../service';
 
 @Injectable({
   providedIn: 'root',

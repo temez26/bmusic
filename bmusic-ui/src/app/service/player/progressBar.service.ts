@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ProgressService } from './progress.service';
-import { PlayerService } from './player.service';
+import { ProgressService, PlayerService } from '../../service';
 
 @Injectable({
   providedIn: 'root',

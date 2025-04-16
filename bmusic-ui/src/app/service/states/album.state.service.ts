@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Albums, CurrentAlbum } from '../models/album.interface';
-import { environment } from '../../../environments/environment';
+import { BehaviorSubject } from 'rxjs';
+import { Albums, CurrentAlbum, environment } from '../../service';
 
 @Injectable({
   providedIn: 'root',

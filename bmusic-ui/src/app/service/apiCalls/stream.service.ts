@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { SongsStateService } from '../states/songs.state.service';
 import { HttpClient } from '@angular/common/http';
-import { throwError } from 'rxjs';
-import { catchError, tap, map, take } from 'rxjs/operators';
-import { ApiService } from './api.service';
+import { throwError, take, catchError, tap, map } from 'rxjs';
+import { ApiService, SongsStateService } from '../../service';
+
 @Injectable({
   providedIn: 'root',
 })

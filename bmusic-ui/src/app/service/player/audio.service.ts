@@ -1,12 +1,13 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { ProgressService } from './progress.service';
-import { PlayerModel } from '../models/player.class';
-import { PlayerService } from './player.service';
-import { SongsStateService } from '../states/songs.state.service';
-import { ApiService } from '../apiCalls/api.service';
-import { PlaylistStateService } from '../states/playlist.state.service';
-import { Song } from '../models/song.interface';
-import { StreamService } from '../apiCalls/stream.service';
+import {
+  Song,
+  PlaylistStateService,
+  SongsStateService,
+  PlayerService,
+  PlayerModel,
+  StreamService,
+  ProgressService,
+} from '../../service';
 
 @Injectable({
   providedIn: 'root',

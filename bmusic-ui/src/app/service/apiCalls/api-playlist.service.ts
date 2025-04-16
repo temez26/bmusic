@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { throwError, Observable, tap } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { Song } from '../models/song.interface';
-import { Playlist } from '../models/playlist.interface';
-import { ApiService } from './api.service';
+import { throwError, Observable, tap, catchError } from 'rxjs';
+import { ApiService, Playlist, Song } from '../../service';
 
 @Injectable({
   providedIn: 'root',

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { PlayerStateService } from '../states/player.state.service';
-import { PlayerStorageService } from '../storage/player-storage.service';
-import { PlayerModel } from '../models/player.class';
 import { Observable } from 'rxjs';
+import {
+  PlayerModel,
+  PlayerStorageService,
+  PlayerStateService,
+} from '../../service';
 
 @Injectable({
   providedIn: 'root',

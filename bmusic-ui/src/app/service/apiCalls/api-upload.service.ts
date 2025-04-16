@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
-import { catchError, throwError, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { ApiService } from './api.service';
-import { AlbumStateService } from '../states/album.state.service';
-import { SongsStateService } from '../states/songs.state.service';
-import { ArtistStateService } from '../states/artist.state.service';
+import { catchError, throwError, Observable, tap } from 'rxjs';
+import {
+  ApiService,
+  SongsStateService,
+  AlbumStateService,
+  ArtistStateService,
+} from '../../service';
 
 @Injectable({
   providedIn: 'root',

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SongsStateService } from '../songs.state.service';
-import { Song } from '../../models/song.interface';
+import { SongsStateService, Song } from '../../../service';
 
 @Injectable({
   providedIn: 'root',
