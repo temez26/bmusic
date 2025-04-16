@@ -43,7 +43,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
   constructor(
     private audioService: AudioService,
     private playerService: PlayerService,
-    private apiService: ApiService,
     private progressBar: progressBarService,
     private streamService: StreamService
   ) {
