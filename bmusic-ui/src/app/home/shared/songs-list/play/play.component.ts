@@ -4,7 +4,7 @@ import { AudioService } from '../../../../service/player/audio.service';
 import { SongsStateService } from '../../../../service/states/songs.state.service';
 import { Song } from '../../../../service/models/song.interface';
 import { environment } from '../../../../../environments/environment';
-import { PlaylistStateService } from '../../../../service/states/playlistState.service';
+import { PlaylistStateService } from '../../../../service/states/playlist.service';
 
 @Component({
   selector: 'app-play',
