@@ -4,7 +4,7 @@ import { AudioService } from '../../../../service/player/audio.service';
 import { SongsStateService } from '../../../../service/states/songs.state.service';
 import { Song } from '../../../../service/models/song.interface';
 import { environment } from '../../../../../environments/environment';
-import { PlaylistStateService } from '../../../../service/states/playlist.service';
+import { PlaylistService } from '../../../../service/states/playlist.service';
 
 @Component({
   selector: 'app-play',
@@ -26,7 +26,7 @@ export class PlayComponent implements OnInit {
   constructor(
     private audioService: AudioService,
     private songsState: SongsStateService,
-    private playlistState: PlaylistStateService
+    private playlistService: PlaylistService
   ) {}
 
   ngOnInit(): void {
@@ -55,7 +55,7 @@ export class PlayComponent implements OnInit {
     }
 
     // Set the current playlist and play the selected song.
-    this.songsState.setCurrentPlaylistSongs(playlist);
+    this.playlistService.setCurrentPlaylistSongs(playlist);
     this.audioService.setData(songId);
   }
 }

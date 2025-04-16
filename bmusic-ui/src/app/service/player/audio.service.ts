@@ -4,6 +4,7 @@ import { PlayerModel } from '../models/player.class';
 import { PlayerService } from './player.service';
 import { SongsStateService } from '../states/songs.state.service';
 import { ApiService } from '../api.service';
+import { PlaylistService } from '../states/playlist.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,8 @@ export class AudioService {
     private progressService: ProgressService,
     private stateService: SongsStateService,
     private playerService: PlayerService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private playlistService: PlaylistService
   ) {
     this.player = this.playerService.player;
   }
@@ -60,7 +62,7 @@ export class AudioService {
 
     if (currentSongId !== null) {
       // Use playlist songs if available; otherwise use all songs.
-      let songs = this.stateService.getCurrentPlaylistSongs();
+      let songs = this.playlistService.getCurrentPlaylistSongs();
       if (!songs || songs.length === 0) {
         songs = this.stateService.getSongs();
       }

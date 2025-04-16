@@ -1,34 +1,24 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Song } from '../models/song.interface';
 import { PlayerService } from '../player/player.service';
+import { PlaylistService } from './playlist.service';
 
 @Injectable({
   providedIn: 'root',
 })
-// Handles Song data that is fetched from the server
 export class SongsStateService {
   private songsSubject = new BehaviorSubject<Song[]>([]);
   public songs$: Observable<Song[]> = this.songsSubject.asObservable();
-
-  private currentPlaylistSubject: BehaviorSubject<Song[]>;
-  public currentPlaylist$: Observable<Song[]>;
 
   private currentSongSubject = new BehaviorSubject<Song | null>(null);
   public currentSong$: Observable<Song | null> =
     this.currentSongSubject.asObservable();
 
-  private playlistSongs: Song[] = [];
-
-  constructor(private playerService: PlayerService) {
-    const savedPlaylist = sessionStorage.getItem('currentPlaylist');
-    const initialPlaylist = savedPlaylist ? JSON.parse(savedPlaylist) : [];
-    this.currentPlaylistSubject = new BehaviorSubject<Song[]>(initialPlaylist);
-    this.currentPlaylist$ = this.currentPlaylistSubject.asObservable();
-    this.currentPlaylistSubject.subscribe((songs) => {
-      sessionStorage.setItem('currentPlaylist', JSON.stringify(songs));
-    });
-  }
+  constructor(
+    private playerService: PlayerService,
+    private playlistService: PlaylistService
+  ) {}
 
   updateSong(updatedSong: Song): void {
     const currentSongs = this.songsSubject.getValue();
@@ -40,35 +30,8 @@ export class SongsStateService {
     this.songsSubject.next(updatedSongs);
   }
 
-  getSongsByPlaylistIds(specificIds: number[]): Song[] {
-    const songs = this.getSongs();
-    const foundSongs = specificIds
-      .map((id) => songs.find((song) => song.id === id))
-      .filter((song): song is Song => !!song);
-    this.currentPlaylistSubject.next(foundSongs);
-    console.log('Stored playlist songs in currentPlaylistSubject:', foundSongs);
-    return foundSongs;
-  }
-
-  getPlaylistSongs(): Song[] {
-    return this.playlistSongs;
-  }
-
   setSongs(songs: Song[]): void {
     this.songsSubject.next([...songs]);
-  }
-
-  clearPlaylistSongs(): void {
-    this.playlistSongs = [];
-  }
-
-  setCurrentPlaylistSongs(songs: Song[]): void {
-    console.log(songs);
-    this.currentPlaylistSubject.next([...songs]);
-  }
-
-  getCurrentPlaylistSongs(): Song[] {
-    return this.currentPlaylistSubject.getValue();
   }
 
   getSongs(): Song[] {
@@ -98,7 +61,8 @@ export class SongsStateService {
   }
 
   setCurrentSongById(songId: number): void {
-    let currentPlaylist = this.getCurrentPlaylistSongs();
+    // Now, if a playlist song is needed, you can delegate to PlaylistService methods
+    let currentPlaylist = this.playlistService.getCurrentPlaylistSongs();
     let song = currentPlaylist.find((s) => s.id === songId);
     if (!song) {
       currentPlaylist = this.getSongs();

@@ -1,39 +1,52 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Playlist } from '../models/playlist.interface';
+import { Song } from '../models/song.interface';
+import { SongsStateService } from './songs.state.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PlaylistStateService {
-  private currentPlaylistSubject: BehaviorSubject<Playlist | null>;
-  public currentPlaylist$: Observable<Playlist | null>;
+export class PlaylistService {
+  private currentPlaylistSubject: BehaviorSubject<Song[]>;
+  public currentPlaylist$: Observable<Song[]>;
+
+  private playlistSongs: Song[] = [];
 
   constructor() {
     const savedPlaylist = sessionStorage.getItem('currentPlaylist');
-    const initialPlaylist: Playlist | null = savedPlaylist
+    const initialPlaylist: Song[] = savedPlaylist
       ? JSON.parse(savedPlaylist)
-      : null;
-
-    this.currentPlaylistSubject = new BehaviorSubject<Playlist | null>(
-      initialPlaylist
-    );
+      : [];
+    this.currentPlaylistSubject = new BehaviorSubject<Song[]>(initialPlaylist);
     this.currentPlaylist$ = this.currentPlaylistSubject.asObservable();
 
-    this.currentPlaylistSubject.subscribe((playlist) => {
-      sessionStorage.setItem('currentPlaylist', JSON.stringify(playlist));
+    this.currentPlaylistSubject.subscribe((songs) => {
+      sessionStorage.setItem('currentPlaylist', JSON.stringify(songs));
     });
   }
 
-  getCurrentPlaylist(): Playlist | null {
+  getSongsByPlaylistIds(specificIds: number[], songs: Song[]): Song[] {
+    const foundSongs = specificIds
+      .map((id) => songs.find((song) => song.id === id))
+      .filter((song): song is Song => !!song);
+    this.currentPlaylistSubject.next(foundSongs);
+    console.log('Stored playlist songs in currentPlaylistSubject:', foundSongs);
+    return foundSongs;
+  }
+
+  getPlaylistSongs(): Song[] {
+    return this.playlistSongs;
+  }
+
+  clearPlaylistSongs(): void {
+    this.playlistSongs = [];
+  }
+
+  setCurrentPlaylistSongs(songs: Song[]): void {
+    this.currentPlaylistSubject.next([...songs]);
+  }
+
+  getCurrentPlaylistSongs(): Song[] {
     return this.currentPlaylistSubject.getValue();
-  }
-
-  setCurrentPlaylist(playlist: Playlist): void {
-    this.currentPlaylistSubject.next(playlist);
-  }
-
-  clearCurrentPlaylist(): void {
-    this.currentPlaylistSubject.next(null);
   }
 }
