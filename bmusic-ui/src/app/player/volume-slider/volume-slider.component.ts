@@ -6,9 +6,7 @@ import {
   ViewChild,
   OnInit,
 } from '@angular/core';
-import { ProgressService } from '../../service/player/progress.service';
-import { PlayerService } from '../../service/player/player.service';
-import { PlayerModel } from '../../service/models/player.class';
+import { PlayerModel, PlayerService, ProgressService } from '../../service';
 
 @Component({
   selector: 'app-volume-slider',

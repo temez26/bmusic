@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpEventType } from '@angular/common/http';
-import { ApiUploadService } from '../../service/apiCalls/api-upload.service';
+import { ApiUploadService } from '../../service';
 
 @Component({
   selector: 'app-upload',

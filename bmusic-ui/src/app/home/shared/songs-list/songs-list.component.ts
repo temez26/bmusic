@@ -5,17 +5,18 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { Observable, map } from 'rxjs';
 import { PlayComponent } from './play/play.component';
 import { MenuComponent } from './menu/menu.component';
-import { CommonModule } from '@angular/common';
-import { SongsStateService } from '../../../service/states/songs.state.service';
-import { Song } from '../../../service/models/song.interface';
-import { Playlist } from '../../../service/models/playlist.interface';
-import { PlayerStateService } from '../../../service/states/player.state.service';
-import { SortService } from '../../../service/states/shared/sort.service';
-import { PlaylistStateService } from '../../../service/states/playlist.state.service';
+import {
+  PlaylistStateService,
+  SortService,
+  PlayerStateService,
+  Playlist,
+  Song,
+  SongsStateService,
+} from '../../../service';
 
 @Component({
   selector: 'app-songs-list',

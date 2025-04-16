@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AlbumStateService } from '../../service/states/album.state.service';
-import { Albums } from '../../service/models/album.interface';
-import { environment } from '../../../environments/environment';
 import { Router, RouterLink } from '@angular/router';
-import { ApiService } from '../../service/apiCalls/api.service';
+import {
+  ApiService,
+  environment,
+  Albums,
+  AlbumStateService,
+} from '../../service';
 
 @Component({
   selector: 'app-albums',

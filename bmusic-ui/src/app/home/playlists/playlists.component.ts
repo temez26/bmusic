@@ -1,12 +1,10 @@
-// Language: TypeScript
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ApiPlaylistService } from '../../service/apiCalls/api-playlist.service';
 import { Observable } from 'rxjs';
-import { Playlist } from '../../service/models/playlist.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PlaylistSettingsComponent } from './playlistsettings/playlistsettings.component';
+import { Playlist, ApiPlaylistService } from '../../service';
 
 @Component({
   selector: 'app-playlists',
@@ -20,7 +18,6 @@ export class PlaylistsComponent implements OnInit {
   newPlaylistName = '';
   newPlaylistDescription = '';
 
-  // New properties to add a song to a playlist
   selectedPlaylistId?: number;
   songIdToAdd?: number;
 

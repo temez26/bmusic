@@ -6,17 +6,19 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
 import { VolumeSliderComponent } from './volume-slider/volume-slider.component';
-import { PlayerModel } from '../service/models/player.class';
+
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
-import { AudioService } from '../service/player/audio.service';
+
 import { AlbumCoverComponent } from './album-cover/album-cover.component';
-import { PlayerService } from '../service/player/player.service';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { ApiService } from '../service/apiCalls/api.service';
-import { progressBarService } from '../service/player/progressBar.service';
-import { StreamService } from '../service/apiCalls/stream.service';
+import {
+  PlayerModel,
+  AudioService,
+  PlayerService,
+  progressBarService,
+  StreamService,
+} from '../service';
 
 @Component({
   selector: 'app-player',

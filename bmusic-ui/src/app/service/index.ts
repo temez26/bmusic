@@ -2,6 +2,7 @@
 export * from './player/audio.service';
 export * from './player/player.service';
 export * from './player/progress.service';
+export * from './player/progressBar.service';
 // session storage service
 export * from './storage/player-storage.service';
 // states services
@@ -10,6 +11,8 @@ export * from './states/playlist.state.service';
 export * from './states/player.state.service';
 export * from './states/artist.state.service';
 export * from './states/album.state.service';
+export * from './states/shared/search.service';
+export * from './states/shared/sort.service';
 // api calls
 export * from './apiCalls/stream.service';
 export * from './apiCalls/api.service';

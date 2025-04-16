@@ -1,10 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AudioService } from '../../../../service/player/audio.service';
-import { SongsStateService } from '../../../../service/states/songs.state.service';
-import { Song } from '../../../../service/models/song.interface';
-import { environment } from '../../../../../environments/environment';
-import { PlaylistStateService } from '../../../../service/states/playlist.state.service';
+import {
+  PlaylistStateService,
+  environment,
+  Song,
+  SongsStateService,
+  AudioService,
+} from '../../../../service';
 
 @Component({
   selector: 'app-play',

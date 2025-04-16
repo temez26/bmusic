@@ -6,12 +6,15 @@ import {
   AfterViewInit,
   HostListener,
 } from '@angular/core';
-import { fromEvent, BehaviorSubject, Observable, of } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import {
+  fromEvent,
+  BehaviorSubject,
+  Observable,
+  debounceTime,
+  switchMap,
+} from 'rxjs';
 import { SearchDropdownComponent } from './search-dropdown/search-dropdown.component';
-import { SongsStateService } from '../../service/states/songs.state.service';
-import { PlayComponent } from '../../home/shared/songs-list/play/play.component';
-import { SongSearchService } from '../../service/states/shared/search.service';
+import { SongSearchService } from '../../service';
 
 @Component({
   selector: 'app-search',

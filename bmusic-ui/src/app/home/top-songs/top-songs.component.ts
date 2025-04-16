@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayComponent } from '../shared/songs-list/play/play.component';
-import { SongsStateService } from '../../service/states/songs.state.service';
-import { SortService } from '../../service/states/shared/sort.service';
+import { SongsStateService, SortService } from '../../service';
 
 @Component({
   selector: 'app-top-songs',

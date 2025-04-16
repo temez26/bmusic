@@ -9,10 +9,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../../../service/apiCalls/api.service';
-import { ApiPlaylistService } from '../../../../service/apiCalls/api-playlist.service';
-import { Playlist } from '../../../../service/models/playlist.interface';
-import { Song } from '../../../../service/models/song.interface';
+import {
+  Song,
+  Playlist,
+  ApiPlaylistService,
+  ApiService,
+} from '../../../../service';
 
 @Component({
   selector: 'app-menu',
