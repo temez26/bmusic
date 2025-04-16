@@ -3,23 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { throwError, Observable, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Song } from '../models/song.interface';
-import { environment } from '../../../environments/environment';
 import { Playlist } from '../models/playlist.interface';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiPlaylistService {
-  private baseUrl = environment.apiBaseUrl;
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private api: ApiService) {}
 
   createPlaylist(
     name: string,
     description: string,
     created_by: number
   ): Observable<Playlist> {
-    const url = `${this.baseUrl}playlists`;
+    const url = `${this.api.baseUrl}playlists`;
     return this.http
       .post<Playlist>(url, { name, description, created_by })
       .pipe(
@@ -31,7 +29,7 @@ export class ApiPlaylistService {
   }
 
   addSongToPlaylist(playlistId: number, song_id: number) {
-    const url = `${this.baseUrl}playlists/${playlistId}/songs`;
+    const url = `${this.api.baseUrl}playlists/${playlistId}/songs`;
     return this.http.post(url, { song_id }).pipe(
       catchError((error) => {
         console.error('Error adding song to playlist:', error);
@@ -41,7 +39,7 @@ export class ApiPlaylistService {
   }
 
   removeSongFromPlaylist(playlistId: number, song_id: number) {
-    const url = `${this.baseUrl}playlists/${playlistId}/songs/${song_id}`;
+    const url = `${this.api.baseUrl}playlists/${playlistId}/songs/${song_id}`;
     return this.http.delete(url).pipe(
       catchError((error) => {
         console.error('Error removing song from playlist:', error);
@@ -51,7 +49,7 @@ export class ApiPlaylistService {
   }
 
   fetchPlaylistSongs(playlistId: number): Observable<Song[]> {
-    const url = `${this.baseUrl}playlists/${playlistId}/songs`;
+    const url = `${this.api.baseUrl}playlists/${playlistId}/songs`;
     return this.http.get<Song[]>(url).pipe(
       catchError((error) => {
         console.error('Error fetching playlist songs:', error);
@@ -61,7 +59,7 @@ export class ApiPlaylistService {
   }
 
   deletePlaylist(playlistId: number) {
-    const url = `${this.baseUrl}playlists/${playlistId}`;
+    const url = `${this.api.baseUrl}playlists/${playlistId}`;
     return this.http.delete(url).pipe(
       tap(() =>
         console.log(`Successfully deleted playlist with ID: ${playlistId}`)
@@ -73,7 +71,7 @@ export class ApiPlaylistService {
     );
   }
   fetchPlaylists(): Observable<Playlist[]> {
-    const url = `${this.baseUrl}playlists`;
+    const url = `${this.api.baseUrl}playlists`;
     return this.http.get<Playlist[]>(url).pipe(
       catchError((error) => {
         console.error('Error fetching playlists:', error);

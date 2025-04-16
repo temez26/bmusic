@@ -90,7 +90,6 @@ export class MenuComponent {
             .removeSongFromPlaylist(1, this.songId)
             .subscribe({
               next: () => {
-                console.log('Song removed from Favorites');
                 this.membership[1] = false;
                 this.isMenuOpen = false;
                 this.isPlaylistDropdownOpen = false;
@@ -103,7 +102,6 @@ export class MenuComponent {
         } else {
           this.apiPlaylistService.addSongToPlaylist(1, this.songId).subscribe({
             next: () => {
-              console.log('Song added to Favorites');
               this.membership[1] = true;
               this.isMenuOpen = false;
               this.isPlaylistDropdownOpen = false;
@@ -173,7 +171,6 @@ export class MenuComponent {
             .removeSongFromPlaylist(playlistId, this.songId)
             .subscribe({
               next: () => {
-                console.log(`Song removed from playlist ${playlistName}`);
                 this.membership[playlistId] = false;
                 this.isPlaylistDropdownOpen = false;
                 // Show notification for removal using the playlist name.
@@ -190,7 +187,6 @@ export class MenuComponent {
             .addSongToPlaylist(playlistId, this.songId)
             .subscribe({
               next: () => {
-                console.log(`Song added to playlist ${playlistName}`);
                 this.membership[playlistId] = true;
                 this.isPlaylistDropdownOpen = false;
                 // Show notification for addition using the playlist name.

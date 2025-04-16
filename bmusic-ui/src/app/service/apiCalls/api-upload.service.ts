@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { catchError, throwError, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -12,7 +11,6 @@ import { ArtistStateService } from '../states/artist.state.service';
   providedIn: 'root',
 })
 export class ApiUploadService {
-  private baseUrl = environment.apiBaseUrl;
   constructor(
     private http: HttpClient,
     private api: ApiService,
@@ -22,7 +20,7 @@ export class ApiUploadService {
   ) {}
 
   uploadFiles(files: File[]): Observable<HttpEvent<any>> {
-    const url = `${this.baseUrl}upload`;
+    const url = `${this.api.baseUrl}upload`;
     const formData = new FormData();
     files.forEach((file) => formData.append('files', file));
 

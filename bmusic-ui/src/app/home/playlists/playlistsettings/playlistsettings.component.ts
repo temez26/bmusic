@@ -29,9 +29,6 @@ export class PlaylistSettingsComponent {
   deletePlaylist() {
     this.apiPlaylistService.deletePlaylist(this.playlistId).subscribe({
       next: () => {
-        console.log(
-          `Successfully deleted playlist with ID: ${this.playlistId}`
-        );
         this.playlistDeleted.emit();
         this.isDropdownOpen = false;
       },

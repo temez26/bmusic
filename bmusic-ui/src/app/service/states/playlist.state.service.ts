@@ -30,10 +30,7 @@ export class PlaylistStateService {
       .map((id) => songs.find((song) => song.id === id))
       .filter((song): song is Song => !!song);
     this.currentPlaylistSubject.next(playlistSongs);
-    console.log(
-      'Stored playlist songs in currentPlaylistSubject:',
-      playlistSongs
-    );
+
     return playlistSongs;
   }
 

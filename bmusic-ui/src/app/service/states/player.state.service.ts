@@ -71,7 +71,6 @@ export class PlayerStateService {
     return this.states$['isPlaying'];
   }
   get songId$(): Observable<number> {
-    console.log('triggerd');
     return this.states$['songId'];
   }
 }

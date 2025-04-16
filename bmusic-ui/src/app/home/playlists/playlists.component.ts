@@ -34,7 +34,6 @@ export class PlaylistsComponent implements OnInit {
     (this.apiService.fetchPlaylists() as Observable<Playlist[]>).subscribe({
       next: (data: Playlist[]) => {
         this.playlists = data;
-        console.log(this.playlists);
       },
       error: (error) => {
         console.error('Error fetching playlists', error);
@@ -53,7 +52,6 @@ export class PlaylistsComponent implements OnInit {
       )
       .subscribe({
         next: (playlist: Playlist) => {
-          console.log('Playlist created', playlist);
           this.playlists.push(playlist);
           // Clear form inputs
           this.newPlaylistName = '';
@@ -70,17 +68,10 @@ export class PlaylistsComponent implements OnInit {
       console.error('Please select a playlist and provide a song id.');
       return;
     }
-    this.apiService
-      .addSongToPlaylist(this.selectedPlaylistId, this.songIdToAdd)
-      .subscribe({
-        next: (response) => {
-          console.log('Song successfully added to playlist:', response);
-          // Optionally refresh playlist data or update UI as needed
-        },
-        error: (error) => {
-          console.error('Error adding song to playlist', error);
-        },
-      });
+    this.apiService.addSongToPlaylist(
+      this.selectedPlaylistId,
+      this.songIdToAdd
+    );
   }
 
   // New method to select a specific playlist
@@ -88,13 +79,7 @@ export class PlaylistsComponent implements OnInit {
     this.selectedPlaylistId = playlistId;
   }
   deletePlaylist(playlistId: number) {
-    this.apiService.deletePlaylist(playlistId).subscribe({
-      next: (response) => {
-        console.log(`Playlist deleted successfully:`, response);
-        this.fetchPlaylists(); // Refresh the playlist list after successful deletion
-      },
-      error: (error) => console.error('Error deleting playlist:', error),
-    });
+    this.apiService.deletePlaylist(playlistId);
   }
   onPlaylistDeleted() {
     this.fetchPlaylists();

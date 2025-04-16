@@ -14,7 +14,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class ApiService {
-  private baseUrl = environment.apiBaseUrl;
+  public baseUrl = environment.apiBaseUrl;
 
   constructor(
     private http: HttpClient,
@@ -27,11 +27,9 @@ export class ApiService {
     const url = `${this.baseUrl}songs`;
     return this.http.get<Song[]>(url).pipe(
       tap((fetchedSongs: Song[]) => {
-        console.log(fetchedSongs);
         this.songService.setSongs(fetchedSongs);
       }),
       catchError((error) => {
-        console.error('Error fetching songs:', error);
         return throwError(() => error);
       })
     );
@@ -43,7 +41,6 @@ export class ApiService {
         this.artistService.setArtists(fetchedArtists);
       }),
       catchError((error) => {
-        console.log(error);
         return throwError(() => error);
       })
     );
@@ -55,7 +52,6 @@ export class ApiService {
         this.albumService.setAlbums(fetchedAlbums);
       }),
       catchError((error) => {
-        console.log(error);
         return throwError(() => error);
       })
     );
@@ -68,7 +64,6 @@ export class ApiService {
         this.songService.setSongs(updatedSongs);
       }),
       catchError((error) => {
-        console.error('Error deleting song:', error);
         return throwError(() => error);
       })
     );

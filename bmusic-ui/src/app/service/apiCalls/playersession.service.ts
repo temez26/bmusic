@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { BehaviorSubject } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,7 @@ export class PlayerSessionService {
   private socket: Socket;
   public playerState$ = new BehaviorSubject<any>(null);
 
-  constructor() {
+  constructor(private api: ApiService) {
     // Check for a previously stored device id
     let deviceId = localStorage.getItem('deviceId');
     if (!deviceId) {
@@ -22,7 +22,7 @@ export class PlayerSessionService {
     console.log('Using device id:', deviceId);
 
     // Pass the deviceId as a query parameter
-    this.socket = io(environment.apiBaseUrl, {
+    this.socket = io(api.baseUrl, {
       transports: ['websocket'],
       query: { deviceId },
     });

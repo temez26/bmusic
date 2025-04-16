@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { SongsStateService } from '../states/songs.state.service';
 import { HttpClient } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { catchError, tap, map, take } from 'rxjs/operators';
+import { ApiService } from './api.service';
 @Injectable({
   providedIn: 'root',
 })
 export class StreamService {
   constructor(
     private http: HttpClient,
-    private songService: SongsStateService
+    private songService: SongsStateService,
+    private api: ApiService
   ) {}
 
-  private baseUrl = environment.apiBaseUrl;
-
   incrementPlayCount(songId: number) {
-    const url = `${this.baseUrl}increment`;
+    const url = `${this.api.baseUrl}increment`;
     return this.http.post<{ playCount: number }>(url, { id: songId }).pipe(
       tap((response) => {
         // Use the reactive stream to get the current songs
@@ -48,7 +47,7 @@ export class StreamService {
     startTime: number = 0
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      audioElement.src = this.baseUrl + filePath;
+      audioElement.src = this.api.baseUrl + filePath;
       audioElement.load();
       audioElement.oncanplaythrough = () => {
         // Remove handler to avoid multiple calls when setting currentTime
