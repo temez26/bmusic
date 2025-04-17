@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ArtistStateService } from '../../service/states/artist.state.service';
-import { Router, RouterLink } from '@angular/router';
+import {
+  Component,
+  OnInit,
+  CommonModule,
+  Router,
+  RouterLink,
+} from './artist-barrel';
 
 @Component({
   selector: 'app-artists',

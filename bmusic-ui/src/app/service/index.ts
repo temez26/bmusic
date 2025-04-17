@@ -25,6 +25,5 @@ export * from './models/player.class';
 export * from './models/song.interface';
 export * from './models/playlist.interface';
 export * from './models/artist.interface';
-
 // environment
 export * from '../../environments/environment';

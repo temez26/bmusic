@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
 import {
   ApiService,
   environment,
   Albums,
   AlbumStateService,
 } from '../../service';
+import {
+  Component,
+  OnInit,
+  CommonModule,
+  Router,
+  RouterLink,
+} from './album-barrel';
 
 @Component({
   selector: 'app-albums',
