@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Albums, CurrentAlbum } from '../models/album.interface';
-import { environment } from '../../../environments/environment';
+import { BehaviorSubject } from 'rxjs';
+import { Albums, CurrentAlbum, environment } from '../../service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AlbumStateService {
   private albumsSubject = new BehaviorSubject<Albums[]>([]);
-  public albums$: Observable<Albums[]> = this.albumsSubject.asObservable();
+  public albums$ = this.albumsSubject.asObservable();
 
   private currentAlbumSubject = new BehaviorSubject<CurrentAlbum | null>(null);
-  public currentAlbum$: Observable<CurrentAlbum | null> =
-    this.currentAlbumSubject.asObservable();
+  public currentAlbum$ = this.currentAlbumSubject.asObservable();
 
   setAlbums(albums: Albums[]) {
     this.albumsSubject.next([...albums]);
@@ -32,9 +30,6 @@ export class AlbumStateService {
     }
   }
 
-  getAlbums(): Albums[] {
-    return this.albumsSubject.getValue();
-  }
   getAlbumCover(albumId: number): string {
     const currentAlbums = this.albumsSubject.getValue();
     const currentAlbum = currentAlbums.find((album) => album.id === albumId);

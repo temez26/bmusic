@@ -6,15 +6,19 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
 import { VolumeSliderComponent } from './volume-slider/volume-slider.component';
-import { PlayerModel } from '../service/models/player.class';
+
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
-import { AudioService } from '../service/player/audio.service';
+
 import { AlbumCoverComponent } from './album-cover/album-cover.component';
-import { PlayerService } from '../service/player/player.service';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { ApiService } from '../service/api.service';
+import {
+  PlayerModel,
+  AudioService,
+  PlayerService,
+  progressBarService,
+  StreamService,
+} from '../service';
 
 @Component({
   selector: 'app-player',
@@ -41,7 +45,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
   constructor(
     private audioService: AudioService,
     private playerService: PlayerService,
-    private apiService: ApiService
+    private progressBar: progressBarService,
+    private streamService: StreamService
   ) {
     this.player = this.playerService.player;
   }
@@ -57,7 +62,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
         this.audioRef.nativeElement.pause();
 
         if (filePath) {
-          this.apiService
+          this.streamService
             .initializeAudio(
               this.audioRef.nativeElement,
               filePath,
@@ -135,12 +140,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.playerService.updateIsPlaying(this.playerService.player.isPlaying);
   }
   updateDuration(event: any) {
-    this.audioService.updateDuration(event);
+    this.progressBar.updateDuration(event);
   }
 
   // Updates the time in progress bar
   updateCurrentTime(event: any) {
-    this.audioService.updateCurrentTime(
+    this.progressBar.updateCurrentTime(
       event.target as HTMLAudioElement,
       this.progressSliderRef.nativeElement
     );
@@ -151,7 +156,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   // Handle progress bar status
   seek(event: any) {
-    this.audioService.seek(
+    this.progressBar.seek(
       event.target.value,
       this.audioRef.nativeElement,
       this.progressSliderRef.nativeElement

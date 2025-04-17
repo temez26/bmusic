@@ -1,9 +1,13 @@
 import { Injectable, ElementRef } from '@angular/core';
-import { ProgressService } from './progress.service';
-import { PlayerModel } from '../models/player.class';
-import { PlayerService } from './player.service';
-import { SongsStateService } from '../states/songs.state.service';
-import { ApiService } from '../api.service';
+import {
+  Song,
+  PlaylistStateService,
+  SongsStateService,
+  PlayerService,
+  PlayerModel,
+  StreamService,
+  ProgressService,
+} from '../../service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,17 +15,22 @@ import { ApiService } from '../api.service';
 // Service for managing audio playback and volume control
 export class AudioService {
   player: PlayerModel;
+  songs!: Song[];
   constructor(
     private progressService: ProgressService,
     private stateService: SongsStateService,
     private playerService: PlayerService,
-    private apiService: ApiService
+    private playlistService: PlaylistStateService,
+    private streamService: StreamService
   ) {
     this.player = this.playerService.player;
+    this.stateService.songs$.subscribe((songs) => {
+      this.songs = songs;
+    });
   }
 
   private incrementPlayCount(songId: number): void {
-    this.apiService.incrementPlayCount(songId).subscribe();
+    this.streamService.incrementPlayCount(songId).subscribe();
   }
 
   changeVolume(
@@ -36,38 +45,6 @@ export class AudioService {
     }
     player.volumePercentage = event.target.value;
     this.progressService.initializeSlider(event.target);
-  }
-
-  // updates timer right side of the progressbar
-  updateDuration(event: any) {
-    const audio = event.target;
-    const { duration, formattedDuration } =
-      this.progressService.updateDuration(audio);
-    this.playerService.updateAudioDuration(duration);
-    this.playerService.updateFormattedLength(formattedDuration);
-  }
-
-  // updates time left side of the progressbar
-  updateCurrentTime(
-    audio: HTMLAudioElement,
-    progressSlider: HTMLInputElement
-  ): void {
-    const { currentTime, formattedCurrentTime } =
-      this.progressService.updateCurrentTime(audio);
-    this.playerService.updateFormattedCurrentTime(formattedCurrentTime);
-    this.playerService.updateCurrentTime(currentTime);
-    this.progressService.updateProgress(progressSlider, audio);
-  }
-
-  //progress bar status
-  seek(
-    seekTime: number,
-    audio: HTMLAudioElement,
-    progressSlider: HTMLInputElement
-  ): void {
-    const { currentTime } = this.progressService.seek(audio, seekTime);
-    this.playerService.updateCurrentTime(currentTime);
-    this.progressService.updateProgress(progressSlider, audio);
   }
 
   handleSongEnd(audioRef: ElementRef<HTMLAudioElement>) {
@@ -92,19 +69,18 @@ export class AudioService {
 
     if (currentSongId !== null) {
       // Use playlist songs if available; otherwise use all songs.
-      let songs = this.stateService.getCurrentPlaylistSongs();
-      if (!songs || songs.length === 0) {
-        console.log('boi');
-        songs = this.stateService.getSongs();
-      }
-      const currentSongIndex = songs.findIndex(
+      this.playlistService.currentPlaylist$.subscribe((playlist) => {
+        this.songs = playlist;
+      });
+
+      const currentSongIndex = this.songs.findIndex(
         (song) => song.id === currentSongId
       );
 
       if (currentSongIndex !== -1) {
         const newIndex =
-          (currentSongIndex + offset + songs.length) % songs.length;
-        const newSong = songs[newIndex];
+          (currentSongIndex + offset + this.songs.length) % this.songs.length;
+        const newSong = this.songs[newIndex];
         this.stateService.setCurrentSongById(newSong.id);
         this.incrementPlayCount(newSong.id);
       } else {
@@ -116,7 +92,7 @@ export class AudioService {
   }
 
   playRandomSong(): void {
-    const songs = this.stateService.getSongs();
+    const songs = this.songs;
     const randomIndex = Math.floor(Math.random() * songs.length);
     const randomSong = songs[randomIndex];
     this.stateService.setCurrentSongById(randomSong.id);

@@ -5,7 +5,7 @@ import {
   EventEmitter,
   HostListener,
 } from '@angular/core';
-import { ApiPlaylistService } from '../../../service/api-playlist.service';
+import { ApiPlaylistService } from '../../../service/apiCalls/api-playlist.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -29,9 +29,6 @@ export class PlaylistSettingsComponent {
   deletePlaylist() {
     this.apiPlaylistService.deletePlaylist(this.playlistId).subscribe({
       next: () => {
-        console.log(
-          `Successfully deleted playlist with ID: ${this.playlistId}`
-        );
         this.playlistDeleted.emit();
         this.isDropdownOpen = false;
       },

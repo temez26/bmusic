@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
-import { SongsStateService } from '../../../service/states/songs.state.service';
-import { ApiPlaylistService } from '../../../service/api-playlist.service';
-import { Playlist } from '../../../service/models/playlist.interface';
-import { Song } from '../../../service/models/song.interface';
+import { Song, Playlist, ApiPlaylistService } from '../../../service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -40,9 +37,9 @@ export class PlaylistComponent implements OnInit {
 
       if (idParam) {
         this.playlistId = +idParam;
-        console.log(this.playlistId);
+
         this.fetchPlaylists();
-        console.log(this.playlist);
+
         this.apiService.fetchPlaylistSongs(this.playlistId).subscribe({
           next: (data: unknown) => {
             // If the API returns an array of songs rather than a Playlist object,
@@ -52,7 +49,6 @@ export class PlaylistComponent implements OnInit {
               ...this.playlist,
               songIds: songs.map((song) => song.id),
             };
-            console.log('Loaded playlist:', this.playlist);
           },
           error: (error) => console.error('Error fetching playlist', error),
         });
@@ -66,7 +62,6 @@ export class PlaylistComponent implements OnInit {
         const found = data.find((p) => p.id === this.playlistId);
         if (found) {
           this.playlists = found;
-          console.log('Loaded playlist:', this.playlists);
         } else {
           console.error('Playlist not found for id:', this.playlistId);
         }

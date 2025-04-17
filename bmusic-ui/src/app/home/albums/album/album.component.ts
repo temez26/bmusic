@@ -1,11 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { SongsStateService } from '../../../service/states/songs.state.service';
-import { Song } from '../../../service/models/song.interface';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AlbumStateService } from '../../../service/states/album.state.service';
-import { ApiService } from '../../../service/api.service';
 import { ActivatedRoute } from '@angular/router';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
+import {
+  SortService,
+  ApiService,
+  AlbumStateService,
+  Song,
+  SongsStateService,
+} from '../../../service';
 
 @Component({
   selector: 'app-album',
@@ -24,7 +27,8 @@ export class AlbumComponent implements OnInit {
     private songsState: SongsStateService,
     private albumState: AlbumStateService,
     private apiService: ApiService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private helper: SortService
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +45,7 @@ export class AlbumComponent implements OnInit {
     });
 
     this.songsState.songs$.subscribe(() => {
-      const albumSongs = this.songsState
+      const albumSongs = this.helper
         .sortSongs('id')
         .filter((song) => song.album_id === this.albumId);
       this.songs = albumSongs;

@@ -6,11 +6,15 @@ import {
   AfterViewInit,
   HostListener,
 } from '@angular/core';
-import { fromEvent, BehaviorSubject, Observable, of } from 'rxjs';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import {
+  fromEvent,
+  BehaviorSubject,
+  Observable,
+  debounceTime,
+  switchMap,
+} from 'rxjs';
 import { SearchDropdownComponent } from './search-dropdown/search-dropdown.component';
-import { SongsStateService } from '../../service/states/songs.state.service';
-import { PlayComponent } from '../../home/shared/songs-list/play/play.component';
+import { SongSearchService } from '../../service';
 
 @Component({
   selector: 'app-search',
@@ -32,13 +36,13 @@ export class SearchComponent implements AfterViewInit {
   // Observable search results updates whenever the querySubject emits a new value.
   searchResults$: Observable<any[]> = this.querySubject.pipe(
     debounceTime(50),
-    switchMap((query) => this.songsState.searchSongs(query))
+    switchMap((query) => this.searchService.searchSongs(query))
   );
 
   dropdownVisible = false;
   private hideTimeoutId: any;
 
-  constructor(private songsState: SongsStateService) {}
+  constructor(private searchService: SongSearchService) {}
 
   ngAfterViewInit() {
     // Listen for input events and update the querySubject.

@@ -39,7 +39,7 @@ router.delete("/:playlistId", async (req, res) => {
 
   try {
     const playlist = await deletePlaylist(playlistId);
-    console.log("Delete successful, returning:", playlist);
+
     res.status(200).json(playlist);
   } catch (err) {
     console.error("Error deleting playlist", err);

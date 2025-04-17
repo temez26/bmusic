@@ -1,14 +1,15 @@
 // --- Node.js and Third-Party Modules ---
-const fs = require("fs");
-const path = require("path");
 const http = require("http");
 const express = require("express");
 const cors = require("cors");
 
 // --- Local Modules and Controllers ---
 const playlistRouter = require("./services/playlistController");
+const {
+  incrementPlayCountHandler,
+  serveCoverImage,
+} = require("./services/helperController");
 const upload = require("./services/uploadConfig");
-const { incrementPlayCount } = require("./database/db");
 const { handleFileDelete } = require("./services/deleteController");
 const {
   handleAllSongs,
@@ -47,35 +48,35 @@ app.get("/data/uploads/:filename", streamMedia);
 // File upload endpoint
 app.post("/upload", upload, handleFileUpload);
 
-// Increment play count endpoint
-app.post("/increment", async (req, res) => {
-  const { id } = req.body;
-  if (!id) return res.status(400).send("Song ID is required");
+// Increment play count endpoint using the controller
+app.post("/increment", incrementPlayCountHandler);
 
-  try {
-    const playCount = await incrementPlayCount(id);
-    res.status(200).json({ playCount });
-  } catch (err) {
-    console.error("Error incrementing play count:", err);
-    res.status(500).send("Error incrementing play count");
-  }
-});
-
-// Serve cover images endpoint
-app.get("/data/covers/*", (req, res) => {
-  const filePath = path.join(__dirname, req.path);
-  fs.access(filePath, fs.constants.F_OK, (err) => {
-    if (err) {
-      console.error("File not found:", filePath);
-      return res.status(404).send("File not found");
-    }
-    res.sendFile(filePath);
-  });
-});
+// Serve cover images endpoint using the controller
+app.get("/data/covers/*", serveCoverImage);
 
 // Delete file endpoint
 app.delete("/delete", handleFileDelete);
 
 // --- Create and Start HTTP Server ---
 const server = http.createServer(app);
+
+// Set up Socket.IO server
+const { Server } = require("socket.io");
+const io = new Server(server, {
+  cors: { origin: "*" },
+});
+
+io.on("connection", (socket) => {
+  console.log("New client connected:", socket.id);
+
+  socket.on("updatePlayerState", (state) => {
+    // Broadcast the updated state to all other clients
+    socket.broadcast.emit("playerState", state);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected:", socket.id);
+  });
+});
+
 server.listen(port, () => console.log(`Listening on port ${port}`));
