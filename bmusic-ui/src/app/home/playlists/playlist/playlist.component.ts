@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
 import { Song, Playlist, ApiPlaylistService } from '../../../service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-playlist',

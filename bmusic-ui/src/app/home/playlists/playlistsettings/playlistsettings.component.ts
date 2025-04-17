@@ -5,8 +5,8 @@ import {
   EventEmitter,
   HostListener,
 } from '@angular/core';
-import { ApiPlaylistService } from '../../../service/apiCalls/api-playlist.service';
 import { CommonModule } from '@angular/common';
+import { ApiPlaylistService } from '../../../service/apiCalls/api-playlist.service';
 
 @Component({
   selector: 'app-playlist-settings',

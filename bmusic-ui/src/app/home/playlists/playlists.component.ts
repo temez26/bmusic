@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { PlaylistSettingsComponent } from './playlistsettings/playlistsettings.component';
 import { Playlist, ApiPlaylistService } from '../../service';
 

@@ -8,9 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { VolumeSliderComponent } from './volume-slider/volume-slider.component';
-
 import { VolumeIconComponent } from './volume-icon/volume-icon.component';
-
 import { AlbumCoverComponent } from './album-cover/album-cover.component';
 import {
   PlayerModel,
