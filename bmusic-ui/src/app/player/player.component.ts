@@ -16,8 +16,8 @@ import {
   PlayerModel,
   AudioService,
   PlayerService,
-  progressBarService,
   StreamService,
+  ProgressBarService,
 } from '../service';
 
 @Component({
@@ -45,15 +45,13 @@ export class PlayerComponent implements OnInit, OnDestroy {
   constructor(
     private audioService: AudioService,
     private playerService: PlayerService,
-    private progressBar: progressBarService,
+    private progressBar: ProgressBarService,
     private streamService: StreamService
   ) {
     this.player = this.playerService.player;
   }
 
   ngOnInit() {
-    // triggers the audio playback by checking the filepath change
-
     this.playerService
       .subscribeToFilePath()
       .pipe(takeUntil(this.unsubscribe$))
@@ -140,12 +138,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.playerService.updateIsPlaying(this.playerService.player.isPlaying);
   }
   updateDuration(event: any) {
-    this.progressBar.updateDuration(event);
+    this.progressBar.onDurationChange(event);
   }
 
   // Updates the time in progress bar
   updateCurrentTime(event: any) {
-    this.progressBar.updateCurrentTime(
+    this.progressBar.onTimeUpdate(
       event.target as HTMLAudioElement,
       this.progressSliderRef.nativeElement
     );
@@ -156,7 +154,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   // Handle progress bar status
   seek(event: any) {
-    this.progressBar.seek(
+    this.progressBar.onSeek(
       event.target.value,
       this.audioRef.nativeElement,
       this.progressSliderRef.nativeElement

@@ -1,43 +1,59 @@
 import { Injectable } from '@angular/core';
 import { ProgressService, PlayerService } from '../../service';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class progressBarService {
+@Injectable({ providedIn: 'root' })
+export class ProgressBarService {
   constructor(
-    private progressService: ProgressService,
-    private playerService: PlayerService
+    private progress: ProgressService,
+    private player: PlayerService
   ) {}
-  // updates timer right side of the progressbar
-  updateDuration(event: any) {
-    const audio = event.target;
-    const { duration, formattedDuration } =
-      this.progressService.updateDuration(audio);
-    this.playerService.updateAudioDuration(duration);
-    this.playerService.updateFormattedLength(formattedDuration);
+
+  // call from (loadedmetadata) on <audio>
+  onDurationChange(event: Event): void {
+    const audio = event.target as HTMLAudioElement;
+    const { duration, formattedDuration } = this.progress.updateDuration(audio);
+    this.sync({ duration, formattedDuration });
   }
 
-  // updates time left side of the progressbar
-  updateCurrentTime(
-    audio: HTMLAudioElement,
-    progressSlider: HTMLInputElement
-  ): void {
+  // call from (timeupdate) on <audio>
+  onTimeUpdate(audio: HTMLAudioElement, slider: HTMLInputElement): void {
     const { currentTime, formattedCurrentTime } =
-      this.progressService.updateCurrentTime(audio);
-    this.playerService.updateFormattedCurrentTime(formattedCurrentTime);
-    this.playerService.updateCurrentTime(currentTime);
-    this.progressService.updateProgress(progressSlider, audio);
+      this.progress.updateCurrentTime(audio);
+    this.sync({ currentTime, formattedCurrentTime });
+    this.progress.updateProgress(slider, audio);
   }
 
-  //progress bar status
-  seek(
+  // call when user drags the slider
+  onSeek(
     seekTime: number,
     audio: HTMLAudioElement,
-    progressSlider: HTMLInputElement
+    slider: HTMLInputElement
   ): void {
-    const { currentTime } = this.progressService.seek(audio, seekTime);
-    this.playerService.updateCurrentTime(currentTime);
-    this.progressService.updateProgress(progressSlider, audio);
+    const { currentTime } = this.progress.seek(audio, seekTime);
+    this.sync({ currentTime });
+    this.progress.updateProgress(slider, audio);
+  }
+
+  /** consolidate all PlayerService updates in one place */
+  private sync(opts: {
+    duration?: number;
+    formattedDuration?: string;
+    currentTime?: number;
+    formattedCurrentTime?: string;
+  }): void {
+    const { duration, formattedDuration, currentTime, formattedCurrentTime } =
+      opts;
+    if (duration != null) {
+      this.player.updateAudioDuration(duration);
+      if (formattedDuration) {
+        this.player.updateFormattedLength(formattedDuration);
+      }
+    }
+    if (currentTime != null) {
+      this.player.updateCurrentTime(currentTime);
+      if (formattedCurrentTime) {
+        this.player.updateFormattedCurrentTime(formattedCurrentTime);
+      }
+    }
   }
 }
