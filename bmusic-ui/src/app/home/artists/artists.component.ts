@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { ArtistStateService } from '../../service/states/artist.state.service';
 
+
 @Component({
   selector: 'app-artists',
   standalone: true,

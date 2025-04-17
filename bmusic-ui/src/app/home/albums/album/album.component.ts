@@ -1,6 +1,3 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
 import {
   SortService,
@@ -9,6 +6,12 @@ import {
   Song,
   SongsStateService,
 } from '../../../service';
+import {
+  Component,
+  OnInit,
+  CommonModule,
+  ActivatedRoute,
+} from '../album-barrel';
 
 @Component({
   selector: 'app-album',
