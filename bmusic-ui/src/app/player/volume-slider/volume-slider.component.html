@@ -1,9 +1,11 @@
 <div class="volume-slider-container">
   <input
-    type="range"
-    class="styled-slider slider-progress"
     #volumeSlider
-    [value]="player.volumePercentage"
+    class="styled-slider slider-progress"
+    type="range"
+    min="0"
+    max="100"
+    [value]="volumePercentage"
     (input)="changeVolume($event)"
   />
 </div>

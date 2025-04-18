@@ -9,6 +9,7 @@
   <div class="player">
     <div class="volume-controls">
       <app-volume-slider
+        [volumePercentage]="player.volumePercentage"
         (volumeChange)="onVolumeChange($event)"
       ></app-volume-slider>
       <app-volume-icon
@@ -51,6 +52,18 @@
         (loadedmetadata)="updateDuration($event)"
         (timeupdate)="updateCurrentTime($event)"
       ></audio>
+    </div>
+    <div class="main-device-selector">
+      <label for="main-device">Main controller:</label>
+      <select
+        id="main-device"
+        [ngModel]="mainDeviceId"
+        (ngModelChange)="onMainDeviceChange($event)"
+      >
+        <option *ngFor="let d of devices" [value]="d">
+          {{ d === session.deviceId ? "This device (you)" : d }}
+        </option>
+      </select>
     </div>
     <div class="player-timer">
       <span class="timer">{{ player.formattedCurrentTime }}</span>

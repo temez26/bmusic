@@ -2,44 +2,50 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild,
-  OnInit,
+  AfterViewInit,
 } from '@angular/core';
-import { PlayerModel, PlayerService, ProgressService } from '../../service';
+import { ProgressService } from '../../service'; // rename if needed
 
 @Component({
   selector: 'app-volume-slider',
   standalone: true,
-  imports: [],
   templateUrl: './volume-slider.component.html',
   styleUrls: ['./volume-slider.component.scss'],
 })
-export class VolumeSliderComponent implements OnInit {
+export class VolumeSliderComponent implements AfterViewInit, OnChanges {
   @ViewChild('volumeSlider', { static: true })
   volumeSliderRef!: ElementRef<HTMLInputElement>;
+
+  @Input() volumePercentage = 50;
   @Output() volumeChange = new EventEmitter<number>();
 
-  player: PlayerModel;
+  constructor(private progressService: ProgressService) {}
 
-  constructor(
-    private progressService: ProgressService,
-    private playerService: PlayerService
-  ) {
-    this.player = this.playerService.player;
+  ngAfterViewInit() {
+    // initial thumb fill
+    this.updateTrackFill();
   }
 
-  ngOnInit() {
-    this.volumeSliderRef.nativeElement.value = String(
-      this.player.volumePercentage
-    );
+  ngOnChanges(changes: SimpleChanges) {
+    const volChange = changes['volumePercentage'];
+    if (volChange && !volChange.firstChange) {
+      // push the new value into the native <input>
+      this.volumeSliderRef.nativeElement.value = String(this.volumePercentage);
+      this.updateTrackFill();
+    }
+  }
+  changeVolume(e: Event) {
+    const newVol = Number((e.target as HTMLInputElement).value);
+    this.volumeChange.emit(newVol);
+  }
+
+  private updateTrackFill() {
+    // whatever your ProgressService does to paint the track
     this.progressService.initializeSlider(this.volumeSliderRef.nativeElement);
-  }
-
-  changeVolume(event: any): void {
-    const newVolume = Number(event.target.value);
-    this.player.volumePercentage = newVolume;
-
-    this.volumeChange.emit(newVolume);
   }
 }

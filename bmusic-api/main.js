@@ -21,16 +21,30 @@ const io = new Server(server, {
   cors: { origin: "*" },
 });
 
-io.on("connection", (socket) => {
-  console.log("New client connected:", socket.id);
+const devices = new Set();
 
-  socket.on("updatePlayerState", (state) => {
-    // Broadcast the updated state to all other clients
-    socket.broadcast.emit("playerState", state);
+io.on("connection", (socket) => {
+  const deviceId = socket.handshake.query.deviceId;
+  if (deviceId) {
+    devices.add(deviceId);
+    io.emit("devices", Array.from(devices));
+  }
+
+  // ←– new handler
+  socket.on("setMainDevice", (id) => {
+    // let everyone know which device is now the master
+    io.emit("mainDeviceChanged", id);
   });
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected:", socket.id);
+    if (deviceId) {
+      devices.delete(deviceId);
+      io.emit("devices", Array.from(devices));
+    }
+  });
+
+  socket.on("updatePlayerState", (state) => {
+    socket.broadcast.emit("playerState", state);
   });
 });
 

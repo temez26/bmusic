@@ -1,11 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { take } from 'rxjs/operators';
 import {
   PlaylistStateService,
   environment,
   Song,
   SongsStateService,
   AudioService,
+  PlayerSessionService,
 } from '../../../../service';
 
 @Component({
@@ -16,20 +18,20 @@ import {
   styleUrls: ['./play.component.scss'],
 })
 export class PlayComponent implements OnInit {
-  @Input() songId: number = 0;
-  @Input() title: string = '';
-  @Input() img: string = '';
-  @Input() customCover: string = '';
-  @Input() customTitle: string = '';
-  @Input() customColumn: string = '';
-  // In album or artist pages this is provided.
+  @Input() songId = 0;
+  @Input() title = '';
+  @Input() img = '';
+  @Input() customCover = '';
+  @Input() customTitle = '';
+  @Input() customColumn = '';
   @Input() albumSongs: Song[] = [];
-  fullSongs!: Song[];
+  fullSongs: Song[] = [];
 
   constructor(
     private audioService: AudioService,
     private songsState: SongsStateService,
-    private playlistService: PlaylistStateService
+    private playlistService: PlaylistStateService,
+    private session: PlayerSessionService
   ) {}
 
   ngOnInit(): void {
@@ -37,31 +39,26 @@ export class PlayComponent implements OnInit {
   }
 
   playSong(songId: number): void {
-    // Get the full songs list from the state.
-
-    this.songsState.songs$.subscribe((songs) => {
+    // grab the current list once
+    this.songsState.songs$.pipe(take(1)).subscribe((songs) => {
       this.fullSongs = songs;
+
+      // choose album vs full playlist
+      let playlist =
+        this.albumSongs.length === this.fullSongs.length
+          ? this.albumSongs
+          : this.fullSongs;
+
+      if (!playlist.find((s) => s.id === songId)) {
+        playlist = this.fullSongs;
+      }
+
+      // set playlist and update AudioService
+      this.playlistService.setCurrentPlaylistSongs(playlist);
+      this.audioService.setData(songId);
+
+      // tell everyone to load & play on the main controller
+      this.session.updatePlayerState(this.audioService.player, 'play');
     });
-
-    // If albumSongs was passed and its length equals the full songs list,
-    // then assume it represents a dedicated playlist (e.g. album or artist view),
-    // otherwise fallback to the full list.
-    let playlist: Song[] = this.fullSongs;
-    if (
-      this.albumSongs &&
-      this.albumSongs.length > 0 &&
-      this.albumSongs.length === this.fullSongs.length
-    ) {
-      playlist = this.albumSongs;
-    }
-
-    // Re-check: if the song isn't in the chosen playlist, fallback to the full list.
-    if (!playlist.some((song) => song.id === songId)) {
-      playlist = this.fullSongs;
-    }
-
-    // Set the current playlist and play the selected song.
-    this.playlistService.setCurrentPlaylistSongs(playlist);
-    this.audioService.setData(songId);
   }
 }
