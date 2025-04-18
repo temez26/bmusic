@@ -66,6 +66,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
         if (!state) return;
         const audio = this.audioRef.nativeElement;
         const isRemote = state.deviceId !== this.session.deviceId;
+        const isMain = this.isMain;
 
         // ── NEW: handle remote timer ticks ──
         if (isRemote && state.action === 'timeupdate') {
@@ -78,14 +79,17 @@ export class PlayerComponent implements OnInit, OnDestroy {
           return;
         }
         // 0️⃣ handle remote play/pause actions immediately
-        if (isRemote && (state.action === 'play' || state.action === 'pause')) {
-          if (state.action === 'play') {
-            audio.play();
-            this.playerService.updateIsPlaying(true);
-          } else {
-            audio.pause();
-            this.playerService.updateIsPlaying(false);
+        if (state.action === 'play' || state.action === 'pause') {
+          // Only main device controls audio element
+          if (isMain) {
+            if (state.action === 'play') {
+              audio.play();
+            } else {
+              audio.pause();
+            }
           }
+          // All devices update UI state
+          this.playerService.updateIsPlaying(state.action === 'play');
           return;
         }
 
@@ -95,29 +99,14 @@ export class PlayerComponent implements OnInit, OnDestroy {
         }
 
         // if volume‐only, just set volume & return
-        if (isRemote && state.action === 'volume') {
+        if (state.action === 'volume') {
           this.playerService.player.volumePercentage = state.volumePercentage;
           this.volumeSliderRef.nativeElement.value = `${state.volumePercentage}`;
-          audio.volume = state.volumePercentage / 100;
+          // Always set audio element's volume on main device
+          if (this.isMain) {
+            audio.volume = state.volumePercentage / 100;
+          }
           return;
-        }
-
-        // 3️⃣ file‑load + time drift + local play/pause sync
-        if (state.filePath !== this.player.filePath) {
-          this.playerService.updateFilePath(state.filePath);
-          this.streamService
-            .initializeAudio(audio, state.filePath, state.currentTime)
-            .then(() => {
-              if (!isRemote && state.isPlaying) audio.play();
-            });
-        } else {
-          if (Math.abs(audio.currentTime - state.currentTime) > 0.5) {
-            audio.currentTime = state.currentTime;
-          }
-          if (!isRemote) {
-            if (state.isPlaying && audio.paused) audio.play();
-            else if (!state.isPlaying && !audio.paused) audio.pause();
-          }
         }
 
         // 4️⃣ update UI model
@@ -194,7 +183,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
               this.player.currentTime
             )
             .then(() => {
-              if (this.isMain && this.player.isPlaying) {
+              if (this.player.isPlaying) {
                 this.audioRef.nativeElement.play();
               }
             });
@@ -247,23 +236,15 @@ export class PlayerComponent implements OnInit, OnDestroy {
     if (this.player.isShuffle) this.audioService.playRandomSong();
     else this.audioService.changeSong(1);
 
-    // set playing & broadcast
+    // set playing & broadcast as 'play'
     this.playerService.updateIsPlaying(true);
-    this.session.updatePlayerState(this.playerService.player, 'next');
-
-    // only main actually calls play
-    if (this.isMain) {
-      this.audioRef.nativeElement.play();
-    }
+    this.session.updatePlayerState(this.playerService.player, 'play');
   }
 
   previousSong() {
     this.audioService.changeSong(-1);
     this.playerService.updateIsPlaying(true);
-    this.session.updatePlayerState(this.playerService.player, 'prev');
-    if (this.isMain) {
-      this.audioRef.nativeElement.play();
-    }
+    this.session.updatePlayerState(this.playerService.player, 'play');
   }
 
   toggleShuffle() {
