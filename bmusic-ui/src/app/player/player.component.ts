@@ -43,6 +43,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
   @ViewChild('volumeSlider', { static: true })
   volumeSliderRef!: ElementRef<HTMLInputElement>;
 
+  private viewReady = false;
+
+  ngAfterViewInit() {
+    this.viewReady = true;
+  }
   player: PlayerModel;
   private unsubscribe$ = new Subject<void>();
   devices: string[] = [];
@@ -59,11 +64,21 @@ export class PlayerComponent implements OnInit, OnDestroy {
   get isMain(): boolean {
     return this.session.deviceId === this.mainDeviceId;
   }
+  private attachStream(): void {
+    const audio = this.audioRef.nativeElement;
+    this.streamService
+      .initializeAudio(audio, this.player.filePath, this.player.currentTime)
+      .then(() => {
+        if (this.player.isPlaying) audio.play();
+      });
+    audio.addEventListener('timeupdate', this.updateCurrentTime.bind(this));
+    audio.addEventListener('ended', this.handleSongEnd.bind(this));
+  }
   ngOnInit() {
     this.session.playerState$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((state: RemoteState | null) => {
-        if (!state) return;
+        if (!state || !this.viewReady) return;
         const audio = this.audioRef.nativeElement;
         const isRemote = state.deviceId !== this.session.deviceId;
         const isMain = this.isMain;
@@ -103,9 +118,23 @@ export class PlayerComponent implements OnInit, OnDestroy {
           this.playerService.player.volumePercentage = state.volumePercentage;
           this.volumeSliderRef.nativeElement.value = `${state.volumePercentage}`;
           // Always set audio element's volume on main device
+          console.log('triggered');
           if (this.isMain) {
             audio.volume = state.volumePercentage / 100;
           }
+          return;
+        }
+        if (isRemote && isMain && state.action === 'next') {
+          this.audioService.changeSong(1);
+          this.playerService.updateIsPlaying(true);
+          // now broadcast a real “play” so every client updates its UI
+          this.session.updatePlayerState(this.playerService.player, 'play');
+          return;
+        }
+        if (isRemote && isMain && state.action === 'prev') {
+          this.audioService.changeSong(-1);
+          this.playerService.updateIsPlaying(true);
+          this.session.updatePlayerState(this.playerService.player, 'play');
           return;
         }
 
@@ -145,48 +174,26 @@ export class PlayerComponent implements OnInit, OnDestroy {
         const audio = this.audioRef.nativeElement;
 
         if (this.isMain) {
-          // If *we* are now main, load and play current state:
-          this.streamService
-            .initializeAudio(
-              audio,
-              this.player.filePath,
-              this.player.currentTime
-            )
-            .then(() => {
-              if (this.player.isPlaying) audio.play();
-            });
-          // re‐attach our local event listeners:
-          audio.addEventListener(
-            'timeupdate',
-            this.updateCurrentTime.bind(this)
-          );
-          audio.addEventListener('ended', this.handleSongEnd.bind(this));
+          this.attachStream();
         } else {
-          // If we lost “main” role, stop our audio element entirely:
           audio.pause();
           audio.removeAttribute('src');
         }
       });
 
+    /** 3) Optionally only react on the main device */
     this.playerService
       .subscribeToFilePath()
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        filter(() => this.isMain) // ← skip on non‑main
+      )
       .subscribe((filePath) => {
         this.playerService.updateIsPlaying(false);
         this.audioRef.nativeElement.pause();
 
         if (filePath) {
-          this.streamService
-            .initializeAudio(
-              this.audioRef.nativeElement,
-              filePath,
-              this.player.currentTime
-            )
-            .then(() => {
-              if (this.player.isPlaying) {
-                this.audioRef.nativeElement.play();
-              }
-            });
+          this.attachStream();
         }
       });
     this.playerService
@@ -232,19 +239,25 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.session.setMainDevice(id);
   }
   nextSong() {
-    // pick the next track
-    if (this.player.isShuffle) this.audioService.playRandomSong();
-    else this.audioService.changeSong(1);
-
-    // set playing & broadcast as 'play'
-    this.playerService.updateIsPlaying(true);
-    this.session.updatePlayerState(this.playerService.player, 'play');
+    if (this.isMain) {
+      if (this.player.isShuffle) this.audioService.playRandomSong();
+      else this.audioService.changeSong(1);
+      this.playerService.updateIsPlaying(true);
+      this.session.updatePlayerState(this.playerService.player, 'play');
+    } else {
+      // ask the main device to skip
+      this.session.updatePlayerState(this.playerService.player, 'next');
+    }
   }
 
   previousSong() {
-    this.audioService.changeSong(-1);
-    this.playerService.updateIsPlaying(true);
-    this.session.updatePlayerState(this.playerService.player, 'play');
+    if (this.isMain) {
+      this.audioService.changeSong(-1);
+      this.playerService.updateIsPlaying(true);
+      this.session.updatePlayerState(this.playerService.player, 'play');
+    } else {
+      this.session.updatePlayerState(this.playerService.player, 'prev');
+    }
   }
 
   toggleShuffle() {

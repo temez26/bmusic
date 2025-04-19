@@ -45,6 +45,7 @@ io.on("connection", (socket) => {
 
   socket.on("updatePlayerState", (state) => {
     socket.broadcast.emit("playerState", state);
+    console.log(state);
   });
 });
 
