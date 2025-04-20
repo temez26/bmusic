@@ -16,6 +16,7 @@ export interface RemoteState extends PlayerModel {
     | 'repeat'
     | 'volume'
     | 'timeupdate';
+  osName?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -26,6 +27,7 @@ export class PlayerSessionService {
   public playerState$ = new BehaviorSubject<RemoteState | null>(null);
 
   public deviceId: string;
+  private localDeviceName!: string;
 
   constructor(private api: ApiService) {
     // generate or reuse your own id
@@ -37,6 +39,7 @@ export class PlayerSessionService {
     // restore global main if any
     const storedMain = localStorage.getItem('mainDeviceId') || this.deviceId;
     this.mainDeviceId$.next(storedMain);
+    this.localDeviceName = this.getDeviceFingerprint();
 
     this.socket = io(this.api.baseUrl, {
       transports: ['websocket'],
@@ -62,13 +65,36 @@ export class PlayerSessionService {
     // Broadcast to all clients
     this.socket.emit('setMainDevice', id);
   }
+  private getDeviceName(): string {
+    const ua = navigator.userAgent;
+    if (/Windows NT/.test(ua)) return 'Windows';
+    if (/Android/.test(ua)) return 'Android';
+    if (/iPhone|iPad|iPod/.test(ua)) return 'iOS';
+    if (/Macintosh/.test(ua)) return 'macOS';
+    if (/Linux/.test(ua)) return 'Linux';
+    return 'Unknown';
+  }
+  private getDeviceFingerprint(): string {
+    const ua = navigator.userAgent;
+    const os = this.getDeviceName();
 
+    // only browser name, no version
+    let browser = 'Unknown';
+    if (/Chrome\/\d+/.test(ua) && !/Edg\/\d+/.test(ua)) browser = 'Chrome';
+    else if (/Firefox\/\d+/.test(ua)) browser = 'Firefox';
+    else if (/Safari\/\d+/.test(ua) && /Version\/\d+/.test(ua))
+      browser = 'Safari';
+    else if (/Edg\/\d+/.test(ua)) browser = 'Edge';
+
+    return `${os} · ${browser}`;
+  }
   // IMPORTANT: Allow commands from ANY device
   updatePlayerState(state: PlayerModel, action?: RemoteState['action']) {
     // Send complete state object with all fields
     this.socket.emit('updatePlayerState', {
       ...state, // Include ALL fields from PlayerModel
       deviceId: this.deviceId,
+      osName: this.localDeviceName,
       action,
       // Explicitly set critical fields to avoid timing issues
       isPlaying: state.isPlaying,

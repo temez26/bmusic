@@ -52,6 +52,9 @@ export class PlayerComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   devices: string[] = [];
   mainDeviceId: string = '';
+  deviceMenuOpen = false;
+  localDeviceName: string = '';
+  private deviceNameMap: Record<string, string> = {};
   constructor(
     private audioService: AudioService,
     private playerService: PlayerService,
@@ -60,9 +63,30 @@ export class PlayerComponent implements OnInit, OnDestroy {
     public session: PlayerSessionService
   ) {
     this.player = this.playerService.player;
+    this.localDeviceName = this.getDeviceName();
+
+    this.deviceNameMap[this.session.deviceId] = this.localDeviceName;
   }
   get isMain(): boolean {
     return this.session.deviceId === this.mainDeviceId;
+  }
+  private getDeviceName(): string {
+    const ua = navigator.userAgent;
+    if (/Windows NT/.test(ua)) return 'Windows';
+    if (/Android/.test(ua)) return 'Android';
+    if (/iPhone|iPad|iPod/.test(ua)) return 'iOS';
+    if (/Macintosh/.test(ua)) return 'macOS';
+    if (/Linux/.test(ua)) return 'Linux';
+    return 'Unknown';
+  }
+  public displayDeviceLabel(deviceId: string): string {
+    const name = this.deviceNameMap[deviceId] || deviceId;
+    const isYou = deviceId === this.session.deviceId;
+    const isMain = deviceId === this.mainDeviceId;
+    if (isYou && isMain) return `${name} (you)`;
+    if (isYou) return `${name} (you)`;
+    if (isMain) return `${name} (main)`;
+    return name;
   }
   private attachStream(): void {
     const audio = this.audioRef.nativeElement;
@@ -79,6 +103,9 @@ export class PlayerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((state: RemoteState | null) => {
         if (!state || !this.viewReady) return;
+        if (state.osName) {
+          this.deviceNameMap[state.deviceId] = state.osName;
+        }
         const audio = this.audioRef.nativeElement;
         const isRemote = state.deviceId !== this.session.deviceId;
         const isMain = this.isMain;
@@ -138,35 +165,63 @@ export class PlayerComponent implements OnInit, OnDestroy {
           return;
         }
 
-        // 4️⃣ update UI model
-        this.playerService.updateIsShuffle(state.isShuffle);
-        this.playerService.updateIsRepeat(state.isRepeat);
-        this.playerService.updateCurrentTime(state.currentTime);
-        // 4️⃣ update all UI model fields
-        this.playerService.player.currentTitle = state.currentTitle;
-        this.playerService.player.currentArtist = state.currentArtist;
-        this.playerService.player.currentAlbumCover = state.currentAlbumCover;
-        this.playerService.player.formattedLength = state.formattedLength;
-        this.playerService.player.formattedCurrentTime =
-          state.formattedCurrentTime;
+        // Comprehensive state synchronization for all non-control actions
+        // Update the complete player model with all remote state properties
+        if (isRemote) {
+          // Core playback status
+          this.playerService.updateIsPlaying(state.isPlaying);
+          this.playerService.updateIsShuffle(state.isShuffle);
+          this.playerService.updateIsRepeat(state.isRepeat);
+          this.playerService.updateCurrentTime(state.currentTime);
 
-        this.progressBar.onSeek(
-          state.currentTime,
-          audio,
-          this.progressSliderRef.nativeElement
-        );
+          // Track metadata
+          this.playerService.player.currentTitle = state.currentTitle;
+          this.playerService.player.currentArtist = state.currentArtist;
+          this.playerService.player.currentAlbumCover = state.currentAlbumCover;
+          this.playerService.player.filePath = state.filePath;
+
+          // Formatting and display properties
+          this.playerService.player.formattedLength = state.formattedLength;
+          this.playerService.player.formattedCurrentTime =
+            state.formattedCurrentTime;
+          this.playerService.player.audioDuration = state.audioDuration;
+
+          // Playlist status
+          this.playerService.player.currentSongId = state.currentSongId;
+
+          // Update progress bar UI
+          this.progressBar.onSeek(
+            state.currentTime,
+            this.audioRef.nativeElement,
+            this.progressSliderRef.nativeElement
+          );
+        }
+
+        // The existing code for shuffle/repeat/time updates can be removed as it's now part of the comprehensive update above
+
         if (state.volumePercentage !== this.player.volumePercentage) {
           // update model
           this.playerService.player.volumePercentage = state.volumePercentage;
           // move the slider thumb
           this.volumeSliderRef.nativeElement.value = `${state.volumePercentage}`;
-          // always apply to audio element so the “master” volume changes
-          audio.volume = state.volumePercentage / 100;
+          // always apply to audio element so the "master" volume changes
+          if (this.isMain) {
+            console.log('boi');
+            this.audioRef.nativeElement.volume = state.volumePercentage / 100;
+          }
         }
       });
     this.session.devices$
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((list) => (this.devices = list));
+      .subscribe((list) => {
+        this.devices = list;
+        list.forEach((id) => {
+          if (!this.deviceNameMap[id]) {
+            // until we get a state from them, show raw ID
+            this.deviceNameMap[id] = id;
+          }
+        });
+      });
     this.session.mainDeviceId$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((mainId) => {
@@ -258,6 +313,13 @@ export class PlayerComponent implements OnInit, OnDestroy {
     } else {
       this.session.updatePlayerState(this.playerService.player, 'prev');
     }
+  }
+  toggleDeviceMenu() {
+    this.deviceMenuOpen = !this.deviceMenuOpen;
+  }
+
+  closeDeviceMenu() {
+    this.deviceMenuOpen = false;
   }
 
   toggleShuffle() {

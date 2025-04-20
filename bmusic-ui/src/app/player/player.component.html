@@ -53,17 +53,25 @@
         (timeupdate)="updateCurrentTime($event)"
       ></audio>
     </div>
-    <div class="main-device-selector">
-      <label for="main-device">Main controller:</label>
-      <select
-        id="main-device"
-        [ngModel]="mainDeviceId"
-        (ngModelChange)="onMainDeviceChange($event)"
-      >
-        <option *ngFor="let d of devices" [value]="d">
-          {{ d === session.deviceId ? "This device (you)" : d }}
-        </option>
-      </select>
+    <div
+      class="main-device-selector-wrapper"
+      tabindex="0"
+      (click)="toggleDeviceMenu()"
+      (blur)="closeDeviceMenu()"
+    >
+      <button class="device-selector-button" type="button">
+        <img src="/mobile-and-laptop.png" class="icon" alt="Devices" />
+        <span>{{ displayDeviceLabel(mainDeviceId) }}</span>
+      </button>
+      <ul class="device-menu" [class.open]="deviceMenuOpen">
+        <li
+          *ngFor="let d of devices"
+          (click)="onMainDeviceChange(d); closeDeviceMenu()"
+          [class.active]="d === mainDeviceId"
+        >
+          {{ displayDeviceLabel(d) }}
+        </li>
+      </ul>
     </div>
     <div class="player-timer">
       <span class="timer">{{ player.formattedCurrentTime }}</span>

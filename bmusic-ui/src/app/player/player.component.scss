@@ -113,6 +113,74 @@
   justify-content: center;
   width: 100%;
 }
+
+.main-device-selector-wrapper {
+  position: absolute;
+  display: inline-block;
+  outline: none;
+  align-self: flex-end;
+  padding-bottom: 30px;
+
+  .device-selector-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 4px 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #fff;
+    .icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 6px;
+      filter: invert(1);
+    }
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  .device-menu {
+    position: absolute;
+    top: auto;
+    bottom: 100%;
+    right: 0;
+    margin-top: 0px;
+    margin-bottom: 6px;
+    background: #282828;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    list-style: none;
+    padding: 4px 0;
+    width: 200px;
+    max-height: 240px;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: all 0.2s ease;
+
+    &.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    li {
+      padding: 8px 12px;
+      color: #fff;
+      cursor: pointer;
+      white-space: nowrap;
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      &.active {
+        font-weight: bold;
+      }
+    }
+  }
+}
 .timer {
   color: #cac9c9;
   font-size: 0.8em;
