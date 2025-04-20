@@ -79,11 +79,26 @@ export class PlayerComponent implements OnInit, OnDestroy {
     if (/Linux/.test(ua)) return 'Linux';
     return 'Unknown';
   }
+  public displayMainDeviceName(deviceId: string): string {
+    const name = this.deviceNameMap[deviceId] || deviceId;
+    const isYou = deviceId === this.session.deviceId;
+    // Only append “(you)” if it’s your device; do not append “(main)”
+    return isYou ? `${name} (you)` : name;
+  }
   public displayDeviceLabel(deviceId: string): string {
     const name = this.deviceNameMap[deviceId] || deviceId;
     const isYou = deviceId === this.session.deviceId;
     const isMain = deviceId === this.mainDeviceId;
     if (isYou && isMain) return `${name} (you)`;
+    if (isYou) return `${name} (you)`;
+    if (isMain) return `${name} (main)`;
+    return name;
+  }
+  public displayDeviceLabelForList(deviceId: string): string {
+    // For list items, only append for 'you' or 'main'
+    const name = this.deviceNameMap[deviceId] || deviceId;
+    const isYou = deviceId === this.session.deviceId;
+    const isMain = deviceId === this.mainDeviceId;
     if (isYou) return `${name} (you)`;
     if (isMain) return `${name} (main)`;
     return name;

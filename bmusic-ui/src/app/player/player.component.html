@@ -60,8 +60,10 @@
       (blur)="closeDeviceMenu()"
     >
       <button class="device-selector-button" type="button">
-        <img src="/mobile-and-laptop.png" class="icon" alt="Devices" />
-        <span>{{ displayDeviceLabel(mainDeviceId) }}</span>
+        <span class="device-label">{{
+          displayMainDeviceName(mainDeviceId)
+        }}</span>
+        <img src="/device.png" class="icon" alt="Devices" />
       </button>
       <ul class="device-menu" [class.open]="deviceMenuOpen">
         <li
@@ -69,7 +71,7 @@
           (click)="onMainDeviceChange(d); closeDeviceMenu()"
           [class.active]="d === mainDeviceId"
         >
-          {{ displayDeviceLabel(d) }}
+          {{ displayDeviceLabelForList(d) }}
         </li>
       </ul>
     </div>
