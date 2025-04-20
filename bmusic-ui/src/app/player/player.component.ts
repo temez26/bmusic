@@ -121,6 +121,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
         if (state.osName) {
           this.deviceNameMap[state.deviceId] = state.osName;
         }
+
         const audio = this.audioRef.nativeElement;
         const isRemote = state.deviceId !== this.session.deviceId;
         const isMain = this.isMain;
@@ -148,11 +149,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
           // All devices update UI state
           this.playerService.updateIsPlaying(state.action === 'play');
           return;
-        }
-
-        // skip pausing for remote volume events
-        if (isRemote && state.action !== 'volume' && !audio.paused) {
-          audio.pause();
         }
 
         // if volume‐only, just set volume & return
@@ -211,6 +207,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
             this.progressSliderRef.nativeElement
           );
         }
+        if (isRemote && isMain && state.action === 'sync_request') {
+          this.session.updatePlayerState(this.playerService.player);
+          return;
+        }
 
         // The existing code for shuffle/repeat/time updates can be removed as it's now part of the comprehensive update above
 
@@ -221,9 +221,26 @@ export class PlayerComponent implements OnInit, OnDestroy {
           this.volumeSliderRef.nativeElement.value = `${state.volumePercentage}`;
           // always apply to audio element so the "master" volume changes
           if (this.isMain) {
-            console.log('boi');
             this.audioRef.nativeElement.volume = state.volumePercentage / 100;
           }
+        }
+        if (isRemote && isMain && state.action === 'seek') {
+          // jump the audio element
+          audio.currentTime = state.currentTime;
+          // update UI
+          this.progressBar.onSeek(
+            state.currentTime,
+            audio,
+            this.progressSliderRef.nativeElement
+          );
+          // update the local model & re‑broadcast a timeupdate so all UIs sync
+          this.playerService.updateCurrentTime(state.currentTime);
+          this.session.updatePlayerState(
+            this.playerService.player,
+            'timeupdate'
+          );
+
+          return;
         }
       });
     this.session.devices$
@@ -236,7 +253,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
             this.deviceNameMap[id] = id;
           }
         });
+        if (this.isMain) {
+          this.session.updatePlayerState(this.playerService.player);
+        }
       });
+
     this.session.mainDeviceId$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((mainId) => {
@@ -248,6 +269,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
         } else {
           audio.pause();
           audio.removeAttribute('src');
+          this.session.updatePlayerState(
+            this.playerService.player,
+            'sync_request'
+          );
         }
       });
 
@@ -288,7 +313,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
     // sets the initial volume on startup
     this.onVolumeChange(this.playerService.player.volumePercentage);
 
-    this.session.updatePlayerState(this.playerService.player);
     const audioEl = this.audioRef.nativeElement;
     fromEvent(audioEl, 'timeupdate')
       .pipe(
@@ -339,12 +363,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   toggleShuffle() {
     this.playerService.updateIsShuffle(!this.player.isShuffle);
-    this.session.updatePlayerState(this.playerService.player);
+    this.session.updatePlayerState(this.playerService.player, 'shuffle');
   }
 
   toggleRepeat() {
     this.playerService.updateIsRepeat(!this.player.isRepeat);
-    this.session.updatePlayerState(this.playerService.player);
+    this.session.updatePlayerState(this.playerService.player, 'repeat');
   }
 
   togglePlayPause() {
@@ -400,6 +424,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.playerService.updateCurrentTime(
       this.audioRef.nativeElement.currentTime
     );
+    // tell everyone else that we dragged the bar
+    this.session.updatePlayerState(this.playerService.player, 'seek');
   }
 
   handleSongEnd() {

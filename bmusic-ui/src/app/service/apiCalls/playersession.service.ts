@@ -15,7 +15,8 @@ export interface RemoteState extends PlayerModel {
     | 'shuffle'
     | 'repeat'
     | 'volume'
-    | 'timeupdate';
+    | 'timeupdate'
+    | 'sync_request';
   osName?: string;
 }
 

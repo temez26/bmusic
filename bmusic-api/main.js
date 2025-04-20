@@ -20,32 +20,44 @@ const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: { origin: "*" },
 });
-
 const devices = new Set();
+let globalMainDeviceId = "";
 
 io.on("connection", (socket) => {
   const deviceId = socket.handshake.query.deviceId;
   if (deviceId) {
     devices.add(deviceId);
     io.emit("devices", Array.from(devices));
+
+    // 1) Initialize a global main on first connect
+    if (!globalMainDeviceId) {
+      globalMainDeviceId = deviceId;
+    }
+
+    // 2) Tell this new client who the main is
+    socket.emit("mainDeviceChanged", globalMainDeviceId);
   }
 
-  // ←– new handler
   socket.on("setMainDevice", (id) => {
-    // let everyone know which device is now the master
+    // update global and broadcast
+    globalMainDeviceId = id;
     io.emit("mainDeviceChanged", id);
+  });
+
+  socket.on("updatePlayerState", (state) => {
+    socket.broadcast.emit("playerState", state);
   });
 
   socket.on("disconnect", () => {
     if (deviceId) {
       devices.delete(deviceId);
       io.emit("devices", Array.from(devices));
+      // optional: reset main if it disconnected
+      if (deviceId === globalMainDeviceId) {
+        globalMainDeviceId = Array.from(devices)[0] || "";
+        io.emit("mainDeviceChanged", globalMainDeviceId);
+      }
     }
-  });
-
-  socket.on("updatePlayerState", (state) => {
-    socket.broadcast.emit("playerState", state);
-    console.log(state);
   });
 });
 
