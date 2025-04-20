@@ -120,13 +120,14 @@
   display: inline-block;
   outline: none;
   align-self: flex-end;
-  padding-bottom: 25px;
+  padding-bottom: 15px;
 
   .device-selector-button {
-    background: rgba(0, 0, 0, 0);
-    border: 1px solid rgba(7, 7, 7, 0.096);
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid rgba(7, 7, 7, 0);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
-    padding: 4px 5px;
+    padding: 8px 8px;
     display: flex;
     align-items: center;
     cursor: pointer;
