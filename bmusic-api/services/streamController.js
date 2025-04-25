@@ -57,6 +57,7 @@ function sendFullFile(res, stats, mimeType, filePath) {
  * Sends a byte-range of the file for streaming purposes.
  */
 function sendPartialFile(req, res, stats, mimeType, filePath, range) {
+  console.log(`Range header received: ${range}. Sending partial content.`);
   const positions = range.replace(/bytes=/, "").split("-");
   const start = parseInt(positions[0], 10);
   const total = stats.size;
