@@ -47,18 +47,6 @@ export class AudioService {
     this.progressService.initializeSlider(event.target);
   }
 
-  handleSongEnd(audioRef: ElementRef<HTMLAudioElement>) {
-    if (this.player.isRepeat) {
-      audioRef.nativeElement.play();
-      if (this.player.currentSongId !== null) {
-        this.incrementPlayCount(this.player.currentSongId);
-      }
-    } else if (this.player.isShuffle) {
-      this.playRandomSong();
-    } else {
-      this.changeSong(1);
-    }
-  }
   setData(songId: number): void {
     this.stateService.setCurrentSongById(songId);
     this.incrementPlayCount(songId);

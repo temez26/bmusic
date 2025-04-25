@@ -44,6 +44,7 @@ function sendFullFile(res, stats, mimeType, filePath) {
   const head = {
     "Content-Length": stats.size,
     "Content-Type": mimeType,
+    "Accept-Ranges": "bytes",
   };
   console.log("No range header, sending entire file:", head);
   res.writeHead(200, head);

@@ -47,6 +47,9 @@ io.on("connection", (socket) => {
   socket.on("updatePlayerState", (state) => {
     socket.broadcast.emit("playerState", state);
   });
+  socket.on("updatePlaylistState", (songs) => {
+    socket.broadcast.emit("playlistState", songs);
+  });
 
   socket.on("disconnect", () => {
     if (deviceId) {

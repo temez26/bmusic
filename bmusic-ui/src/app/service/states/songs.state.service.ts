@@ -15,7 +15,9 @@ export class SongsStateService {
   constructor(
     private playerService: PlayerService,
     private playlistService: PlaylistStateService
-  ) {}
+  ) {
+    // track who is the main device
+  }
 
   setSongs(songs: Song[]): void {
     this.songsSubject.next([...songs]);

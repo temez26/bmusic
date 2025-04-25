@@ -20,6 +20,8 @@ import {
   ProgressBarService,
   PlayerSessionService,
   RemoteState,
+  SongsStateService,
+  Song,
 } from '../service';
 import { FormsModule } from '@angular/forms';
 
@@ -60,7 +62,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
     private playerService: PlayerService,
     private progressBar: ProgressBarService,
     private streamService: StreamService,
-    public session: PlayerSessionService
+    public session: PlayerSessionService,
+    private songsState: SongsStateService
   ) {
     this.player = this.playerService.player;
     this.localDeviceName = this.getDeviceName();
@@ -103,6 +106,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     if (isMain) return `${name} (main)`;
     return name;
   }
+
   private attachStream(): void {
     const audio = this.audioRef.nativeElement;
     this.streamService
@@ -114,6 +118,14 @@ export class PlayerComponent implements OnInit, OnDestroy {
     audio.addEventListener('ended', this.handleSongEnd.bind(this));
   }
   ngOnInit() {
+    this.songsState.songs$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((songs: Song[]) => {
+        if (!this.isMain) {
+          console.log('main');
+          this.audioService.songs = songs;
+        }
+      });
     this.session.playerState$
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((state: RemoteState | null) => {
@@ -305,10 +317,13 @@ export class PlayerComponent implements OnInit, OnDestroy {
       'timeupdate',
       this.updateCurrentTime.bind(this)
     );
-    this.audioRef.nativeElement.addEventListener(
+    this.audioRef.nativeElement.removeEventListener(
       'ended',
       this.handleSongEnd.bind(this)
     );
+    this.audioRef.nativeElement.addEventListener('ended', () => {
+      if (this.isMain) this.handleSongEnd();
+    });
 
     // sets the initial volume on startup
     this.onVolumeChange(this.playerService.player.volumePercentage);
@@ -429,7 +444,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
 
   handleSongEnd() {
-    this.audioService.handleSongEnd(this.audioRef);
-    this.session.updatePlayerState(this.playerService.player);
+    this.nextSong();
   }
 }

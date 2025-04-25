@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { BehaviorSubject } from 'rxjs';
-import { ApiService } from '../../service';
+import { ApiService, Song } from '../../service';
 import { PlayerModel } from '../models/player.class';
 
 export interface RemoteState extends PlayerModel {
@@ -26,6 +26,7 @@ export class PlayerSessionService {
   public devices$ = new BehaviorSubject<string[]>([]);
   public mainDeviceId$ = new BehaviorSubject<string>('');
   public playerState$ = new BehaviorSubject<RemoteState | null>(null);
+  public playlistState$ = new BehaviorSubject<Song[]>([]);
 
   public deviceId: string;
   private localDeviceName!: string;
@@ -58,6 +59,9 @@ export class PlayerSessionService {
     this.socket.on('playerState', (state: RemoteState) => {
       this.playerState$.next(state);
     });
+    this.socket.on('playlistState', (songs: Song[]) => {
+      this.playlistState$.next(songs);
+    });
   }
 
   setMainDevice(id: string) {
@@ -65,6 +69,9 @@ export class PlayerSessionService {
     localStorage.setItem('mainDeviceId', id);
     // Broadcast to all clients
     this.socket.emit('setMainDevice', id);
+  }
+  updatePlaylistState(songs: Song[]): void {
+    this.socket.emit('updatePlaylistState', songs);
   }
   private getDeviceName(): string {
     const ua = navigator.userAgent;
