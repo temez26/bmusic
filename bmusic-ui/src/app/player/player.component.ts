@@ -110,7 +110,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
   private attachStream(): void {
     const audio = this.audioRef.nativeElement;
     this.streamService
-      .initializeAudio(audio, this.player.filePath, this.player.currentTime)
+      .initializeAudio(
+        audio,
+        this.player.filePath,
+        this.player.currentSongId,
+        this.player.currentTime
+      )
       .then(() => {
         if (this.player.isPlaying) audio.play();
       });

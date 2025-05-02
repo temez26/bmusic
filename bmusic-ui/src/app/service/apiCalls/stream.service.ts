@@ -7,46 +7,21 @@ import { ApiService, SongsStateService } from '../../service';
   providedIn: 'root',
 })
 export class StreamService {
-  constructor(
-    private http: HttpClient,
-    private songService: SongsStateService,
-    private api: ApiService
-  ) {}
+  constructor(private api: ApiService) {}
 
-  incrementPlayCount(songId: number) {
-    const url = `${this.api.baseUrl}increment`;
-    return this.http.post<{ playCount: number }>(url, { id: songId }).pipe(
-      tap((response) => {
-        // Use the reactive stream to get the current songs
-        this.songService.songs$
-          .pipe(
-            take(1),
-            map((songs) =>
-              songs.map((song) =>
-                song.id === songId
-                  ? { ...song, play_count: response.playCount }
-                  : song
-              )
-            )
-          )
-          .subscribe((updatedSongs) => {
-            // Update the entire songs list with the updated data
-            this.songService.setSongs(updatedSongs);
-          });
-      }),
-      catchError((error) => {
-        console.error('Error incrementing play count:', error);
-        return throwError(() => error);
-      })
-    );
-  }
   initializeAudio(
     audioElement: HTMLAudioElement,
     filePath: string,
+    songId: number | null,
     startTime: number = 0
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      audioElement.src = this.api.baseUrl + filePath;
+      // Extract just the filename from the filePath
+      const filename = filePath.split('/').pop();
+
+      // Construct URL with trackId in the path: /stream/{trackId}/{filename}
+      audioElement.src = `${this.api.baseUrl}stream/${songId}/${filename}`;
+
       audioElement.load();
       audioElement.oncanplaythrough = () => {
         // Remove handler to avoid multiple calls when setting currentTime

@@ -29,10 +29,6 @@ export class AudioService {
     });
   }
 
-  private incrementPlayCount(songId: number): void {
-    this.streamService.incrementPlayCount(songId).subscribe();
-  }
-
   changeVolume(
     event: any,
     volumeSliderRef: ElementRef<HTMLInputElement>,
@@ -49,7 +45,6 @@ export class AudioService {
 
   setData(songId: number): void {
     this.stateService.setCurrentSongById(songId);
-    this.incrementPlayCount(songId);
   }
 
   changeSong(offset: number): void {
@@ -70,7 +65,6 @@ export class AudioService {
           (currentSongIndex + offset + this.songs.length) % this.songs.length;
         const newSong = this.songs[newIndex];
         this.stateService.setCurrentSongById(newSong.id);
-        this.incrementPlayCount(newSong.id);
       } else {
         console.error('Current song not found in the list');
       }
@@ -84,6 +78,5 @@ export class AudioService {
     const randomIndex = Math.floor(Math.random() * songs.length);
     const randomSong = songs[randomIndex];
     this.stateService.setCurrentSongById(randomSong.id);
-    this.incrementPlayCount(randomSong.id);
   }
 }

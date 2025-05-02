@@ -4,7 +4,6 @@ const router = express.Router();
 // --- Local Modules and Controllers ---
 const {
   playlistRouter,
-  incrementPlayCountHandler,
   serveCoverImage,
   upload,
   handleFileDelete,
@@ -30,13 +29,10 @@ router.get("/albums", handleAllAlbums);
 router.use("/playlists", playlistRouter);
 
 // Music streaming endpoint
-router.get("/data/uploads/:filename", streamMedia);
+router.get("/stream/:trackId/:filename", streamMedia);
 
 // File upload endpoint
 router.post("/upload", upload, handleFileUpload);
-
-// Increment play count endpoint using the controller
-router.post("/increment", incrementPlayCountHandler);
 
 // Serve cover images endpoint using the controller
 router.get("/data/covers/*", serveCoverImage);

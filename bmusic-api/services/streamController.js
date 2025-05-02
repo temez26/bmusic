@@ -1,5 +1,8 @@
 const fs = require("fs");
 const path = require("path");
+const { incrementPlayCount } = require("../database/db");
+
+const playCountRegistered = new Map();
 
 /**
  * Helper function to stream a media file.
@@ -7,8 +10,9 @@ const path = require("path");
  */
 function streamMedia(req, res) {
   console.log("Triggered music stream");
-  const { filename } = req.params;
+  const { filename, trackId } = req.params;
   const filePath = path.join("/app/data/uploads", filename);
+  console.log(filename, trackId);
 
   // Determine MIME type based on file extension
   const ext = path.extname(filename).toLowerCase();
@@ -28,6 +32,32 @@ function streamMedia(req, res) {
     }
 
     const { range } = req.headers;
+
+    // Check if this is a range request for play counting
+    if (trackId && range) {
+      const positions = range.replace(/bytes=/, "").split("-");
+      const start = parseInt(positions[0], 10);
+
+      // For FLAC files (~900-1000 kbps), 10 seconds ≈ 1.1-1.2 MB
+      // Using 1 MB as threshold (approximately 8-10 seconds of FLAC audio)
+      const playbackThreshold = 1 * 1024 * 1024; // 1MB
+
+      if (start > playbackThreshold && !playCountRegistered.has(trackId)) {
+        console.log(
+          `Play counted for track ${trackId} after 8-10 seconds of playback`
+        );
+        playCountRegistered.set(trackId, true);
+
+        // Clear the tracking after 15 minutes to allow recounting for new sessions
+        setTimeout(() => {
+          playCountRegistered.delete(trackId);
+        }, 15 * 60 * 1000);
+
+        incrementPlayCount(trackId).catch((err) => {
+          console.error("Failed to increment play count:", err);
+        });
+      }
+    }
 
     if (!range) {
       sendFullFile(res, stats, mimeType, filePath);
