@@ -3,6 +3,7 @@ export interface Albums {
   title: string;
   artist_id: number;
   genre: string;
+  songs: [];
   cover_image_url: string;
 }
 

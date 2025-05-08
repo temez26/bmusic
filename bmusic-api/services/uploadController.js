@@ -5,7 +5,7 @@ const {
   getOrInsertArtist,
   getOrInsertAlbum,
   getAllSongs,
-} = require("../database/db");
+} = require("../database/songsdb");
 
 // Function to handle file uploads and metadata extraction
 const handleFileUpload = async (req, res) => {

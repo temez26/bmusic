@@ -23,7 +23,7 @@ router.get("/", (req, res) => {
 });
 
 // Fetch routes
-router.get("/songs", handleAllSongs);
+router.get("/songs/:limit?", handleAllSongs);
 router.get("/artists", handleAllArtists);
 router.get("/albums", handleAllAlbums);
 router.use("/playlists", playlistRouter);

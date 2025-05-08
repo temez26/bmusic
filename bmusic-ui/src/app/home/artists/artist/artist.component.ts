@@ -2,14 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
-import {
-  SortService,
-  AlbumStateService,
-  ApiService,
-  Song,
-  ArtistStateService,
-  SongsStateService,
-} from '../../../service';
+import { Song, ArtistStateService } from '../../../service';
 
 @Component({
   selector: 'app-artist',
@@ -20,20 +13,15 @@ import {
 })
 export class ArtistComponent implements OnInit {
   public artistId: number = 0;
-  public songs: Song[] = [];
-  public artist: any = {};
-  public coverSrc: string = '';
+  public artist: any;
+  public genre: string = '';
 
   public artistFilter = (song: Song): boolean =>
     song.artist_id === this.artistId;
 
   constructor(
     private route: ActivatedRoute,
-    private songsState: SongsStateService,
-    private artistState: ArtistStateService,
-    private apiService: ApiService,
-    private albumState: AlbumStateService,
-    private helper: SortService
+    private artistState: ArtistStateService
   ) {}
 
   ngOnInit(): void {
@@ -41,29 +29,16 @@ export class ArtistComponent implements OnInit {
       const idParam = params.get('artistId');
       if (idParam) {
         this.artistId = +idParam;
-        this.artist = this.artistState.getCurrentArtist();
       }
     });
-
-    this.apiService.fetchAlbums().subscribe(() => {
-      this.coverSrc = this.albumState.getAlbumCover(this.artistId);
+    this.artistState.artists$.subscribe(() => {
+      this.artistState.setCurrentArtist(this.artistId);
+      this.artist = this.artistState.getCurrentArtist();
+      this.genre = this.formatGenre(this.artist.songs[0].genre);
     });
-
-    this.songsState.songs$.subscribe(() => {
-      const artistSongs = this.helper
-        .sortSongs('id')
-        .filter((song) => song.artist_id === this.artistId);
-
-      // Clean up the genre field if applicable
-      artistSongs.forEach((song) => {
-        if (song.genre) {
-          song.genre = song.genre.replace(/[{}"]/g, '');
-        }
-      });
-
-      this.songs = artistSongs;
-      // Removed setting the current playlist; data is passed down as input.
-      // this.songsState.setCurrentPlaylistSongs(artistSongs);
-    });
+  }
+  formatGenre(genre: string): string {
+    if (!genre) return '';
+    return genre.replace(/[{}"]/g, '');
   }
 }

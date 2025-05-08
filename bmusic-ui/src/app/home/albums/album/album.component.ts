@@ -8,6 +8,7 @@ import {
   AlbumStateService,
   Song,
   SongsStateService,
+  Albums,
 } from '../../../service';
 
 @Component({
@@ -44,13 +45,14 @@ export class AlbumComponent implements OnInit {
       this.coverSrc = this.albumState.getAlbumCover(this.albumId);
     });
 
-    this.songsState.songs$.subscribe(() => {
-      const albumSongs = this.helper
-        .sortSongs('id')
-        .filter((song) => song.album_id === this.albumId);
-      this.songs = albumSongs;
-      // Removed setting the current playlist here.
-      // The songs list will be passed down via the albumSongs Input to the child components.
+    this.albumState.albums$.subscribe((albums) => {
+      const album = albums.find((album) => album.id == this.albumId);
+
+      if (album) {
+        this.songs = album.songs;
+      } else {
+        this.songs = [];
+      }
     });
   }
 }

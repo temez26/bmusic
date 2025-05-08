@@ -127,7 +127,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((songs: Song[]) => {
         if (!this.isMain) {
-          console.log('main');
           this.audioService.songs = songs;
         }
       });
@@ -173,7 +172,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
           this.playerService.player.volumePercentage = state.volumePercentage;
           this.volumeSliderRef.nativeElement.value = `${state.volumePercentage}`;
           // Always set audio element's volume on main device
-          console.log('triggered');
+
           if (this.isMain) {
             audio.volume = state.volumePercentage / 100;
           }

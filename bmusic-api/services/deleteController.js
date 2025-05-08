@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { deleteSong, getSongById, getAllSongs } = require("../database/db");
+const { deleteSong, getSongById, getAllSongs } = require("../database/songsdb");
 
 // Function to handle file deletion
 const handleFileDelete = async (req, res) => {

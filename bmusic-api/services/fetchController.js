@@ -1,9 +1,19 @@
-const { getAllSongs, getAllArtists, getAllAlbums } = require("../database/db");
+const {
+  getAllSongs,
+  getAllArtists,
+  getAllAlbums,
+} = require("../database/songsdb");
 
 // Function to handle fetching all songs from the database
 const handleAllSongs = async (req, res) => {
   try {
-    const songs = await getAllSongs();
+    const options = {
+      limit: req.params.limit || req.query.limit,
+      sort: req.query.sort,
+      order: req.query.order,
+    };
+
+    const songs = await getAllSongs(options);
     res.status(200).json(songs);
   } catch (err) {
     console.error(err);

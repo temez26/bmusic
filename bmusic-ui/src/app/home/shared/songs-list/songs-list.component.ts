@@ -25,14 +25,13 @@ import {
   templateUrl: './songs-list.component.html',
   styleUrls: ['./songs-list.component.scss'],
 })
-export class SongsListComponent implements OnInit, OnChanges {
+export class SongsListComponent implements OnInit {
   @Input() playlist?: Playlist;
   @Input() sortCriteria: 'id' | 'play_count' = 'id';
   @Input() filterFn: (song: Song) => boolean = () => true;
-  // New input property to receive album songs from the parent component.
-  @Input() albumSongs: Song[] = [];
+  @Input() inputSongs: any;
   songId!: number;
-  songs!: Observable<Song[]>;
+  songs!: Observable<any>;
   openMenuSongId: number | null = null;
 
   constructor(
@@ -48,11 +47,6 @@ export class SongsListComponent implements OnInit, OnChanges {
       this.songId = songId;
     });
   }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.updateSongs();
-  }
-
   private updateSongs(): void {
     if (this.playlist && this.playlist.songIds) {
       // Use playlist songs.
@@ -64,13 +58,11 @@ export class SongsListComponent implements OnInit, OnChanges {
           return filtered;
         })
       );
-    } else if (this.albumSongs && this.albumSongs.length > 0) {
-      // Use albumSongs provided from the album component.
-      this.songs = this.songsState.songs$.pipe(
-        map(() => {
-          return this.albumSongs.filter(this.filterFn);
-        })
-      );
+    } else if (this.inputSongs && this.inputSongs.length > 0) {
+      // Convert albumSongs array to an Observable
+      this.songs = new Observable((observer) => {
+        observer.next(this.inputSongs);
+      });
     } else {
       // Clear any stored playlist songs so full songs list is used.
       this.songs = this.songsState.songs$.pipe(

@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { incrementPlayCount } = require("../database/db");
+const { incrementPlayCount } = require("../database/songsdb");
 
 const playCountRegistered = new Map();
 

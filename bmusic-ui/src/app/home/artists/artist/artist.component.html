@@ -2,11 +2,11 @@
   <!-- Artist Header -->
   <div class="artist-header">
     <div class="artist-thumbnail">
-      <span>{{ songs[0].artist.charAt(0) }}</span>
+      <span>{{ artist.name.charAt(0) }}</span>
     </div>
     <div class="artist-info">
-      <h1 class="artist-name">{{ songs[0].artist }}</h1>
-      <h2 class="artist-genre">{{ songs[0].genre }}</h2>
+      <h1 class="artist-name">{{ artist.name }}</h1>
+      <h2 class="artist-genre">{{ genre }}</h2>
     </div>
   </div>
 
@@ -16,7 +16,7 @@
       <app-songs-list
         [filterFn]="artistFilter"
         sortCriteria="id"
-        [albumSongs]="songs"
+        [inputSongs]="artist"
       >
       </app-songs-list>
     </div>

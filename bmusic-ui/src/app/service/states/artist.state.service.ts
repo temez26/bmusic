@@ -20,6 +20,7 @@ export class ArtistStateService {
 
   setCurrentArtist(artistId: number) {
     const currentArtists = this.artistSubject.getValue();
+
     const currentArtist = currentArtists.find(
       (artist) => artist.id === artistId
     );

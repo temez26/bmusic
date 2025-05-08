@@ -7,7 +7,7 @@ const {
   getPlaylistSongs,
   getAllPlaylists,
   deletePlaylist,
-} = require("../database/db");
+} = require("../database/playlistdb");
 
 // Create a new playlist
 router.post("/", async (req, res) => {
