@@ -3,12 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
 import {
-  SortService,
   ApiService,
   AlbumStateService,
   Song,
-  SongsStateService,
-  Albums,
+  environment,
 } from '../../../service';
 
 @Component({
@@ -20,16 +18,14 @@ import {
 })
 export class AlbumComponent implements OnInit {
   private albumId: number = 0;
-  public coverSrc: string = '';
+  public coverSrc: any;
   public songs: Song[] = [];
   albumFilter = (song: any): boolean => song.album_id === this.albumId;
 
   constructor(
-    private songsState: SongsStateService,
     private albumState: AlbumStateService,
     private apiService: ApiService,
-    private route: ActivatedRoute,
-    private helper: SortService
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -41,12 +37,11 @@ export class AlbumComponent implements OnInit {
       }
     });
 
-    this.apiService.fetchAlbums().subscribe(() => {
-      this.coverSrc = this.albumState.getAlbumCover(this.albumId);
-    });
+    this.apiService.fetchAlbums().subscribe();
 
     this.albumState.albums$.subscribe((albums) => {
       const album = albums.find((album) => album.id == this.albumId);
+      this.coverSrc = environment.apiBaseUrl + album?.songs[0].album_cover_url;
 
       if (album) {
         this.songs = album.songs;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayComponent } from '../shared/songs-list/play/play.component';
-import { SongsStateService, SortService } from '../../service';
+import { ApiService } from '../../service';
 
 @Component({
   selector: 'app-top-songs',
@@ -13,14 +13,11 @@ import { SongsStateService, SortService } from '../../service';
 export class TopSongsComponent implements OnInit {
   songs: any[] = [];
 
-  constructor(
-    private helper: SortService,
-    private songsState: SongsStateService
-  ) {}
+  constructor(private api: ApiService) {}
 
   ngOnInit() {
-    this.songsState.songs$.subscribe(() => {
-      this.songs = this.helper.sortSongs('play_count');
+    this.api.fetchTopSongs().subscribe((songs) => {
+      this.songs = songs;
     });
   }
 }

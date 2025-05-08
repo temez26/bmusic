@@ -19,7 +19,6 @@ export class StreamService {
       // Extract just the filename from the filePath
       const filename = filePath.split('/').pop();
 
-      // Construct URL with trackId in the path: /stream/{trackId}/{filename}
       audioElement.src = `${this.api.baseUrl}stream/${songId}/${filename}`;
 
       audioElement.load();

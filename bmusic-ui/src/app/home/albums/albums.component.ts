@@ -33,7 +33,6 @@ export class AlbumsComponent implements OnInit {
   }
 
   setAlbum(albumId: number): void {
-    this.albumState.setCurrentAlbum(albumId);
     this.router.navigate(['/album', albumId]);
   }
 }

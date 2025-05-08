@@ -26,12 +26,21 @@ export class ApiService {
   ) {}
 
   fetchSongs() {
-    const url = `${this.baseUrl}songs`;
+    const url = `${this.baseUrl}songs?sort=album&order=asc`;
     return this.http.get<Song[]>(url).pipe(
       tap((fetchedSongs: Song[]) => {
         this.songService.setSongs(fetchedSongs);
       }),
       catchError((error) => {
+        return throwError(() => error);
+      })
+    );
+  }
+  fetchTopSongs() {
+    const url = `${this.baseUrl}songs?sort=play_count&limit=15`;
+    return this.http.get<Song[]>(url).pipe(
+      catchError((error) => {
+        console.error('Error fetching top songs:', error);
         return throwError(() => error);
       })
     );

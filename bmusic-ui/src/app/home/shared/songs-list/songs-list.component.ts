@@ -3,15 +3,15 @@ import {
   Input,
   OnChanges,
   OnInit,
+  OnDestroy,
   SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable, map } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { PlayComponent } from './play/play.component';
 import { MenuComponent } from './menu/menu.component';
 import {
   PlaylistStateService,
-  SortService,
   PlayerStateService,
   Playlist,
   Song,
@@ -25,52 +25,61 @@ import {
   templateUrl: './songs-list.component.html',
   styleUrls: ['./songs-list.component.scss'],
 })
-export class SongsListComponent implements OnInit {
+export class SongsListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() playlist?: Playlist;
   @Input() sortCriteria: 'id' | 'play_count' = 'id';
   @Input() filterFn: (song: Song) => boolean = () => true;
   @Input() inputSongs: any;
   songId!: number;
-  songs!: Observable<any>;
+  songs: Song[] = []; // Change to array instead of Observable
   openMenuSongId: number | null = null;
+  private subscriptions = new Subscription();
 
   constructor(
     private songsState: SongsStateService,
     private songData: PlayerStateService,
-    private helper: SortService,
+
     private playlistService: PlaylistStateService
   ) {}
 
   ngOnInit(): void {
     this.updateSongs();
-    this.songData.songId$.subscribe((songId) => {
+
+    const songIdSub = this.songData.songId$.subscribe((songId) => {
       this.songId = songId;
     });
+    this.subscriptions.add(songIdSub);
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['inputSongs'] || changes['playlist']) {
+      this.updateSongs();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
   private updateSongs(): void {
     if (this.playlist && this.playlist.songIds) {
-      // Use playlist songs.
-      this.songs = this.songsState.songs$.pipe(
-        map((songs) => {
-          const filtered = this.playlistService
-            .getSongsByPlaylistIds(this.playlist!.songIds, songs)
-            .filter(this.filterFn);
-          return filtered;
-        })
-      );
-    } else if (this.inputSongs && this.inputSongs.length > 0) {
-      // Convert albumSongs array to an Observable
-      this.songs = new Observable((observer) => {
-        observer.next(this.inputSongs);
+      // Use playlist songs
+      const songsSub = this.songsState.songs$.subscribe((allSongs) => {
+        this.songs = this.playlistService
+          .getSongsByPlaylistIds(this.playlist!.songIds, allSongs)
+          .filter(this.filterFn);
       });
+      this.subscriptions.add(songsSub);
+    } else if (this.inputSongs && this.inputSongs.length > 0) {
+      // Directly assign the array
+      this.songs = this.inputSongs;
     } else {
-      // Clear any stored playlist songs so full songs list is used.
-      this.songs = this.songsState.songs$.pipe(
-        map(() => {
-          const sortedSongs = this.helper.sortSongs(this.sortCriteria);
-          return sortedSongs.filter(this.filterFn);
-        })
-      );
+      // Default case
+      // Default case
+      const songsSub = this.songsState.songs$.subscribe((allSongs) => {
+        this.songs = allSongs.filter(this.filterFn);
+      });
+      this.subscriptions.add(songsSub);
     }
   }
 
