@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
-import { Song, ArtistStateService } from '../../../service';
+import { ArtistStateService } from '../../../service';
 
 @Component({
   selector: 'app-artist',
@@ -15,9 +15,6 @@ export class ArtistComponent implements OnInit {
   public artistId: number = 0;
   public artist: any;
   public genre: string = '';
-
-  public artistFilter = (song: Song): boolean =>
-    song.artist_id === this.artistId;
 
   constructor(
     private route: ActivatedRoute,

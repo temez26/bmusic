@@ -18,12 +18,10 @@ export class SongsComponent implements OnInit {
   constructor(private api: ApiService, private songsState: SongsStateService) {}
 
   ngOnInit(): void {
-    // Assign the observable first
     this.songsState.songs$.subscribe((songs) => {
       this.songs = songs;
     });
 
-    // Then trigger the API call and track loading state
     this.api
       .fetchSongs()
       .pipe(finalize(() => (this.isLoading = false)))
