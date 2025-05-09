@@ -2,12 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
-import {
-  ApiService,
-  AlbumStateService,
-  Song,
-  environment,
-} from '../../../service';
+import { ApiService, environment, sharedStatesService } from '../../../service';
 
 @Component({
   selector: 'app-album',
@@ -22,7 +17,7 @@ export class AlbumComponent implements OnInit {
   public album: any;
 
   constructor(
-    private albumState: AlbumStateService,
+    private albumState: sharedStatesService,
     private apiService: ApiService,
     private route: ActivatedRoute
   ) {

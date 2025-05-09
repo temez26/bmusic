@@ -1,7 +1,6 @@
 import { Injectable, ElementRef } from '@angular/core';
 import {
   Song,
-  PlaylistStateService,
   SongsStateService,
   PlayerService,
   PlayerModel,
@@ -19,9 +18,7 @@ export class AudioService {
   constructor(
     private progressService: ProgressService,
     private stateService: SongsStateService,
-    private playerService: PlayerService,
-    private playlistService: PlaylistStateService,
-    private streamService: StreamService
+    private playerService: PlayerService
   ) {
     this.player = this.playerService.player;
     this.stateService.songs$.subscribe((songs) => {
@@ -52,8 +49,9 @@ export class AudioService {
 
     if (currentSongId !== null) {
       // Use playlist songs if available; otherwise use all songs.
-      this.playlistService.currentPlaylist$.subscribe((playlist) => {
-        this.songs = playlist;
+
+      this.stateService.songs$.subscribe((songs) => {
+        this.songs = songs;
       });
 
       const currentSongIndex = this.songs.findIndex(

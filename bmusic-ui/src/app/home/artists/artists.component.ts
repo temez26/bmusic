@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ArtistStateService } from '../../service/states/artist.state.service';
 import { Router, RouterLink } from '@angular/router';
+import { sharedStatesService } from '../../service';
 
 @Component({
   selector: 'app-artists',
@@ -14,7 +14,7 @@ export class ArtistsComponent implements OnInit {
   artists: any[] = [];
 
   constructor(
-    private artistState: ArtistStateService,
+    private artistState: sharedStatesService,
     private router: Router
   ) {}
 

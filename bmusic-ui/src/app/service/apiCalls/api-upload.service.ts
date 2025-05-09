@@ -4,8 +4,7 @@ import { catchError, throwError, Observable, tap } from 'rxjs';
 import {
   ApiService,
   SongsStateService,
-  AlbumStateService,
-  ArtistStateService,
+  sharedStatesService,
 } from '../../service';
 
 @Injectable({
@@ -15,9 +14,8 @@ export class ApiUploadService {
   constructor(
     private http: HttpClient,
     private api: ApiService,
-    private albumState: AlbumStateService,
     private songsState: SongsStateService,
-    private artistState: ArtistStateService
+    private sharedService: sharedStatesService
   ) {}
 
   uploadFiles(files: File[]): Observable<HttpEvent<any>> {
@@ -35,13 +33,13 @@ export class ApiUploadService {
           if (event.type === HttpEventType.Response) {
             // On successful upload, refresh albums, songs, and artists directly
             this.api.fetchAlbums().subscribe((albums) => {
-              this.albumState.setAlbums(albums);
+              this.sharedService.setAlbums(albums);
             });
             this.api.fetchSongs().subscribe((songs) => {
               this.songsState.setSongs(songs);
             });
             this.api.fetchArtists().subscribe((artists) => {
-              this.artistState.setArtists(artists);
+              this.sharedService.setArtists(artists);
             });
           }
         }),

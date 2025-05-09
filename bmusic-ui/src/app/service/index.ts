@@ -7,11 +7,9 @@ export * from './player/progressBar.service';
 export * from './storage/player-storage.service';
 // states services
 export * from './states/songs.state.service';
-export * from './states/playlist.state.service';
 export * from './states/player.state.service';
-export * from './states/artist.state.service';
-export * from './states/album.state.service';
 export * from './states/shared/search.service';
+export * from './states/shared.state.service';
 
 // api calls
 export * from './apiCalls/stream.service';

@@ -5,11 +5,10 @@ import { catchError, tap } from 'rxjs/operators';
 import {
   environment,
   SongsStateService,
-  AlbumStateService,
-  ArtistStateService,
   Artists,
   Albums,
   Song,
+  sharedStatesService,
 } from '../../service';
 
 @Injectable({
@@ -21,8 +20,7 @@ export class ApiService {
   constructor(
     private http: HttpClient,
     private songService: SongsStateService,
-    private albumService: AlbumStateService,
-    private artistService: ArtistStateService
+    private sharedService: sharedStatesService
   ) {}
 
   fetchSongs() {
@@ -49,7 +47,7 @@ export class ApiService {
     const url = `${this.baseUrl}artists`;
     return this.http.get<Artists[]>(url).pipe(
       tap((fetchedArtists: Artists[]) => {
-        this.artistService.setArtists(fetchedArtists);
+        this.sharedService.setArtists(fetchedArtists);
       }),
       catchError((error) => {
         return throwError(() => error);
@@ -60,8 +58,7 @@ export class ApiService {
     const url = `${this.baseUrl}albums`;
     return this.http.get<Albums[]>(url).pipe(
       tap((fetchedAlbums: Albums[]) => {
-        this.albumService.setAlbums(fetchedAlbums);
-        console.log(fetchedAlbums);
+        this.sharedService.setAlbums(fetchedAlbums);
       }),
       catchError((error) => {
         return throwError(() => error);

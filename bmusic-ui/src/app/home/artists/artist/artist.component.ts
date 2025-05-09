@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
-import { ArtistStateService } from '../../../service';
+import { sharedStatesService } from '../../../service';
 
 @Component({
   selector: 'app-artist',
@@ -18,7 +18,8 @@ export class ArtistComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private artistState: ArtistStateService
+
+    private artistState: sharedStatesService
   ) {}
 
   ngOnInit(): void {

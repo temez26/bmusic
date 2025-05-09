@@ -5,7 +5,7 @@ import {
   ApiService,
   environment,
   Albums,
-  AlbumStateService,
+  sharedStatesService,
 } from '../../service';
 
 @Component({
@@ -20,7 +20,7 @@ export class AlbumsComponent implements OnInit {
   url: string = environment.apiBaseUrl;
 
   constructor(
-    private albumState: AlbumStateService,
+    private albumState: sharedStatesService,
     private apiService: ApiService,
     private router: Router
   ) {}

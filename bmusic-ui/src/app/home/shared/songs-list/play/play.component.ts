@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { take } from 'rxjs/operators';
 import {
-  PlaylistStateService,
   environment,
   Song,
   SongsStateService,
@@ -30,7 +29,7 @@ export class PlayComponent implements OnInit {
   constructor(
     private audioService: AudioService,
     private songsState: SongsStateService,
-    private playlistService: PlaylistStateService,
+
     private session: PlayerSessionService
   ) {}
 
@@ -54,7 +53,7 @@ export class PlayComponent implements OnInit {
       }
 
       // set playlist and update AudioService
-      this.playlistService.setCurrentPlaylistSongs(playlist);
+
       this.audioService.setData(songId);
 
       // tell everyone to load & play on the main controller
