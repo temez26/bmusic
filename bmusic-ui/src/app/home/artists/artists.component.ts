@@ -24,7 +24,6 @@ export class ArtistsComponent implements OnInit {
     });
   }
   setArtist(artistId: number) {
-    this.artistState.setCurrentArtist(artistId);
     this.router.navigate(['/artist', artistId]);
   }
 }

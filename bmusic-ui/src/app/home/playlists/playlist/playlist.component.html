@@ -2,19 +2,16 @@
   <img
     class="playlist-image"
     [src]="
-      playlists.name === 'Favorites'
+      playlist.name === 'Favorites'
         ? '/favorites.png'
         : playlist.imgUrl || '/playlists.png'
     "
     alt="{{ playlist.name }}"
   />
-  <h1>{{ playlists.name }}</h1>
-  <p>{{ playlists.description }}</p>
+  <h1>{{ playlist.name }}</h1>
+  <p>{{ playlist.description }}</p>
 </div>
-
-<app-songs-list
-  [playlist]="playlist"
-  [filterFn]="playlistFilter"
-  sortCriteria="id"
->
-</app-songs-list>
+<div *ngIf="isLoading">Loading songs...</div>
+<div *ngIf="!isLoading">
+  <app-songs-list [inputSongs]="songs"></app-songs-list>
+</div>

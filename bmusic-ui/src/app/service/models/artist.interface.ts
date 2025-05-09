@@ -1,6 +1,7 @@
+import { Song } from './song.interface';
+
 export interface Artists {
   id: number;
   name: string;
-  songs: [];
+  songs: Song[];
 }
-export interface CurrentArtist extends Artists {}

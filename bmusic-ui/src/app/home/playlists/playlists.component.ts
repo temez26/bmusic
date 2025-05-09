@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PlaylistSettingsComponent } from './playlistsettings/playlistsettings.component';
@@ -26,9 +25,8 @@ export class PlaylistsComponent implements OnInit {
   ngOnInit(): void {
     this.fetchPlaylists();
   }
-
   fetchPlaylists(): void {
-    (this.apiService.fetchPlaylists() as Observable<Playlist[]>).subscribe({
+    this.apiService.fetchPlaylists().subscribe({
       next: (data: Playlist[]) => {
         this.playlists = data;
       },
@@ -37,9 +35,7 @@ export class PlaylistsComponent implements OnInit {
       },
     });
   }
-
   createPlaylist(): void {
-    // Assuming user id 1 for testing purposes
     const created_by = 1;
     this.apiService
       .createPlaylist(
@@ -71,7 +67,6 @@ export class PlaylistsComponent implements OnInit {
     );
   }
 
-  // New method to select a specific playlist
   selectPlaylist(playlistId: number): void {
     this.selectedPlaylistId = playlistId;
   }

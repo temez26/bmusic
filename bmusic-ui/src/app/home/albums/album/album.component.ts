@@ -19,14 +19,15 @@ import {
 export class AlbumComponent implements OnInit {
   private albumId: number = 0;
   public coverSrc: any;
-  public songs: Song[] = [];
-  albumFilter = (song: any): boolean => song.album_id === this.albumId;
+  public album: any;
 
   constructor(
     private albumState: AlbumStateService,
     private apiService: ApiService,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.coverSrc = environment.apiBaseUrl;
+  }
 
   ngOnInit(): void {
     // Get the albumId from the URL
@@ -41,13 +42,16 @@ export class AlbumComponent implements OnInit {
 
     this.albumState.albums$.subscribe((albums) => {
       const album = albums.find((album) => album.id == this.albumId);
-      this.coverSrc = environment.apiBaseUrl + album?.songs[0].album_cover_url;
+      this.coverSrc = this.getFullImageUrl(album?.songs[0].album_cover_url);
 
       if (album) {
-        this.songs = album.songs;
+        this.album = album;
       } else {
-        this.songs = [];
+        this.album = [];
       }
     });
+  }
+  private getFullImageUrl(path: string | undefined): string | undefined {
+    return path ? `${environment.apiBaseUrl}${path}` : './cd-cover.png';
   }
 }

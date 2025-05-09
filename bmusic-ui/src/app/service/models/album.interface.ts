@@ -8,7 +8,3 @@ export interface Albums {
   songs: Song[];
   cover_image_url: string;
 }
-
-export interface CurrentAlbum extends Albums {
-  current_album_id: number;
-}

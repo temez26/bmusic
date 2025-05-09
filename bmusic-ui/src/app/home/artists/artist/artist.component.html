@@ -13,12 +13,7 @@
   <!-- Songs List -->
   <div class="parent-container">
     <div class="song-list-container">
-      <app-songs-list
-        [filterFn]="artistFilter"
-        sortCriteria="id"
-        [inputSongs]="artist"
-      >
-      </app-songs-list>
+      <app-songs-list [inputSongs]="artist.songs"> </app-songs-list>
     </div>
   </div>
 </div>

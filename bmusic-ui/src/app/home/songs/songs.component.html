@@ -1,7 +1,9 @@
 <div class="parent-container">
   <h1>Songs</h1>
 
-  <div class="song-list-container">
-    <app-songs-list></app-songs-list>
+  <div *ngIf="isLoading" class="loading">Loading songs...</div>
+
+  <div class="song-list-container" *ngIf="!isLoading">
+    <app-songs-list *ngIf="songs" [inputSongs]="songs"></app-songs-list>
   </div>
 </div>

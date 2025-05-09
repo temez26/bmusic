@@ -6,21 +6,17 @@
       [src]="
         coverSrc && !coverSrc.includes('/null') ? coverSrc : '/cd-cover.png'
       "
-      alt="{{ songs[0].title || 'Album Cover' }}"
+      alt="{{ album.title || 'Album Cover' }}"
     />
     <div class="album-info">
-      <h1 class="album-title">{{ songs[0].title }}</h1>
-      <h2 class="album-artist">{{ songs[0].artist }}</h2>
+      <h1 class="album-title">{{ album.title }}</h1>
+      <h2 class="album-artist">{{ album.songs[0].artist }}</h2>
     </div>
   </div>
 
   <div class="parent-container">
     <div class="song-list-container">
-      <app-songs-list
-        [filterFn]="albumFilter"
-        sortCriteria="id"
-        [inputSongs]="songs"
-      ></app-songs-list>
+      <app-songs-list [inputSongs]="album.songs"></app-songs-list>
     </div>
   </div>
 </div>

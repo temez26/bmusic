@@ -31,9 +31,13 @@ export class ArtistComponent implements OnInit {
         this.artistId = +idParam;
       }
     });
-    this.artistState.artists$.subscribe(() => {
-      this.artistState.setCurrentArtist(this.artistId);
-      this.artist = this.artistState.getCurrentArtist();
+    this.artistState.artists$.subscribe((artists) => {
+      const artist = artists.find((artist) => artist.id == this.artistId);
+      if (artist) {
+        this.artist = artist;
+      } else {
+        this.artist = [];
+      }
       this.genre = this.formatGenre(this.artist.songs[0].genre);
     });
   }

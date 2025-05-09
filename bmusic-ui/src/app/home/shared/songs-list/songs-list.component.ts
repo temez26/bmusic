@@ -25,13 +25,11 @@ import {
   templateUrl: './songs-list.component.html',
   styleUrls: ['./songs-list.component.scss'],
 })
-export class SongsListComponent implements OnInit, OnChanges, OnDestroy {
+export class SongsListComponent implements OnInit {
   @Input() playlist?: Playlist;
-  @Input() sortCriteria: 'id' | 'play_count' = 'id';
-  @Input() filterFn: (song: Song) => boolean = () => true;
   @Input() inputSongs: any;
   songId!: number;
-  songs: Song[] = []; // Change to array instead of Observable
+  songs: Song[] = [];
   openMenuSongId: number | null = null;
   private subscriptions = new Subscription();
 
@@ -44,45 +42,23 @@ export class SongsListComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.updateSongs();
-
+    // Handles the currently playing song check
     const songIdSub = this.songData.songId$.subscribe((songId) => {
       this.songId = songId;
     });
     this.subscriptions.add(songIdSub);
+    console.log(this.inputSongs);
+  }
+  hasArtistData(): boolean {
+    return this.songs?.some((song) => song.artist && song.artist.trim() !== '');
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['inputSongs'] || changes['playlist']) {
-      this.updateSongs();
-    }
+  hasAlbumData(): boolean {
+    return this.songs?.some((song) => song.album && song.album.trim() !== '');
   }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
-
   private updateSongs(): void {
-    if (this.playlist && this.playlist.songIds) {
-      // Use playlist songs
-      const songsSub = this.songsState.songs$.subscribe((allSongs) => {
-        this.songs = this.playlistService
-          .getSongsByPlaylistIds(this.playlist!.songIds, allSongs)
-          .filter(this.filterFn);
-      });
-      this.subscriptions.add(songsSub);
-    } else if (this.inputSongs && this.inputSongs.length > 0) {
-      // Directly assign the array
-      this.songs = this.inputSongs;
-    } else {
-      // Default case
-      // Default case
-      const songsSub = this.songsState.songs$.subscribe((allSongs) => {
-        this.songs = allSongs.filter(this.filterFn);
-      });
-      this.subscriptions.add(songsSub);
-    }
+    this.songs = this.inputSongs;
   }
-
   toggleMenu(songId: number): void {
     this.openMenuSongId = this.openMenuSongId === songId ? null : songId;
   }

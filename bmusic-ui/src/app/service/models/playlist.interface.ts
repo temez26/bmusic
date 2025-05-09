@@ -1,6 +1,8 @@
+import { Song } from './song.interface';
+
 export interface Playlist {
   id: number;
-  songIds: number[];
+  songs: Song[];
   name: string;
   description: string;
   created_by: number;

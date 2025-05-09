@@ -61,6 +61,7 @@ export class ApiService {
     return this.http.get<Albums[]>(url).pipe(
       tap((fetchedAlbums: Albums[]) => {
         this.albumService.setAlbums(fetchedAlbums);
+        console.log(fetchedAlbums);
       }),
       catchError((error) => {
         return throwError(() => error);
