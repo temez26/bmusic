@@ -4,7 +4,6 @@ import {
   SongsStateService,
   PlayerService,
   PlayerModel,
-  StreamService,
   ProgressService,
 } from '../../service';
 
@@ -47,28 +46,24 @@ export class AudioService {
   changeSong(offset: number): void {
     const currentSongId = this.player.currentSongId;
 
-    if (currentSongId !== null) {
-      // Use playlist songs if available; otherwise use all songs.
-
-      this.stateService.songs$.subscribe((songs) => {
-        this.songs = songs;
-      });
-
-      const currentSongIndex = this.songs.findIndex(
-        (song) => song.id === currentSongId
-      );
-
-      if (currentSongIndex !== -1) {
-        const newIndex =
-          (currentSongIndex + offset + this.songs.length) % this.songs.length;
-        const newSong = this.songs[newIndex];
-        this.stateService.setCurrentSongById(newSong.id);
-      } else {
-        console.error('Current song not found in the list');
-      }
-    } else {
+    if (currentSongId === null) {
       console.error('Current song id is null');
+      return;
     }
+
+    const currentSongIndex = this.songs.findIndex(
+      (song) => song.id === currentSongId
+    );
+
+    if (currentSongIndex === -1) {
+      console.error('Current song not found in the list');
+      return;
+    }
+
+    const songsCount = this.songs.length;
+    const newIndex = (currentSongIndex + offset + songsCount) % songsCount;
+
+    this.stateService.setCurrentSongById(this.songs[newIndex].id);
   }
 
   playRandomSong(): void {

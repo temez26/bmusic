@@ -4,6 +4,7 @@ import {
   PlayerModel,
   PlayerStorageService,
   PlayerStateService,
+  Song,
 } from '../../service';
 
 @Injectable({
@@ -18,6 +19,19 @@ export class PlayerService {
     this.player = this.playerStateService.player;
   }
 
+  updateWithSongDetails(song: Song, autoplay: boolean = true): void {
+    this.updateAudioDuration(0);
+    this.updateCurrentTime(0);
+    this.updateTitle(song.title);
+    this.updateFilePath(song.file_path);
+    this.updateCoverPath(song.album_cover_url);
+    this.updateArtistPath(song.artist);
+    this.updateSongId(song.id);
+
+    if (autoplay) {
+      this.updateIsPlaying(true);
+    }
+  }
   updateState(key: string, value: any): void {
     this.playerStateService.setState(key, value);
     this.playerStorageService.savePlayerState(this.playerStateService.player);

@@ -12,9 +12,7 @@ export class SongsStateService {
   private currentSongSubject = new BehaviorSubject<Song | null>(null);
   public currentSong$ = this.currentSongSubject.asObservable();
 
-  constructor(private playerService: PlayerService) {
-    // track who is the main device
-  }
+  constructor(private playerService: PlayerService) {}
 
   setSongs(songs: Song[]): void {
     this.songsSubject.next([...songs]);
@@ -24,31 +22,19 @@ export class SongsStateService {
     this.currentSongSubject.next({ ...song });
   }
 
-  private updateSongDetails(song: Song): void {
-    this.setCurrentSong(song);
-    this.playerService.updateTitle(song.title);
-    this.playerService.updateFilePath(song.file_path);
-    this.playerService.updateCoverPath(song.album_cover_url);
-    this.playerService.updateArtistPath(song.artist);
-    this.playerService.updateSongId(song.id);
-    this.playerService.updateIsPlaying(true);
-  }
-
   setCurrentSongById(songId: number): void {
-    // Now, if a playlist song is needed, you can delegate to PlaylistService methods
-    let song;
-    let currentPlaylist;
+    const songs = this.songsSubject.getValue();
+    const song = songs.find((s) => s.id === songId);
 
     if (!song) {
-      currentPlaylist = this.songsSubject.getValue();
-      song = currentPlaylist.find((s) => s.id === songId);
-    }
-    this.playerService.updateAudioDuration(0);
-    this.playerService.updateCurrentTime(0);
-    if (song) {
-      this.updateSongDetails(song);
-    } else {
       console.error('Song not found with id in the current playlist:', songId);
+      return;
     }
+
+    // Update the current song in state
+    this.currentSongSubject.next({ ...song });
+
+    // Update all player properties at once
+    this.playerService.updateWithSongDetails(song);
   }
 }
