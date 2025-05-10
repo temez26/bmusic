@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
+import { v4 as uuidv4 } from 'uuid';
 import { BehaviorSubject } from 'rxjs';
 import { ApiService, Song } from '../../service';
 import { PlayerModel } from '../models/player.class';
@@ -21,72 +22,197 @@ export interface RemoteState extends PlayerModel {
 }
 
 @Injectable({ providedIn: 'root' })
-export class PlayerSessionService {
+export class PlayerSessionService implements OnDestroy {
   private socket!: Socket;
+  private reconnectTimer: any;
+  private readonly RECONNECT_INTERVAL = 5000; // 5 seconds
+  private readonly MAX_RECONNECT_ATTEMPTS = 5;
+  private reconnectAttempts = 0;
+
   public devices$ = new BehaviorSubject<string[]>([]);
   public mainDeviceId$ = new BehaviorSubject<string>('');
   public playerState$ = new BehaviorSubject<RemoteState | null>(null);
   public playlistState$ = new BehaviorSubject<Song[]>([]);
+  public isConnected$ = new BehaviorSubject<boolean>(false);
 
-  public deviceId: string;
+  public deviceId!: string;
   private localDeviceName!: string;
 
   constructor(private api: ApiService) {
-    // generate or reuse your own id
-    const storedId = localStorage.getItem('deviceId');
-    this.deviceId =
-      storedId || `${Math.random().toString(36).slice(2)}-${Date.now()}`;
-    localStorage.setItem('deviceId', this.deviceId);
-
-    // restore global main if any
-    const storedMain = localStorage.getItem('mainDeviceId') || this.deviceId;
-    this.mainDeviceId$.next(storedMain);
+    this.initializeDeviceId();
     this.localDeviceName = this.getDeviceFingerprint();
+    this.initializeSocket();
+  }
+
+  ngOnDestroy(): void {
+    this.cleanupConnection();
+  }
+
+  /**
+   * Clean up connection and timers on destroy
+   */
+  private cleanupConnection(): void {
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+    }
+
+    if (this.socket) {
+      this.socket.disconnect();
+    }
+  }
+
+  /**
+   * Initialize device ID from localStorage or create new one
+   */
+  private initializeDeviceId(): void {
+    const storedId = localStorage.getItem('deviceId');
+    const storedMain = localStorage.getItem('mainDeviceId') || '';
+    this.deviceId = storedId || uuidv4();
+    localStorage.setItem('deviceId', this.deviceId);
+    this.mainDeviceId$.next(storedMain);
+  }
+
+  /**
+   * Initialize socket connection
+   */
+  private initializeSocket(): void {
+    // Clean up any existing connection
+    if (this.socket) {
+      this.socket.disconnect();
+    }
 
     this.socket = io(this.api.baseUrl, {
       transports: ['websocket'],
       query: { deviceId: this.deviceId },
+      reconnectionAttempts: this.MAX_RECONNECT_ATTEMPTS,
+      reconnectionDelay: this.RECONNECT_INTERVAL,
     });
 
-    this.socket.on('devices', (list) => this.devices$.next(list));
+    this.setupSocketListeners();
+  }
 
-    // ←– listen for global main changes
+  /**
+   * Set up all socket event listeners
+   */
+  private setupSocketListeners(): void {
+    this.socket.on('connect', () => {
+      this.isConnected$.next(true);
+      this.reconnectAttempts = 0;
+
+      // Request sync on reconnect
+      if (this.mainDeviceId$.value) {
+        this.socket.emit('updatePlayerState', {
+          deviceId: this.deviceId,
+          osName: this.localDeviceName,
+          action: 'sync_request',
+        });
+      }
+    });
+
+    this.socket.on('disconnect', () => {
+      this.isConnected$.next(false);
+    });
+
+    this.socket.on('connect_error', (error) => {
+      console.error('Socket connection error:', error);
+      this.isConnected$.next(false);
+      this.handleReconnect();
+    });
+
+    this.socket.on('devices', (list: string[]) => {
+      if (Array.isArray(list)) {
+        this.devices$.next(list);
+      }
+    });
+
     this.socket.on('mainDeviceChanged', (id: string) => {
-      this.mainDeviceId$.next(id);
-      localStorage.setItem('mainDeviceId', id);
+      if (typeof id === 'string') {
+        this.mainDeviceId$.next(id);
+        localStorage.setItem('mainDeviceId', id);
+      }
     });
 
     this.socket.on('playerState', (state: RemoteState) => {
-      this.playerState$.next(state);
+      if (this.isValidRemoteState(state)) {
+        this.playerState$.next(state);
+      }
     });
+
     this.socket.on('playlistState', (songs: Song[]) => {
-      this.playlistState$.next(songs);
+      if (Array.isArray(songs)) {
+        this.playlistState$.next(songs);
+      }
     });
   }
 
-  setMainDevice(id: string) {
+  /**
+   * Handle reconnection logic
+   */
+  private handleReconnect(): void {
+    if (this.reconnectAttempts < this.MAX_RECONNECT_ATTEMPTS) {
+      this.reconnectAttempts++;
+      console.log(
+        `Attempting to reconnect (${this.reconnectAttempts}/${this.MAX_RECONNECT_ATTEMPTS})...`
+      );
+
+      this.reconnectTimer = setTimeout(() => {
+        this.initializeSocket();
+      }, this.RECONNECT_INTERVAL);
+    } else {
+      console.error('Max reconnection attempts reached');
+    }
+  }
+
+  /**
+   * Validate remote state object
+   */
+  private isValidRemoteState(state: any): state is RemoteState {
+    return (
+      state && typeof state === 'object' && typeof state.deviceId === 'string'
+    );
+  }
+
+  /**
+   * Set the main device for playback control
+   */
+  setMainDevice(id: string): void {
+    if (!id || typeof id !== 'string') {
+      console.error('Invalid device ID');
+      return;
+    }
+
     this.mainDeviceId$.next(id);
     localStorage.setItem('mainDeviceId', id);
-    // Broadcast to all clients
     this.socket.emit('setMainDevice', id);
   }
+
+  /**
+   * Update the current playlist state
+   */
   updatePlaylistState(songs: Song[]): void {
+    if (!Array.isArray(songs)) {
+      console.error('Invalid playlist data');
+      return;
+    }
+
     this.socket.emit('updatePlaylistState', songs);
   }
-  private getDeviceName(): string {
-    const ua = navigator.userAgent;
-    if (/Windows NT/.test(ua)) return 'Windows';
-    if (/Android/.test(ua)) return 'Android';
-    if (/iPhone|iPad|iPod/.test(ua)) return 'iOS';
-    if (/Macintosh/.test(ua)) return 'macOS';
-    if (/Linux/.test(ua)) return 'Linux';
-    return 'Unknown';
-  }
+
+  /**
+   * Get device and browser information
+   */
   private getDeviceFingerprint(): string {
     const ua = navigator.userAgent;
-    const os = this.getDeviceName();
 
-    // only browser name, no version
+    // OS detection
+    let os = 'Unknown';
+    if (/Windows NT/.test(ua)) os = 'Windows';
+    else if (/Android/.test(ua)) os = 'Android';
+    else if (/iPhone|iPad|iPod/.test(ua)) os = 'iOS';
+    else if (/Macintosh/.test(ua)) os = 'macOS';
+    else if (/Linux/.test(ua)) os = 'Linux';
+
+    // Browser detection
     let browser = 'Unknown';
     if (/Chrome\/\d+/.test(ua) && !/Edg\/\d+/.test(ua)) browser = 'Chrome';
     else if (/Firefox\/\d+/.test(ua)) browser = 'Firefox';
@@ -96,25 +222,31 @@ export class PlayerSessionService {
 
     return `${os} · ${browser}`;
   }
-  // IMPORTANT: Allow commands from ANY device
-  updatePlayerState(state: PlayerModel, action?: RemoteState['action']) {
-    // Send complete state object with all fields
+
+  /**
+   * Update player state and broadcast to other devices
+   * IMPORTANT: Allow commands from ANY device
+   */
+  updatePlayerState(state: PlayerModel, action?: RemoteState['action']): void {
+    if (!state || typeof state !== 'object') {
+      console.error('Invalid player state');
+      return;
+    }
+
     this.socket.emit('updatePlayerState', {
-      ...state, // Include ALL fields from PlayerModel
+      ...state,
       deviceId: this.deviceId,
       osName: this.localDeviceName,
       action,
-      // Explicitly set critical fields to avoid timing issues
-      isPlaying: state.isPlaying,
-      currentTitle: state.currentTitle,
-      currentArtist: state.currentArtist,
-      currentAlbumCover: state.currentAlbumCover,
-      volumePercentage: state.volumePercentage,
-      isShuffle: state.isShuffle,
-      isRepeat: state.isRepeat,
-      filePath: state.filePath,
-      formattedLength: state.formattedLength,
-      formattedCurrentTime: state.formattedCurrentTime,
     });
+  }
+
+  /**
+   * Force reconnect the socket
+   */
+  reconnect(): void {
+    this.cleanupConnection();
+    this.reconnectAttempts = 0;
+    this.initializeSocket();
   }
 }
