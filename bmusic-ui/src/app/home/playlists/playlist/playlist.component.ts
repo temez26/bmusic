@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SongsListComponent } from '../../shared/songs-list/songs-list.component';
-import { Song, Playlist, ApiPlaylistService } from '../../../service';
-import { Observable, finalize } from 'rxjs';
+import { Song, ApiPlaylistService } from '../../../service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-playlist',
