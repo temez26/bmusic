@@ -1,0 +1,13 @@
+<div class="albums">
+  <h1>Albums</h1>
+  <div class="albums-grid">
+    @for (album of albums(); track album.id) {
+      <a class="album-item" [routerLink]="['/album', album.id]">
+        <img [src]="coverUrl(album.cover_image_url)" [alt]="album.title" />
+        <h4>{{ album.title }}</h4>
+      </a>
+    } @empty {
+      <p>No albums yet.</p>
+    }
+  </div>
+</div>

@@ -1,16 +1,7 @@
-# Dev
 FROM node:22
-
-EXPOSE 4200
-
 WORKDIR /app
-
-ENV PATH /app/node_modules/.bin:$PATH
-
-COPY *.json ./
-
-RUN npm install
-
+COPY package*.json ./
+RUN npm ci
 COPY . .
-
-CMD ["nodemon", "--watch", ".", "--ext","ts,html,scss", "--exec", "npm", "start", "--legacy-watch"]
+EXPOSE 4200
+CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--poll", "2000"]

@@ -1,0 +1,13 @@
+<h1>Artists</h1>
+<div class="artist-grid">
+  @for (artist of artists(); track artist.id) {
+    <a class="artist-card" [routerLink]="['/artist', artist.id]">
+      <div class="artist-thumbnail">
+        <span>{{ artist.name.charAt(0) }}</span>
+      </div>
+      <div class="artist-name">{{ artist.name }}</div>
+    </a>
+  } @empty {
+    <p>No artists yet.</p>
+  }
+</div>

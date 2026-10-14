@@ -1,20 +1,21 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { SongsComponent } from './home/songs/songs.component';
-import { AlbumsComponent } from './home/albums/albums.component';
-import { PlaylistsComponent } from './home/playlists/playlists.component';
-import { ArtistsComponent } from './home/artists/artists.component';
-import { AlbumComponent } from './home/albums/album/album.component';
-import { ArtistComponent } from './home/artists/artist/artist.component';
-import { PlaylistComponent } from './home/playlists/playlist/playlist.component';
+import { HomePageComponent } from '@pages/home';
+import { SongsPageComponent } from '@pages/songs';
+import { AlbumsPageComponent } from '@pages/albums';
+import { AlbumPageComponent } from '@pages/album';
+import { ArtistsPageComponent } from '@pages/artists';
+import { ArtistPageComponent } from '@pages/artist';
+import { PlaylistsPageComponent } from '@pages/playlists';
+import { PlaylistPageComponent } from '@pages/playlist';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'songs', component: SongsComponent },
-  { path: 'albums', component: AlbumsComponent },
-  { path: 'album/:albumId', component: AlbumComponent },
-  { path: 'artist/:artistId', component: ArtistComponent },
-  { path: 'playlists', component: PlaylistsComponent },
-  { path: 'playlist/:playlistId', component: PlaylistComponent },
-  { path: 'artists', component: ArtistsComponent },
+  { path: '', component: HomePageComponent },
+  { path: 'songs', component: SongsPageComponent },
+  { path: 'albums', component: AlbumsPageComponent },
+  { path: 'album/:albumId', component: AlbumPageComponent },
+  { path: 'artists', component: ArtistsPageComponent },
+  { path: 'artist/:artistId', component: ArtistPageComponent },
+  { path: 'playlists', component: PlaylistsPageComponent },
+  { path: 'playlist/:playlistId', component: PlaylistPageComponent },
+  { path: '**', redirectTo: '' },
 ];

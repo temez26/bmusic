@@ -1,0 +1,17 @@
+<div class="artist-container">
+  <div class="artist-header">
+    <div class="artist-thumbnail">
+      <span>{{ name().charAt(0) }}</span>
+    </div>
+    <div class="artist-info">
+      <h1 class="artist-name">{{ name() }}</h1>
+      <h2 class="artist-genre">{{ genre() }}</h2>
+    </div>
+  </div>
+
+  <div class="parent-container">
+    <div class="song-list-container">
+      <app-songs-table [songs]="songs()" />
+    </div>
+  </div>
+</div>

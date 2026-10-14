@@ -1,0 +1,59 @@
+<div class="upload">
+  <div class="upload-header">
+    <h1>Upload Songs</h1>
+    <p class="upload-description">
+      Upload audio files (mp3, flac, wav, ogg, aac, m4a) and an optional cover
+      image. Upload one album at a time: the image becomes the album cover.
+    </p>
+  </div>
+
+  <div class="file-input-container">
+    <div class="upload-option">
+      <label for="fileInput" class="upload-label">Choose Files</label>
+      <input
+        #fileInput
+        type="file"
+        id="fileInput"
+        multiple
+        accept="audio/*,image/*"
+        (change)="addFiles(fileInput)"
+        class="upload-input"
+      />
+    </div>
+
+    <div class="upload-option">
+      <label for="directoryInput" class="upload-label">Choose Folder</label>
+      <input
+        #directoryInput
+        type="file"
+        id="directoryInput"
+        webkitdirectory
+        multiple
+        (change)="addFiles(directoryInput)"
+        class="upload-input"
+      />
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="upload-button"
+    [disabled]="!selectedFiles().length || progress() !== null"
+    (click)="upload()"
+  >
+    Upload
+  </button>
+
+  @if (selectedFiles().length) {
+    <div class="upload-message file-count">{{ selectedFiles().length }} file(s) selected</div>
+  }
+  @if (progress() !== null) {
+    <div class="upload-message upload-progress">Upload progress: {{ progress() }}%</div>
+  }
+  @if (message()) {
+    <div class="upload-message success-message">{{ message() }}</div>
+  }
+  @if (error()) {
+    <div class="upload-message error-message">{{ error() }}</div>
+  }
+</div>

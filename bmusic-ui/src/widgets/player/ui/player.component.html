@@ -1,0 +1,70 @@
+<div class="full-player">
+  <app-now-playing class="player-header" [song]="player.current()" />
+
+  <div class="player">
+    <div class="volume-controls">
+      <app-volume-slider [volume]="player.volume()" (volumeChange)="setVolume($event)" />
+      <app-volume-icon [volumePercentage]="player.volume()" />
+    </div>
+
+    <div class="player-controls">
+      <button
+        type="button"
+        class="player-button shuffle-button"
+        aria-label="Shuffle"
+        [class.active]="player.shuffle()"
+        (click)="player.toggleShuffle()"
+      >
+        <img class="icon" src="/shuffle.png" alt="" />
+      </button>
+      <button type="button" class="player-button previous" aria-label="Previous" (click)="previous()">
+        <img class="icon" src="/previous.png" alt="" />
+      </button>
+      <button
+        type="button"
+        class="player-button play"
+        [attr.aria-label]="player.isPlaying() ? 'Pause' : 'Play'"
+        (click)="togglePlay()"
+      >
+        <img class="icon" [src]="player.isPlaying() ? '/pause.png' : '/play.png'" alt="" />
+      </button>
+      <button type="button" class="player-button next" aria-label="Next" (click)="next()">
+        <img class="icon" src="/next.png" alt="" />
+      </button>
+      <button
+        type="button"
+        class="player-button repeat-button"
+        aria-label="Repeat"
+        [class.active]="player.repeat()"
+        (click)="player.toggleRepeat()"
+      >
+        <img class="icon" src="/repeat.png" alt="" />
+      </button>
+      <audio
+        #audio
+        class="player-audio"
+        preload="metadata"
+        (loadedmetadata)="onMetadata()"
+        (timeupdate)="onTimeUpdate()"
+        (ended)="onEnded()"
+      ></audio>
+    </div>
+
+    <div class="player-timer">
+      <span class="timer">{{ elapsed() }}</span>
+      <input
+        #progressSlider
+        type="range"
+        class="progress-slider"
+        aria-label="Seek"
+        min="0"
+        step="any"
+        [max]="player.duration()"
+        [value]="player.position()"
+        [style.--progress]="progress() + '%'"
+        (input)="seek(+progressSlider.value)"
+      />
+      <span class="timer">{{ total() }}</span>
+    </div>
+  </div>
+</div>

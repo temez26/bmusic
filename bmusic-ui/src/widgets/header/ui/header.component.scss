@@ -1,0 +1,103 @@
+.myapp {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.829);
+  padding: 2px 5px;
+  min-height: 60px;
+  border-bottom: 2px solid rgba(255, 0, 0, 0.3);
+  box-shadow: 0 2px 10px rgba(255, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+  border-radius: 15px;
+  z-index: 1;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.navbar-title-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+}
+
+.navbar-title {
+  font-size: 2.8rem;
+  background: linear-gradient(45deg, #ff4081, #3f51b5, #ff4081, #3f51b5);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientAnimation 5s ease infinite;
+  transition: transform 0.3s ease, background-position 0.3s ease;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.icon-button .material-icons {
+  background: rgba(255, 255, 255, 0.788);
+}
+
+.icon-button .material-icons {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+  color: #ffffffc7;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background-position 0.3s, background-color 0.3s ease;
+}
+
+.icon-button:hover .material-icons {
+  color: #e0e0e0;
+  background-color: #ffffff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .myapp {
+    border-radius: 0;
+  }
+
+  .icon-button {
+    width: 50px;
+    height: 50px;
+  }
+
+  .icon-button .material-icons {
+    width: 26px;
+    height: 26px;
+    font-size: 26px;
+  }
+}
+
+.upload-area {
+  position: static;
+}

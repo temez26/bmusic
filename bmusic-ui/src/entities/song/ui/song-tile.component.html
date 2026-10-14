@@ -1,0 +1,9 @@
+@if (variant === 'card') {
+  <img class="cover-image-large" [src]="cover" alt="" />
+  <p class="top-songs-title">{{ song.title }}</p>
+} @else {
+  <div class="songs-column">
+    <img class="cover-image" [src]="cover" alt="" />
+    <p class="songs-title">{{ song.title }}</p>
+  </div>
+}

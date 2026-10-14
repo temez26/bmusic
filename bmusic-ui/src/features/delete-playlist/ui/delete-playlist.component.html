@@ -1,0 +1,8 @@
+@if (!playlist.protected) {
+  <div class="settings-container">
+    <button type="button" class="settings-button" (click)="isOpen.set(!isOpen())">Settings</button>
+    <div class="dropdown-menu" [class.open]="isOpen()">
+      <button type="button" (click)="delete()">Delete Playlist</button>
+    </div>
+  </div>
+}

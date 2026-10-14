@@ -58,7 +58,7 @@ main {
 // Header
 // app-navbar
 // home component
-app-home {
+app-home-page {
   flex-grow: 1;
 }
 // Footer
@@ -147,10 +147,6 @@ p {
 @media (max-width: 768px) {
   body {
     padding: 0;
-  }
-  .cdk-global-overlay-wrapper {
-    position: absolute;
-    top: 7%;
   }
 
   h1 {
