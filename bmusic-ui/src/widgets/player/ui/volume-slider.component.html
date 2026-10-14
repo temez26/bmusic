@@ -1,0 +1,14 @@
+<div class="volume-slider-container">
+  <input
+    #slider
+    type="range"
+    min="0"
+    max="100"
+    aria-label="Volume"
+    class="styled-slider slider-progress"
+    style="--min: 0; --max: 100"
+    [style.--value]="volume"
+    [value]="volume"
+    (input)="volumeChange.emit(+slider.value)"
+  />
+</div>

@@ -1,0 +1,11 @@
+<div class="form-container">
+  <h2>Create new Playlist</h2>
+  <form (submit)="$event.preventDefault(); submit(name, description)">
+    <input #name type="text" name="playlistName" placeholder="Playlist Name" required />
+    <input #description type="text" name="playlistDescription" placeholder="Playlist Description" />
+    <button type="submit">Create Playlist</button>
+    @if (error()) {
+      <p class="form-error">{{ error() }}</p>
+    }
+  </form>
+</div>

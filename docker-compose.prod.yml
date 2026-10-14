@@ -1,11 +1,24 @@
-version: "3.4"
-
+# Production stack: built images, no source mounts, database not exposed.
 services:
+  database:
+    image: postgres:17
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - database_data:/var/lib/postgresql/data
+      - ./database/V1___initial_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+
   bmusic-api:
     build:
       context: bmusic-api
       dockerfile: Dockerfile.prod
-    restart: always
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_HOST: database
+      POSTGRES_PORT: 5432
+    depends_on:
+      - database
     ports:
       - "4000:4000"
     volumes:
@@ -16,19 +29,11 @@ services:
     build:
       context: bmusic-ui
       dockerfile: Dockerfile.prod
-    restart: always
-    ports:
-      - "4200:4200"
-
-  database:
-    container_name: db-bmusic
-    image: postgres:latest
     restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - database_data:/var/lib/postgresql/data
-      - ./database/V1___initial_schema.sql:/docker-entrypoint-initdb.d/create_database.sql
+    depends_on:
+      - bmusic-api
+    ports:
+      - "4200:80"
 
 volumes:
   database_data:

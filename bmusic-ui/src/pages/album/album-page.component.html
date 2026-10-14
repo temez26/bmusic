@@ -1,0 +1,15 @@
+<div class="album-container">
+  <div class="album-header">
+    <img class="album-cover" [src]="cover()" alt="" />
+    <div class="album-info">
+      <h1 class="album-title">{{ album()?.title }}</h1>
+      <h2 class="album-artist">{{ artist() }}</h2>
+    </div>
+  </div>
+
+  <div class="parent-container">
+    <div class="song-list-container">
+      <app-songs-table [songs]="songs()" />
+    </div>
+  </div>
+</div>

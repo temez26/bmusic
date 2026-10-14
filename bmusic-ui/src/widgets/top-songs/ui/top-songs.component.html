@@ -1,0 +1,12 @@
+<div class="song-list-container">
+  <div class="top-songs-row">
+    @for (song of songs(); track song.id; let i = $index) {
+      <div class="song-item" (click)="play(song)">
+        <span class="song-number">{{ i + 1 }}</span>
+        <app-song-tile [song]="song" variant="card" />
+      </div>
+    } @empty {
+      <p class="empty">Play some songs and your most played tracks show up here.</p>
+    }
+  </div>
+</div>

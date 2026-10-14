@@ -1,0 +1,24 @@
+<h1>Playlists</h1>
+<div class="playlists-container">
+  <ul>
+    @for (playlist of playlists(); track playlist.id; let i = $index) {
+      <li class="card-background" [class]="'playlist-' + (i % 4)">
+        <a [routerLink]="['/playlist', playlist.id]" class="playlist-card">
+          <img
+            class="playlist-image"
+            [class.colored-playlists]="!playlist.protected"
+            [src]="playlistImage(playlist)"
+            [alt]="playlist.name"
+          />
+          <div class="playlist-info">
+            <h3>{{ playlist.name }}</h3>
+            <p>{{ playlist.description }}</p>
+          </div>
+        </a>
+        <app-delete-playlist [playlist]="playlist" (deleted)="load()" />
+      </li>
+    }
+  </ul>
+
+  <app-create-playlist-form (created)="load()" />
+</div>

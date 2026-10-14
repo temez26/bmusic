@@ -1,0 +1,36 @@
+<div class="menu">
+  <button type="button" aria-label="Song actions" (click)="toggleOpen($event)">
+    <img src="/menu.svg" alt="" class="button-svg" />
+  </button>
+  @if (open) {
+    <div class="dropdown-menu">
+      @if (favorites(); as favorites) {
+        <button type="button" (click)="togglePlaylist(favorites)">
+          Favorites ({{ contains(favorites) ? 'Remove' : 'Add' }})
+        </button>
+      }
+      <button
+        type="button"
+        (click)="showPlaylists.set(!showPlaylists())"
+        (mouseenter)="showPlaylists.set(true)"
+      >
+        Add to Playlist
+      </button>
+      @if (showPlaylists()) {
+        <div class="playlist-dropdown" (mouseleave)="showPlaylists.set(false)">
+          @for (playlist of otherPlaylists(); track playlist.id) {
+            <button type="button" (click)="togglePlaylist(playlist)">
+              {{ playlist.name }} ({{ contains(playlist) ? 'Remove' : 'Add' }})
+            </button>
+          } @empty {
+            <button type="button" disabled>No playlists yet</button>
+          }
+        </div>
+      }
+      <button type="button" (click)="deleteSong()">Delete</button>
+    </div>
+  }
+</div>
+@if (notification()) {
+  <div class="notification">{{ notification() }}</div>
+}

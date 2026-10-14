@@ -1,39 +1,46 @@
-version: "3.4"
-
+# Development stack: hot reload for API and UI, database exposed on 5432.
 services:
+  database:
+    image: postgres:17
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - database_data:/var/lib/postgresql/data
+      - ./database/V1___initial_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+
   bmusic-api:
     build: bmusic-api
-    restart: "unless-stopped"
-    volumes:
-      - ./bmusic-api/:/app
-      - express_node_modules:/app/node_modules
-      - uploads_data:/app/data/uploads
-      - covers_data:/app/data/covers
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_HOST: database
+      POSTGRES_PORT: 5432
+    depends_on:
+      - database
     ports:
       - "4000:4000"
+    volumes:
+      - ./bmusic-api:/app
+      - api_node_modules:/app/node_modules
+      - uploads_data:/app/data/uploads
+      - covers_data:/app/data/covers
 
   bmusic-ui:
     build: bmusic-ui
-    restart: "unless-stopped"
-    volumes:
-      - ./bmusic-ui/:/app
-      - angular_node_modules:/app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - bmusic-api
     ports:
       - "4200:4200"
-
-  database:
-    container_name: db-bmusic
-    image: postgres:latest
-    restart: "unless-stopped"
-    env_file:
-      - .env
     volumes:
-      - database_data:/var/lib/postgresql/data
-      - ./database/V1___initial_schema.sql:/docker-entrypoint-initdb.d/create_database.sql
+      - ./bmusic-ui:/app
+      - ui_node_modules:/app/node_modules
 
 volumes:
   database_data:
   uploads_data:
   covers_data:
-  angular_node_modules:
-  express_node_modules:
+  api_node_modules:
+  ui_node_modules:

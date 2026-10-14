@@ -1,0 +1,13 @@
+@if (playlist(); as playlist) {
+  <div class="playlist-container">
+    <img class="playlist-image" [src]="image()" [alt]="playlist.name" />
+    <h1>{{ playlist.name }}</h1>
+    <p>{{ playlist.description }}</p>
+  </div>
+}
+
+<app-songs-table
+  [songs]="songs()"
+  emptyText="This playlist is empty. Add songs from the song menu."
+  (playlistsChanged)="loadSongs()"
+/>

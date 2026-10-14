@@ -1,0 +1,26 @@
+<div class="myapp">
+  <a class="icon-button" routerLink="/" aria-label="Home">
+    <span class="material-icons">home</span>
+  </a>
+  <app-song-search (songSelected)="play($event)" />
+
+  <span class="spacer"></span>
+  <div class="navbar-title-container">
+    <span class="navbar-title">Bmusic</span>
+  </div>
+  <span class="spacer"></span>
+
+  <div class="upload-area">
+    <button
+      type="button"
+      class="icon-button"
+      aria-label="Upload music"
+      (click)="showUpload.set(!showUpload())"
+    >
+      <span class="material-icons">upload</span>
+    </button>
+    @if (showUpload()) {
+      <app-upload-panel />
+    }
+  </div>
+</div>

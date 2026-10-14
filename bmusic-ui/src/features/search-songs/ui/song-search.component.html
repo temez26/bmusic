@@ -1,0 +1,29 @@
+<div class="search-container">
+  <button class="search-button" type="button" aria-label="Search" (click)="input.focus()">
+    <i class="material-icons">search</i>
+  </button>
+  <input
+    #input
+    type="text"
+    class="search-input"
+    placeholder="Search Songs"
+    [value]="query()"
+    (input)="query.set(input.value); isOpen.set(true)"
+    (focus)="isOpen.set(true)"
+    (keydown.escape)="isOpen.set(false); input.blur()"
+  />
+  @if (isOpen()) {
+    <div class="dropdown-anchor" (mousedown)="$event.preventDefault()">
+      <div class="dropdown">
+        @for (song of results(); track song.id) {
+          <div class="dropdown-item" (click)="select(song)">
+            <app-song-tile [song]="song" />
+            <h4>by {{ song.artist }}</h4>
+          </div>
+        } @empty {
+          <div class="dropdown-item">No results found</div>
+        }
+      </div>
+    </div>
+  }
+</div>
